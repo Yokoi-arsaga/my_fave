@@ -9,4 +9,4 @@ make create-project
 ```
 
 ### ブランチ運用
-必ずwikiを確認してください！！[Wiki](https://github.com/Yokoi-arsaga/my_fave/wiki)
+必ず[Wiki](https://github.com/Yokoi-arsaga/my_fave/wiki)を確認してください！！
