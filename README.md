@@ -1,4 +1,4 @@
-# YouTube推し動画強制レコメンドSNS my_fave
+# YouTube推し動画強制レコメンドSNS 「my_fave」
 
 ## どんなSNSなの？
 自分の推し動画（YouTubeの動画で人におすすめしたい動画）をフレンドに強制的にレコメンドするSNSツール
