@@ -5,16 +5,15 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * repositoryクラスの依存関係を定義
+ * serviceクラスの依存関係を定義
  */
-class RepositoryServiceProvider extends ServiceProvider
+class ServiceClassProvider extends ServiceProvider
 {
     /**
-     * repositoryと紐づくModel名を追記することでbindされます
-     *
-     * @var array
+     * 実装クラス、Interface共通のPrefix
+     * @var Array
      */
-    private const MODELS = [];
+    private const PREFIXES = [];
 
     /**
      * Register any application services.
@@ -23,10 +22,10 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        foreach (self::MODELS as $model) {
+        foreach (self::PREFIXES as $prefix) {
             $this->app->bind(
-                "App\Repositories\Interfaces\\{$model}RepositoryInterface",
-                "App\Repositories\Eloquent{$model}Repository"
+                "App\Services\Interfaces\\{$prefix}ServiceInterface",
+                "App\Services\\{$prefix}Service"
             );
         }
     }
