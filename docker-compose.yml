@@ -69,3 +69,31 @@ services:
       - MYSQL_USER=${DB_USER:-phper}
       - MYSQL_PASSWORD=${DB_PASS:-secret}
       - MYSQL_ROOT_PASSWORD=${DB_PASS:-secret}
+
+  minio:
+    image: minio/minio
+    container_name: myfave-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: access_key
+      MINIO_ROOT_PASSWORD: secret_key
+    command: server /export --console-address :9001 # minioの仕様変更で「--console-address :9001」のように明示的に指定しない場合、動的インポートになるようです。
+
+  create-bucket:
+    container_name: myfave-create-bucket
+    image: minio/mc
+    entrypoint: [""]
+    command:
+      - /bin/sh
+      - -c
+      - |
+        until (mc config host add minio http://minio:9000 access_key secret_key) do echo 'wait until add host' && sleep 1; done;
+        mc mb minio/devpub
+        mc policy set public minio/devpub
+    environment:
+      MINIO_ROOT_USER: access_key
+      MINIO_ROOT_PASSWORD: secret_key
+    depends_on:
+      - minio
