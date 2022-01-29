@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,12 +22,102 @@ class RegistrationTest extends TestCase
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'email' => 'test@gmail.com',
+            'password' => 'passWORD123',
+            'password_confirmation' => 'passWORD123',
         ]);
 
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    /**
+     * メールアドレスが不正で登録できない場合
+     *
+     * @return void
+     */
+    public function test_new_users_can_not_register_by_email()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'passWORD123',
+            'password_confirmation' => 'passWORD123',
+        ]);
+
+        $this->assertGuest();
+    }
+
+    /**
+     * メールアドレスが重複して登録できない場合
+     *
+     * @return void
+     */
+    public function test_new_users_can_not_register_by_email_duplicate()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => $user->email,
+            'password' => 'passWORD123',
+            'password_confirmation' => 'passWORD123',
+        ]);
+
+        $this->assertGuest();
+    }
+
+    /**
+     * パスワードが不正で登録できなかった場合
+     * 数字が入っていない
+     *
+     * @return void
+     */
+    public function test_new_users_can_not_register_by_password_not_digits()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@gmail.com',
+            'password' => 'passWORDD',
+            'password_confirmation' => 'passWORDD',
+        ]);
+
+        $this->assertGuest();
+    }
+
+    /**
+     * パスワードが不正で登録できなかった場合
+     * パスワードがあっていない
+     *
+     * @return void
+     */
+    public function test_new_users_can_not_register_by_password_not_fit()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@gmail.com',
+            'password' => 'passWORD123',
+            'password_confirmation' => 'passWORD122',
+        ]);
+
+        $this->assertGuest();
+    }
+
+    /**
+     * パスワードが不正で登録できなかった場合
+     * 大文字と小文字が混ぜられていない
+     *
+     * @return void
+     */
+    public function test_new_users_can_not_register_by_password_not_mix()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@gmail.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
+
+        $this->assertGuest();
     }
 }
