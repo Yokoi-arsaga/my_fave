@@ -19,18 +19,28 @@ class PasswordConfirmationTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * パスワードが正しい場合
+     *
+     * @return void
+     */
     public function test_password_can_be_confirmed()
     {
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/confirm-password', [
-            'password' => 'password',
+            'password' => 'passWORD123',
         ]);
 
         $response->assertRedirect();
         $response->assertSessionHasNoErrors();
     }
 
+    /**
+     * パスワードが違う場合
+     *
+     * @return void
+     */
     public function test_password_is_not_confirmed_with_invalid_password()
     {
         $user = User::factory()->create();
