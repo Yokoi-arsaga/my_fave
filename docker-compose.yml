@@ -97,3 +97,9 @@ services:
       MINIO_ROOT_PASSWORD: secret_key
     depends_on:
       - minio
+
+  redis:
+    container_name: myfave_redis
+    image: redis:latest
+    ports:
+      - 6379:6379
