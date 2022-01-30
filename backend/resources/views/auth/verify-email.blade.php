@@ -7,7 +7,7 @@
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">
-            {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+            ご登録ありがとうございます。確認用メールを送らせていただきましたので、受信されたメールを開封し、URLからご本人様であることをご確認ください。メールが届かない場合は、下記「確認メールを再送信」ボタンを押してください。
         </div>
 
         @if (session('status') == 'verification-link-sent')
