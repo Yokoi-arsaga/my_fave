@@ -5,6 +5,8 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
@@ -27,8 +29,35 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'passWORD123',
         ]);
 
+        Event::fake();
+
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $response->id, 'hash' => sha1($response->email)]
+        );
+
+        $this->get($verificationUrl);
+
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    /**
+     * メールアドレスが承認されておらず、ログインできない場合
+     *
+     * @return void
+     */
+    public function test_new_users_can_not_register_with_not_verified()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@gmail.com',
+            'password' => 'passWORD123',
+            'password_confirmation' => 'passWORD123',
+        ]);
+
+        $this->assertGuest();
     }
 
     /**

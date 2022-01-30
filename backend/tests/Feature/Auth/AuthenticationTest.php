@@ -38,6 +38,7 @@ class AuthenticationTest extends TestCase
 
     /**
      * ログインに失敗した場合
+     * パスワードが違う
      *
      * @return void
      */
