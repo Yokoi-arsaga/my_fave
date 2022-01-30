@@ -5,7 +5,10 @@
     "Email": "メールアドレス",
     "Forgot your password?": "パスワードをお忘れですか？",
     "Remember me": "パスワードを保存する",
-    "Confirm Password":"パスワードの確認",
-    "Already registered?":"会員登録はお済みですか？",
-    "Register":"登録"
+    "Confirm Password": "パスワードの確認",
+    "Already registered?": "会員登録はお済みですか？",
+    "Register": "登録",
+    "Resend Verification Email": "確認メールを再送信",
+    "Log Out": "ログアウト",
+    "A new verification link has been sent to the email address you provided during registration.": "登録時に指定したメールアドレスに新しい確認リンクが送信されました。"
 }
