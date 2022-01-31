@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\VerifyEmailJP;
+use App\Notifications\ResetPasswordJP as ResetPasswordNotificationJP;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -44,12 +45,23 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * メールの日本語化
+     * 認証メールの日本語化
      *
      * @return void
      */
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmailJP);
+    }
+
+    /**
+     * パスワードリセットメールの日本語化
+     *
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        // $this->notify(new ResetPasswordNotification($token));
+        $this->notify(new ResetPasswordNotificationJP($token));
     }
 }
