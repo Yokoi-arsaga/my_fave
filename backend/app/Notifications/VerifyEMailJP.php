@@ -5,12 +5,10 @@ namespace App\Notifications;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 
-// オーバーライドに必要
 use Illuminate\Support\Facades\Lang;
 
 class VerifyEmailJP extends VerifyEmail
 {
-    // オーバーライド
     public function toMail($notifiable)
     {
         $verificationUrl = $this->verificationUrl($notifiable);
