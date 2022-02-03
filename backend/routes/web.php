@@ -26,4 +26,6 @@ Route::prefix('thumbnail')->name('thumbnail')->group(function(){
     Route::post('/', [ThumbnailController::class, 'store'])->name('store');
 });
 
+Route::get('/test', [ThumbnailController::class, 'getFileString']);
+
 require __DIR__.'/auth.php';

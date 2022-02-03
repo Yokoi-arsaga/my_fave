@@ -13,7 +13,7 @@ class ThumbnailRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class ThumbnailRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'thumbnail' => 'required|file|mimes:jpg,jpeg,png,gif'
         ];
     }
 }

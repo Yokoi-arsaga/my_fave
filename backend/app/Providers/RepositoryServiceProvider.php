@@ -14,7 +14,9 @@ class RepositoryServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    private const MODELS = [];
+    private const MODELS = [
+        'Thumbnail'
+    ];
 
     /**
      * Register any application services.
