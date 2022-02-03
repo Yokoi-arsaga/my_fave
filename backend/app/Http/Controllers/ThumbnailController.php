@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ThumbnailRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Modules\GenerateFileName;
 
 class ThumbnailController extends Controller
 {
@@ -15,35 +15,13 @@ class ThumbnailController extends Controller
 
     public function store(ThumbnailRequest $request)
     {
-        $extension = $request->thumbnail->extension();
+        $generateFileName = new GenerateFileName;
+        return $generateFileName->getFileString();
     }
 
-    public function getFileString()
+    public function test()
     {
-        $date = date('YmdHis');
-        $id = Auth::id();
-        $randomString = $this->getRandomString();
-
-        return $date. '-' .$id. '-' .$randomString;
-    }
-
-    public function getRandomString()
-    {
-        $stringLength = 8;
-
-        $characters = array_merge(
-            range(0, 9), range('a', 'z'),
-            range('A', 'Z'), ['-', '_']
-        );
-
-        $length = count($characters);
-
-        $id = "";
-
-        for ($i = 0; $i < $stringLength; $i++) {
-            $id .= $characters[random_int(0, $length - 1)];
-        }
-
-        return $id;
+        $generateFileName = new GenerateFileName;
+        return $generateFileName->getFileString();
     }
 }
