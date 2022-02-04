@@ -5,13 +5,15 @@ namespace App\Modules;
 use Illuminate\Support\Facades\Auth;
 
 class GenerateFileName{
-    public function getFileString()
+    public $fileString;
+
+    public function __construct()
     {
         $date = date('YmdHis');
         $id = Auth::id();
         $randomString = $this->getRandomString();
 
-        return $date. '-' .$id. '-' .$randomString;
+        $this->fileString = $date. '-' .$id. '-' .$randomString;
     }
 
     private function getRandomString()
@@ -33,4 +35,6 @@ class GenerateFileName{
 
         return $id;
     }
+
+
 }
