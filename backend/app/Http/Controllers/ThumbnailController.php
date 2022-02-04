@@ -4,18 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ThumbnailRequest;
 use App\Modules\GenerateFileName;
-use App\Services\Thumbnail\ThumbnailService;
+use App\Services\Thumbnail\ThumbnailServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ThumbnailController extends Controller
 {
-    private ThumbnailService $thumbnailService;
+    private ThumbnailServiceInterface $thumbnailService;
 
-    public function __construct(ThumbnailService $thumbnailService)
+    public function __construct(ThumbnailServiceInterface $thumbnailService)
     {
+        $this->thumbnailService = $thumbnailService;
         // 認証が必要
         $this->middleware('auth');
-        $this->thumbnailService = $thumbnailService;
     }
 
     public function store(ThumbnailRequest $request)
@@ -24,8 +25,10 @@ class ThumbnailController extends Controller
         $fileString = $generateFileName->fileString;
 
         $extension = $request->thumbnail->extension();
-        $fullFileName = $fileString.$extension;
+        $fullFileName = $fileString.'.'.$extension;
 
-        return $this->thumbnailService->storeThumbnail($request->thumbnail, $fileString, $fullFileName, Auth::id());
+        $this->thumbnailService->storeThumbnail($request->thumbnail, $fileString, $fullFileName, Auth::id());
+
+        return view('welcome');
     }
 }

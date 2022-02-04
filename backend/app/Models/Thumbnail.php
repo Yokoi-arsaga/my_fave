@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Thumbnail extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'file_string',
+        'full_file_name',
+        'user_id',
+    ];
 }

@@ -11,6 +11,20 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     You're logged in!
                 </div>
+                @if(count($errors) > 0)
+                <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                </div>
+                @endif
+                <form action="{{ route('thumbnail.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="thumbnail">
+                    <input type="submit">
+                </form>
             </div>
         </div>
     </div>

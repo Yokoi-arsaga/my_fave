@@ -26,8 +26,8 @@ class ServiceClassProvider extends ServiceProvider
     {
         foreach (self::PREFIXES as $prefix) {
             $this->app->bind(
-                "App\Services\\{$prefix}\{$prefix}ServiceInterface",
-                "App\Services\\{$prefix}\{$prefix}Service"
+                "App\Services\\{$prefix}\\{$prefix}ServiceInterface",
+                "App\Services\\{$prefix}\\{$prefix}Service"
             );
         }
     }

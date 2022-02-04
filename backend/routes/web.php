@@ -22,7 +22,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::prefix('thumbnail')->name('thumbnail')->group(function(){
+Route::prefix('thumbnail')->name('thumbnail.')->group(function(){
     Route::post('/', [ThumbnailController::class, 'store'])->name('store');
 });
 

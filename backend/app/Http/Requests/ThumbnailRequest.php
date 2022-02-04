@@ -24,7 +24,7 @@ class ThumbnailRequest extends FormRequest
     public function rules()
     {
         return [
-            'thumbnail' => 'required|file|mimes:jpg,jpeg,png,gif'
+            'thumbnail' => ['required', 'file', 'mimes:jpg,jpeg,png,gif']
         ];
     }
 }

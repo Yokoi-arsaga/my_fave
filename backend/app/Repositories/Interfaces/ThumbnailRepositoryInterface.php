@@ -8,7 +8,7 @@ use App\Models\Thumbnail;
  * interface AdminRepository 管理者ユーザー関連処理
  * @package App\Repositories\Admin
  */
-interface ThumbnailRepository
+interface ThumbnailRepositoryInterface
 {
     /**
      * サムネイルを作成。
