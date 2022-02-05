@@ -1,11 +1,10 @@
 <?php
 namespace App\Services\Thumbnail;
 
-use App\Models\Thumbnail;
-use App\Repositories\Interfaces\ThumbnailRepositoryInterface;
+use App\Repositories\Thumbnail\ThumbnailRepositoryInterface;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 
 class ThumbnailService implements ThumbnailServiceInterface
 {

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Thumbnail;
 
 use App\Models\Thumbnail;
-use App\Repositories\Interfaces\ThumbnailRepositoryInterface;
 
 /**
  * class AdminRepositoryImpl 管理者ユーザー関連処理
  * @package App\Repositories\Admin\Concrete
  */
-class EloquentThumbnailRepository implements ThumbnailRepositoryInterface
+class ThumbnailRepository implements ThumbnailRepositoryInterface
 {
     /**
      * @inheritDoc

@@ -27,8 +27,8 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         foreach (self::MODELS as $model) {
             $this->app->bind(
-                "App\Repositories\Interfaces\\{$model}RepositoryInterface",
-                "App\Repositories\Eloquent{$model}Repository"
+                "App\Repositories\\{$model}\\{$model}RepositoryInterface",
+                "App\Repositories\\{$model}\\{$model}Repository"
             );
         }
     }
