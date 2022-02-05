@@ -22,22 +22,13 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @inerhitDoc
      */
-    public function storeThumbnail(UploadedFile $file, string $fileString, string $fullFileName, int $userId): Thumbnail
+    public function storeThumbnail(UploadedFile $file, string $fileString, string $fullFileName, int $userId)
     {
-        Storage::disk('s3')->putFileAs('', $file, $fullFileName, 'public');
+        DB::transaction(function () use ($file, $fileString, $fullFileName, $userId){
+            Storage::disk('s3')->putFileAs('', $file, $fullFileName, 'public');
+            $this->thumbnailRepository->createThumbnail($fileString, $fullFileName, $userId);
+        });
 
-        DB::beginTransaction();
-
-        try {
-            $thumbnail = $this->thumbnailRepository->createThumbnail($fileString, $fullFileName, $userId);
-            DB::commit();
-        } catch (\Exception $exception){
-            DB::rollBack();
-            Storage::disk('s3')->delete($fullFileName);
-
-            throw $exception;
-        }
-
-        return $thumbnail;
+        return response();
     }
 }

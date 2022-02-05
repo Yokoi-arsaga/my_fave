@@ -15,5 +15,5 @@ interface ThumbnailServiceInterface
      * @param int $userId
      * @return Thumbnail
      */
-    public function storeThumbnail(UploadedFile $file, string $fileString, string $fullFileName, int $userId): Thumbnail;
+    public function storeThumbnail(UploadedFile $file, string $fileString, string $fullFileName, int $userId);
 }
