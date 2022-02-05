@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repositories\Interfaces;
+namespace App\Repositories\Thumbnail;
 
 use App\Models\Thumbnail;
 
 /**
  * interface ThumbnailRepository ユーザーのサムネイル処理
- * @package App\Repositories\EloquentThumbnailRepository
+ * @package App\Repositories\ThumbnailRepository
  */
 interface ThumbnailRepositoryInterface
 {
