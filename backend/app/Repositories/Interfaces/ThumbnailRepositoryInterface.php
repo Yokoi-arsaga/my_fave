@@ -5,8 +5,8 @@ namespace App\Repositories\Interfaces;
 use App\Models\Thumbnail;
 
 /**
- * interface AdminRepository 管理者ユーザー関連処理
- * @package App\Repositories\Admin
+ * interface ThumbnailRepository ユーザーのサムネイル処理
+ * @package App\Repositories\EloquentThumbnailRepository
  */
 interface ThumbnailRepositoryInterface
 {
