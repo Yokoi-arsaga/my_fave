@@ -6,12 +6,18 @@ use App\Http\Requests\ThumbnailRequest;
 use App\Modules\GenerateFileName;
 use App\Services\Thumbnail\ThumbnailServiceInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
+/**
+ * ユーザーのサムネイルに関するコントローラー
+ *
+ */
 class ThumbnailController extends Controller
 {
     private ThumbnailServiceInterface $thumbnailService;
 
+    /**
+     * @param ThumbnailServiceInterface $thumbnailService
+     */
     public function __construct(ThumbnailServiceInterface $thumbnailService)
     {
         $this->thumbnailService = $thumbnailService;
@@ -19,6 +25,12 @@ class ThumbnailController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * サムネイルの登録
+     *
+     * @param ThumbnailRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function store(ThumbnailRequest $request)
     {
         $generateFileName = new GenerateFileName;

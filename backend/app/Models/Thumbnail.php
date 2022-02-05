@@ -9,6 +9,9 @@ class Thumbnail extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'file_string',
         'full_file_name',

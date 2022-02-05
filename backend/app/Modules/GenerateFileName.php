@@ -5,7 +5,7 @@ namespace App\Modules;
 use Illuminate\Support\Facades\Auth;
 
 class GenerateFileName{
-    public $fileString;
+    public string $fileString;
 
     public function __construct()
     {
@@ -16,7 +16,13 @@ class GenerateFileName{
         $this->fileString = $date. '-' .$id. '-' .$randomString;
     }
 
-    private function getRandomString()
+    /**
+     * ランダムな文字列の生成
+     *
+     * @return string
+     * @throws string
+     */
+    private function getRandomString() :string
     {
         $stringLength = 8;
 
