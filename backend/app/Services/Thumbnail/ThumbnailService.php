@@ -23,11 +23,11 @@ class ThumbnailService implements ThumbnailServiceInterface
      */
     public function storeThumbnail(UploadedFile $file, string $fileString, string $fullFileName, int $userId)
     {
-        DB::transaction(function () use ($file, $fileString, $fullFileName, $userId){
+        $thumbnail = DB::transaction(function () use ($file, $fileString, $fullFileName, $userId){
             Storage::disk('s3')->putFileAs('', $file, $fullFileName, 'public');
-            $this->thumbnailRepository->createThumbnail($fileString, $fullFileName, $userId);
+            return $this->thumbnailRepository->createThumbnail($fileString, $fullFileName, $userId);
         });
 
-        return response();
+        return response($thumbnail, 201);
     }
 }

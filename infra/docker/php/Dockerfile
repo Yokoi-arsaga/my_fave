@@ -15,13 +15,15 @@ ENV TZ=UTC \
 COPY --from=composer:2.1 /usr/bin/composer /usr/bin/composer
 
 RUN apt-get update && \
-  apt-get -y install git libicu-dev libonig-dev libzip-dev unzip locales nodejs npm && \
+  apt-get -y install git libicu-dev libonig-dev libpng-dev libzip-dev unzip locales nodejs npm libjpeg-dev libfreetype6-dev libjpeg62-turbo-dev && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* && \
   locale-gen en_US.UTF-8 && \
   localedef -f UTF-8 -i en_US en_US.UTF-8 && \
   mkdir /var/run/php-fpm && \
-  docker-php-ext-install intl pdo_mysql zip bcmath && \
+  docker-php-ext-install intl pdo_mysql zip bcmath gd && \
+  docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
+  docker-php-ext-install -j$(nproc) gd && \
   npm install --global npm@7.22.0 && \
   composer config -g process-timeout 3600 && \
   composer config -g repos.packagist composer https://packagist.org
