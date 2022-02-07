@@ -24,11 +24,19 @@ class ThumbnailService implements ThumbnailServiceInterface
      */
     public function storeThumbnail(UploadedFile $file, string $fileString, string $fullFileName, int $userId)
     {
-        $response =  DB::transaction(function () use ($file, $fileString, $fullFileName, $userId){
-            return $this->thumbnailRepository->createThumbnail($fileString, $fullFileName, $userId);
-        });
-
         Storage::disk('s3')->putFileAs('', $file, $fullFileName, 'public');
+
+        // FIXME:ファイルアップロード処理があるためbeginTransactionを使用しているが何かいい方法があれば書き換えたい
+        DB::beginTransaction();
+        try {
+            $response = $this->thumbnailRepository->createThumbnail($fileString, $fullFileName, $userId);
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+
+            Storage::disk('s3')->delete($fullFileName);
+            throw $e;
+        }
 
         return $response;
     }
