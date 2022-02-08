@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ThumbnailRequest;
+use App\Models\Thumbnail;
 use App\Modules\GenerateFileName;
 use App\Services\Thumbnail\ThumbnailServiceInterface;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,7 @@ class ThumbnailController extends Controller
      * サムネイルの登録
      *
      * @param ThumbnailRequest $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Thumbnail $response
      */
     public function store(ThumbnailRequest $request)
     {
@@ -39,8 +40,6 @@ class ThumbnailController extends Controller
         $extension = $request->thumbnail->extension();
         $fullFileName = $fileString.'.'.$extension;
 
-        $this->thumbnailService->storeThumbnail($request->thumbnail, $fileString, $fullFileName, Auth::id());
-
-        return view('welcome');
+        return $this->thumbnailService->storeThumbnail($request->thumbnail, $fileString, $fullFileName, Auth::id());
     }
 }
