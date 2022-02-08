@@ -66,4 +66,24 @@ class SubmitThumbnailTest extends TestCase
 
         $this->assertCount(0, Storage::disk('s3')->files());
     }
+
+    /**
+     * ストレージ保存に失敗した場合の挙動のテスト
+     *
+     * @return void
+     */
+    public function test_submit_thumbnail_failure_by_storage_error()
+    {
+        Storage::shouldReceive('disk')
+            ->once()
+            ->andReturnNull();
+
+        $response = $this->actingAs($this->users[1])->post('/thumbnail',[
+            'thumbnail' => UploadedFile::fake()->image('photo.jpeg')
+        ]);
+
+        $response->assertStatus(500);
+
+        $this->assertEmpty(Thumbnail::all());
+    }
 }
