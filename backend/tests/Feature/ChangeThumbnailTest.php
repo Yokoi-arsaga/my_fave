@@ -67,4 +67,32 @@ class ChangeThumbnailTest extends TestCase
 
         $this->assertCount(0, Storage::disk('s3')->files());
     }
+
+    /**
+     * DB保存に失敗した場合の挙動のテスト
+     *
+     * @return void
+     */
+    public function test_submit_thumbnail_failure_by_db_error()
+    {
+        Storage::fake('s3');
+
+        $current = $this->actingAs($this->users[1])->post('/thumbnail',[
+            'thumbnail' => UploadedFile::fake()->image('photo.jpg')
+        ]);
+
+        Schema::table('thumbnails', function (Blueprint $table) {
+            $table->dropColumn('file_string');
+        });
+
+        $response = $this->actingAs($this->users[1])->patch('/thumbnail/change',[
+            'thumbnail' => UploadedFile::fake()->image('photo.png')
+        ]);
+
+        $response->assertStatus(500);
+
+        $thumbnail = Thumbnail::first();
+
+        $this->assertEquals($current['full_file_name'], $thumbnail['full_file_name']);
+    }
 }
