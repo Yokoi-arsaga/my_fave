@@ -42,4 +42,20 @@ class ThumbnailController extends Controller
 
         return $this->thumbnailService->storeThumbnail($request->thumbnail, $fileString, $fullFileName, Auth::id());
     }
+
+    /**
+     * サムネイルの変更
+     *
+     * @param ThumbnailRequest $request
+     * @return Thumbnail $response
+     */
+    public function change(ThumbnailRequest $request)
+    {
+        $thumbnail = Thumbnail::where('user_id', Auth::id())->first();
+
+        $extension = $request->thumbnail->extension();
+        $fullFileName = $thumbnail->file_string.'.'.$extension;
+
+        return $this->thumbnailService->changeThumbnail($request->thumbnail, $thumbnail->file_string, $fullFileName, Auth::id());
+    }
 }
