@@ -49,4 +49,22 @@ class ChangeThumbnailTest extends TestCase
         $this->assertNotEquals($current['full_file_name'], $response['full_file_name']);
         $this->assertEquals($current['file_string'], $response['file_string']);
     }
+
+    /**
+     * サムネイルを設定していない場合のテスト
+     *
+     * @return void
+     */
+    public function test_change_thumbnail_failure_by_have_not_thumbnail()
+    {
+        Storage::fake('s3');
+
+        $response = $this->actingAs($this->users[1])->patch('/thumbnail/change',[
+            'thumbnail' => UploadedFile::fake()->image('photo.png')
+        ]);
+
+        $response->assertRedirect('/');
+
+        $this->assertCount(0, Storage::disk('s3')->files());
+    }
 }
