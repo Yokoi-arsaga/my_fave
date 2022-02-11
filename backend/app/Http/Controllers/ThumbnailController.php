@@ -56,6 +56,6 @@ class ThumbnailController extends Controller
         $extension = $request->thumbnail->extension();
         $fullFileName = $thumbnail->file_string.'.'.$extension;
 
-        return $this->thumbnailService->changeThumbnail($request->thumbnail, $thumbnail->file_string, $fullFileName, Auth::id());
+        return $this->thumbnailService->changeThumbnail($request->thumbnail, $thumbnail->file_string, $fullFileName, $thumbnail->full_file_name, Auth::id());
     }
 }

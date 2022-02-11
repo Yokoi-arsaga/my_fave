@@ -21,4 +21,15 @@ class ThumbnailRepository implements ThumbnailRepositoryInterface
             'user_id' => $userId
         ]);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateThumbnail(string $fullFileName, int $userId): Thumbnail
+    {
+        $thumbnail = Thumbnail::where('user_id', $userId)->first();
+        $thumbnail->full_file_name = $fullFileName;
+        $thumbnail->save();
+        return $thumbnail;
+    }
 }

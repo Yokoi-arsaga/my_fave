@@ -18,4 +18,12 @@ interface ThumbnailRepositoryInterface
      * @return Thumbnail
      */
     public function createThumbnail(string $fileString, string $fullFileName, int $userId): Thumbnail;
+
+    /**
+     * サムネイルを更新。
+     * @param  string $fullFileName
+     * @param  int $userId
+     * @return Thumbnail
+     */
+    public function updateThumbnail(string $fullFileName, int $userId): Thumbnail;
 }
