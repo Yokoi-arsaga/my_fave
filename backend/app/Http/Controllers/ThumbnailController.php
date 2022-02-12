@@ -58,4 +58,14 @@ class ThumbnailController extends Controller
 
         return $this->thumbnailService->changeThumbnail($request->thumbnail, $thumbnail->file_string, $fullFileName, $thumbnail->full_file_name, Auth::id());
     }
+
+    /**
+     * サムネイルの削除
+     *
+     * @return mixed
+     */
+    public function delete()
+    {
+        return $this->thumbnailService->deleteThumbnail();
+    }
 }
