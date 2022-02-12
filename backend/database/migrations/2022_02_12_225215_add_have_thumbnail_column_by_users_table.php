@@ -15,7 +15,7 @@ class AddHaveThumbnailColumnByUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('have_thumbnail')->default(false);
-            $table->text('description');
+            $table->text('description')->nullable();
         });
     }
 
