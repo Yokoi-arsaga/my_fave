@@ -66,6 +66,8 @@ class ThumbnailController extends Controller
      */
     public function delete()
     {
-        return $this->thumbnailService->deleteThumbnail();
+        $thumbnail = Thumbnail::where('user_id', Auth::id())->first();
+
+        return $this->thumbnailService->deleteThumbnail($thumbnail->full_file_name);
     }
 }
