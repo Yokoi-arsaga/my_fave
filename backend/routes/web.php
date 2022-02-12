@@ -29,6 +29,7 @@ Route::get('/dashboard', function () {
 Route::prefix('thumbnail')->name('thumbnail.')->group(function(){
     Route::post('/', [ThumbnailController::class, 'store'])->name('store');
     Route::patch('/change', [ThumbnailController::class, 'change'])->middleware(['thumbnail.have'])->name('change');
+    Route::delete('/', [ThumbnailController::class, 'delete'])->name('delete');
 });
 
 require __DIR__.'/auth.php';
