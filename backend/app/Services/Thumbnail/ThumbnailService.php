@@ -67,4 +67,28 @@ class ThumbnailService implements ThumbnailServiceInterface
 
         return $response;
     }
+
+    /**
+     * @inerhitDoc
+     */
+    public function deleteThumbnail(string $currentFileName)
+    {
+        // rollback時元に戻すため
+        $rollBackFile = Storage::disk('s3')->get($currentFileName);
+        Storage::disk('s3')->delete($currentFileName);
+
+        // FIXME:ファイルアップロード処理があるためbeginTransactionを使用しているが何かいい方法があれば書き換えたい
+        DB::beginTransaction();
+        try {
+            $response = $this->thumbnailRepository->deleteThumbnail($currentFileName);
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+
+            Storage::disk('s3')->putFileAs('', $rollBackFile, $currentFileName, 'public');
+            throw $e;
+        }
+
+        return $response;
+    }
 }

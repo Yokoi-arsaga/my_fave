@@ -28,4 +28,12 @@ interface ThumbnailServiceInterface
      * @return Thumbnail
      */
     public function changeThumbnail(UploadedFile $file, string $fileString, string $fullFileName, string $currentFileName, int $userId);
+
+    /**
+     * サムネイルの削除処理の整合性をとる
+     *
+     * @param string $currentFileName
+     * @return mixed
+     */
+    public function deleteThumbnail(string $currentFileName);
 }

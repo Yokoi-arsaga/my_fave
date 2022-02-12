@@ -32,4 +32,13 @@ class ThumbnailRepository implements ThumbnailRepositoryInterface
         $thumbnail->save();
         return $thumbnail;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteThumbnail(string $fullFileName): bool
+    {
+        $thumbnail = Thumbnail::where('full_file_name', $fullFileName)->first();
+        return $thumbnail->delete();
+    }
 }

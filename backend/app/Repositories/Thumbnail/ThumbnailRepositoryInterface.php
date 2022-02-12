@@ -11,7 +11,8 @@ use App\Models\Thumbnail;
 interface ThumbnailRepositoryInterface
 {
     /**
-     * サムネイルを作成。
+     * サムネイルを作成
+     *
      * @param  string $fileString
      * @param  string $fullFileName
      * @param  int $userId
@@ -20,10 +21,19 @@ interface ThumbnailRepositoryInterface
     public function createThumbnail(string $fileString, string $fullFileName, int $userId): Thumbnail;
 
     /**
-     * サムネイルを更新。
+     * サムネイルを更新
+     *
      * @param  string $fullFileName
      * @param  int $userId
      * @return Thumbnail
      */
     public function updateThumbnail(string $fullFileName, int $userId): Thumbnail;
+
+    /**
+     * サムネイルを削除
+     *
+     * @param string $fullFileName
+     * @return bool
+     */
+    public function deleteThumbnail(string $fullFileName): bool;
 }
