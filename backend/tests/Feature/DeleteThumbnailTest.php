@@ -30,7 +30,7 @@ class DeleteThumbnailTest extends TestCase
      *
      * @return void
      */
-    public function test_change_thumbnail_success()
+    public function test_delete_thumbnail_success()
     {
         Storage::fake('s3');
 
@@ -44,5 +44,21 @@ class DeleteThumbnailTest extends TestCase
 
         $this->assertCount(0, Storage::disk('s3')->files());
         $this->assertEmpty(Thumbnail::all());
+    }
+
+    /**
+     * サムネイルを設定していない場合のテスト
+     *
+     * @return void
+     */
+    public function test_delete_thumbnail_failure_by_have_not_thumbnail()
+    {
+        Storage::fake('s3');
+
+        $response = $this->actingAs($this->users[1])->delete('/thumbnail');
+
+        $response->assertRedirect('/');
+
+        $this->assertCount(0, Storage::disk('s3')->files());
     }
 }
