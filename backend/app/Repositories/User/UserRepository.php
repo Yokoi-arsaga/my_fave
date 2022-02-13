@@ -21,4 +21,14 @@ class UserRepository implements UserRepositoryInterface
         $user->save();
         return $user;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function toggleThumbnailFlag(bool $flag): void
+    {
+        $user = User::find(Auth::id());
+        $user->have_thumbnail = $flag;
+        $user->save();
+    }
 }

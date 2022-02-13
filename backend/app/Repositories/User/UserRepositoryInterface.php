@@ -18,4 +18,12 @@ interface UserRepositoryInterface
      * @return User
      */
     public function editProfile(ProfileRequest $request): User;
+
+    /**
+     * サムネイル設定フラグの変更
+     *
+     * @param bool $flag
+     * @return void
+     */
+    public function toggleThumbnailFlag(bool $flag): void;
 }
