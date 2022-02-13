@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ThumbnailController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SnsAccountController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,10 +41,10 @@ Route::prefix('profile')->name('profile.')->group(function(){
 });
 
 Route::prefix('account')->name('account.')->group(function(){
-    Route::get('/edit', [UserController::class, 'edit'])->name('edit'); //一時的なもの　いずれ消す
-    Route::post('/store', [UserController::class, 'store'])->name('store');
-    Route::patch('/{id}', [UserController::class, 'update'])->name('update');
-    Route::delete('/{id}', [UserController::class, 'delete'])->name('delete');
+    Route::get('/edit', [SnsAccountController::class, 'edit'])->name('edit'); //一時的なもの　いずれ消す
+    Route::post('/store', [SnsAccountController::class, 'store'])->name('store');
+    Route::patch('/{id}', [SnsAccountController::class, 'update'])->name('update');
+    Route::delete('/{id}', [SnsAccountController::class, 'delete'])->name('delete');
 });
 
 require __DIR__.'/auth.php';
