@@ -39,4 +39,11 @@ Route::prefix('profile')->name('profile.')->group(function(){
     Route::post('/store', [UserController::class, 'store'])->name('store');
 });
 
+Route::prefix('account')->name('account.')->group(function(){
+    Route::get('/edit', [UserController::class, 'edit'])->name('edit'); //一時的なもの　いずれ消す
+    Route::post('/store', [UserController::class, 'store'])->name('store');
+    Route::patch('/{id}', [UserController::class, 'update'])->name('update');
+    Route::delete('/{id}', [UserController::class, 'delete'])->name('delete');
+});
+
 require __DIR__.'/auth.php';
