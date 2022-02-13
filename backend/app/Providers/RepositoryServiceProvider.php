@@ -15,7 +15,9 @@ class RepositoryServiceProvider extends ServiceProvider
      * @var array
      */
     private const MODELS = [
-        'Thumbnail'
+        'Thumbnail',
+        'User',
+        'SnsAccount'
     ];
 
     /**

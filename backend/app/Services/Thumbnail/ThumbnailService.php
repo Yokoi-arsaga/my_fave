@@ -2,21 +2,24 @@
 namespace App\Services\Thumbnail;
 
 use App\Repositories\Thumbnail\ThumbnailRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ThumbnailService implements ThumbnailServiceInterface
 {
     private ThumbnailRepositoryInterface $thumbnailRepository;
+    private UserRepositoryInterface $userRepository;
 
     /**
      * @param ThumbnailRepositoryInterface $thumbnailRepository
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(ThumbnailRepositoryInterface $thumbnailRepository)
+    public function __construct(ThumbnailRepositoryInterface $thumbnailRepository, UserRepositoryInterface $userRepository)
     {
         $this->thumbnailRepository = $thumbnailRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -30,6 +33,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         DB::beginTransaction();
         try {
             $response = $this->thumbnailRepository->createThumbnail($fileString, $fullFileName, $userId);
+            $this->userRepository->toggleThumbnailFlag(true);
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
