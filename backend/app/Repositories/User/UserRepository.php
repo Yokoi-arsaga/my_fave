@@ -4,6 +4,7 @@ namespace App\Repositories\User;
 
 use App\Http\Requests\ProfileRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class UserRepository implements UserRepositoryInterface
@@ -17,6 +18,7 @@ class UserRepository implements UserRepositoryInterface
         $user->name = $request->getName();
         $user->description = $request->getDescription();
         $user->location = $request->getLocation();
+        $user->save();
         return $user;
     }
 }
