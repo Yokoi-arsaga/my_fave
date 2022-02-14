@@ -58,4 +58,67 @@ class EditProfileTest extends TestCase
         $response->assertRedirect('/');
         $this->assertNull($user['description']);
     }
+
+    /**
+     * 名前が25文字を超えていた場合バリデーションで弾かれることを確認
+     *
+     * @return void
+     */
+    public function test_edit_profile_failure_by_name_too_long()
+    {
+        $profileInfo = [
+            'name' => 'ああああああああああああああああああああああああああ',
+            'description' => 'よろしくお願いいたします',
+            'location' => '東京都'
+        ];
+
+        $response = $this->actingAs($this->user)->post('/profile/store', $profileInfo);
+
+        $user = User::first();
+
+        $response->assertRedirect('/');
+        $this->assertNull($user['description']);
+    }
+
+    /**
+     * 説明文が500文字を超えていた場合バリデーションで弾かれることを確認
+     *
+     * @return void
+     */
+    public function test_edit_profile_failure_by_description_too_long()
+    {
+        $profileInfo = [
+            'name' => 'テスト太郎',
+            'description' => 'あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ',
+            'location' => '東京都'
+        ];
+
+        $response = $this->actingAs($this->user)->post('/profile/store', $profileInfo);
+
+        $user = User::first();
+
+        $response->assertRedirect('/');
+        $this->assertNull($user['description']);
+    }
+
+    /**
+     * 位置情報が500文字を超えていた場合バリデーションで弾かれることを確認
+     *
+     * @return void
+     */
+    public function test_edit_profile_failure_by_location_too_long()
+    {
+        $profileInfo = [
+            'name' => 'テスト太郎',
+            'description' => 'よろしくお願いいたします',
+            'location' => 'あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ'
+        ];
+
+        $response = $this->actingAs($this->user)->post('/profile/store', $profileInfo);
+
+        $user = User::first();
+
+        $response->assertRedirect('/');
+        $this->assertNull($user['description']);
+    }
 }
