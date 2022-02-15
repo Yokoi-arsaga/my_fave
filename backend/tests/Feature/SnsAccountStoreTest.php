@@ -62,11 +62,29 @@ class SnsAccountStoreTest extends TestCase
      *
      * @return void
      */
-    public function test_store_account_failure_by_empty()
+    public function test_store_account_failure_by_account_url_empty()
     {
         $accountInfo = [
             'media_id' => 1,
             'account_url' => ''
+        ];
+
+        $response = $this->actingAs($this->user)->post('/account/store', $accountInfo);
+
+        $response->assertRedirect('/');
+        $this->assertEmpty(SnsAccount::all());
+    }
+
+    /**
+     * メディアIDが1~3以外の数字だった場合バリデーションで弾かれることを確認
+     *
+     * @return void
+     */
+    public function test_store_account_failure_by_incorrect_number()
+    {
+        $accountInfo = [
+            'media_id' => 4,
+            'account_url' => 'https://www.youtube.com/'
         ];
 
         $response = $this->actingAs($this->user)->post('/account/store', $accountInfo);
