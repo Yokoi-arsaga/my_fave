@@ -38,4 +38,40 @@ class SnsAccountStoreTest extends TestCase
         $response->assertStatus(201);
         $this->assertEquals($response['account_url'], $account['account_url']);
     }
+
+    /**
+     * メディアIDが空欄だった場合バリデーションで弾かれることを確認
+     *
+     * @return void
+     */
+    public function test_store_account_failure_by_media_empty()
+    {
+        $accountInfo = [
+            'media_id' => '',
+            'account_url' => 'https://www.youtube.com/'
+        ];
+
+        $response = $this->actingAs($this->user)->post('/account/store', $accountInfo);
+
+        $response->assertRedirect('/');
+        $this->assertEmpty(SnsAccount::all());
+    }
+
+    /**
+     * アカウントURLが空欄だった場合バリデーションで弾かれることを確認
+     *
+     * @return void
+     */
+    public function test_store_account_failure_by_empty()
+    {
+        $accountInfo = [
+            'media_id' => 1,
+            'account_url' => ''
+        ];
+
+        $response = $this->actingAs($this->user)->post('/account/store', $accountInfo);
+
+        $response->assertRedirect('/');
+        $this->assertEmpty(SnsAccount::all());
+    }
 }
