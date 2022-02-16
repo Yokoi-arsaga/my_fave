@@ -23,6 +23,8 @@ class FriendRequestController extends Controller
     public function __construct(FriendRequestRepositoryInterface $friendRequestRepository)
     {
         $this->friendRequestRepository = $friendRequestRepository;
+        // 認証が必要
+        $this->middleware('auth');
     }
 
     /**
@@ -32,18 +34,17 @@ class FriendRequestController extends Controller
      */
     public function create()
     {
-        return view();
+        return view('FriendRequest.create');
     }
 
     /**
      * フレンド申請の登録
      *
      * @param FriendRequestRequest $request
-     * @param int $destinationId
      * @return FriendRequest
      */
-    public function store(FriendRequestRequest $request, int $destinationId): FriendRequest
+    public function store(FriendRequestRequest $request): FriendRequest
     {
-        return $this->friendRequestRepository->storeFriendRequest($request, $destinationId);
+        return $this->friendRequestRepository->storeFriendRequest($request);
     }
 }

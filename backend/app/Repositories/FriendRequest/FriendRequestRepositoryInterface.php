@@ -15,8 +15,7 @@ interface FriendRequestRepositoryInterface
      * インサート
      *
      * @param FriendRequestRequest $request
-     * @param int $destinationId
      * @return FriendRequest
      */
-    public function storeFriendRequest(FriendRequestRequest $request, int $destinationId): FriendRequest;
+    public function storeFriendRequest(FriendRequestRequest $request): FriendRequest;
 }

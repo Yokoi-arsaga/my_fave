@@ -11,11 +11,11 @@ class FriendRequestRepository implements FriendRequestRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function storeFriendRequest(FriendRequestRequest $request, int $destinationId): FriendRequest
+    public function storeFriendRequest(FriendRequestRequest $request): FriendRequest
     {
         return FriendRequest::create([
             'applicant_id' => Auth::id(),
-            'destination_id' => $destinationId,
+            'destination_id' => $request->getDestinationId(),
             'message' => $request->getMessage()
         ]);
     }
