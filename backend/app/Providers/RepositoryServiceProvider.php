@@ -17,8 +17,7 @@ class RepositoryServiceProvider extends ServiceProvider
     private const MODELS = [
         'Thumbnail',
         'User',
-        'SnsAccount',
-        'FriendRequest'
+        'SnsAccount'
     ];
 
     /**
