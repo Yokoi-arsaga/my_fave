@@ -13,7 +13,7 @@ class FriendRequestRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class FriendRequestRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => ['required', 'string', 'max:100']
+            'message' => ['required', 'string', 'max:100'],
+            'destination_id' => ['required', 'numeric']
         ];
     }
 
@@ -36,5 +37,15 @@ class FriendRequestRequest extends FormRequest
     public function getMessage(): string
     {
         return $this->input('message');
+    }
+
+    /**
+     * 申請先のユーザーID
+     *
+     * @return int
+     */
+    public function getDestinationId(): int
+    {
+        return $this->input('destination_id');
     }
 }
