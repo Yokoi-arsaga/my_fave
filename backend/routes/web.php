@@ -54,7 +54,7 @@ Route::prefix('account')->name('account.')->group(function(){
 // フレンド申請
 Route::prefix('friend/request')->name('friend.request.')->group(function(){
     Route::get('/create', [FriendRequestController::class, 'create'])->name('create');
-    Route::post('/store', [FriendRequestController::class, 'store'])->name('store');
+    Route::post('/store', [FriendRequestController::class, 'store'])->middleware(['friend.request'])->name('store');
 });
 
 require __DIR__.'/auth.php';

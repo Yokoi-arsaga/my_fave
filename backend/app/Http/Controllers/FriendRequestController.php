@@ -45,6 +45,7 @@ class FriendRequestController extends Controller
      */
     public function store(FriendRequestRequest $request): FriendRequest
     {
+        
         return $this->friendRequestRepository->storeFriendRequest($request);
     }
 }
