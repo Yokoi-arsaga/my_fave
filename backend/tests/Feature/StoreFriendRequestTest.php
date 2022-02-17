@@ -30,7 +30,7 @@ class StoreFriendRequestTest extends TestCase
     public function test_store_friend_request_success()
     {
         $friendRequestInfo = [
-            'destination_id' => 2,
+            'destination_id' => $this->users[2]->id,
             'message' => 'よろしくお願いいたします。',
         ];
 
@@ -48,7 +48,7 @@ class StoreFriendRequestTest extends TestCase
     public function test_store_friend_request_failure_by_message_empty()
     {
         $friendRequestInfo = [
-            'destination_id' => 2,
+            'destination_id' => $this->users[2]->id,
             'message' => '',
         ];
 
@@ -77,14 +77,32 @@ class StoreFriendRequestTest extends TestCase
     }
 
     /**
-     * 送信先IDが空欄だった場合バリデーションで弾かれることを確認
+     * 送信先IDが自身だった場合リダイレクトされることを確認
      *
      * @return void
      */
-    public function test_store_friend_request_failure_by_destination_string()
+    public function test_store_friend_request_failure_by_destination_mine()
     {
         $friendRequestInfo = [
-            'destination_id' => 1,
+            'destination_id' => $this->users[1]->id,
+            'message' => 'よろしくお願いいたします。',
+        ];
+
+        $response = $this->actingAs($this->users[1])->post('/friend/request/store', $friendRequestInfo);
+
+        $response->assertRedirect('/');
+        $this->assertEmpty(FriendRequest::all());
+    }
+
+    /**
+     * 送信先IDが存在しない場合リダイレクトされることを確認
+     *
+     * @return void
+     */
+    public function test_store_friend_request_failure_by_destination_not_exist()
+    {
+        $friendRequestInfo = [
+            'destination_id' => 3,
             'message' => 'よろしくお願いいたします。',
         ];
 

@@ -65,6 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'thumbnail.have' => \App\Http\Middleware\HaveThumbnail::class,
-        'friend.request' => \App\Http\Middleware\FriendRequest::class,
+        'friend.request' => \App\Http\Middleware\FriendRequestStore::class,
     ];
 }
