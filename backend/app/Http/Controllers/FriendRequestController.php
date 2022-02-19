@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FriendRequestRequest;
 use App\Models\FriendRequest;
+use App\Models\User;
+use App\Notifications\FriendRequestNotification;
 use App\Repositories\FriendRequest\FriendRequestRepositoryInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * フレンド申請に関するコントローラー
@@ -45,7 +48,15 @@ class FriendRequestController extends Controller
      */
     public function store(FriendRequestRequest $request): FriendRequest
     {
-        
-        return $this->friendRequestRepository->storeFriendRequest($request);
+        $friendRequest = $this->friendRequestRepository->storeFriendRequest($request);
+
+        $applicant = User::find(Auth::id());
+        $destination = User::find($request->getDestinationId());
+
+        $destination->notify(
+            new FriendRequestNotification($friendRequest, $applicant)
+        );
+
+        return $friendRequest;
     }
 }
