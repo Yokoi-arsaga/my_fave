@@ -24,6 +24,7 @@ class StoreFriendRequestTest extends TestCase
 
     /**
      * フレンド申請投稿に成功したテスト
+     * 通知が送られているかもテスト
      *
      * @return void
      */
@@ -38,6 +39,9 @@ class StoreFriendRequestTest extends TestCase
 
         $response->assertStatus(201);
         $this->assertEquals($response['destination_id'], $friendRequestInfo['destination_id']);
+
+        $user = User::find($this->users[2]->id);
+        $this->assertCount(1, $user->notifications);
     }
 
     /**
@@ -56,6 +60,9 @@ class StoreFriendRequestTest extends TestCase
 
         $response->assertRedirect('/');
         $this->assertEmpty(FriendRequest::all());
+
+        $user = User::find($this->users[2]->id);
+        $this->assertEmpty($user->notifications);
     }
 
     /**
@@ -74,6 +81,9 @@ class StoreFriendRequestTest extends TestCase
 
         $response->assertRedirect('/');
         $this->assertEmpty(FriendRequest::all());
+
+        $user = User::find($this->users[2]->id);
+        $this->assertEmpty($user->notifications);
     }
 
     /**
@@ -92,6 +102,9 @@ class StoreFriendRequestTest extends TestCase
 
         $response->assertRedirect('/');
         $this->assertEmpty(FriendRequest::all());
+
+        $user = User::find($this->users[2]->id);
+        $this->assertEmpty($user->notifications);
     }
 
     /**
@@ -110,5 +123,8 @@ class StoreFriendRequestTest extends TestCase
 
         $response->assertRedirect('/');
         $this->assertEmpty(FriendRequest::all());
+
+        $user = User::find($this->users[2]->id);
+        $this->assertEmpty($user->notifications);
     }
 }
