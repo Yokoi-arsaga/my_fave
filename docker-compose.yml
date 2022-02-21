@@ -103,3 +103,13 @@ services:
     image: redis:latest
     ports:
       - 6379:6379
+
+  front:
+    build:
+      context: .
+      dockerfile: ./infra/docker/front/Dockerfile
+    volumes:
+      - ./:/var/www/nuxt
+    ports:
+      - ${FRONT_PORT}:3000
+    tty: true
