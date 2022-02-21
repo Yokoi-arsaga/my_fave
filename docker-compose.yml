@@ -109,7 +109,7 @@ services:
       context: .
       dockerfile: ./infra/docker/front/Dockerfile
     volumes:
-      - ./:/var/www/nuxt
+      - ./frontend:/var/www/nuxt
     ports:
       - ${FRONT_PORT}:3000
     tty: true
