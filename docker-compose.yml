@@ -102,7 +102,7 @@ services:
     container_name: myfave_redis
     image: redis:latest
     ports:
-      - 6379:6379
+      - '6379:6379'
 
   front:
     build:
@@ -112,4 +112,5 @@ services:
       - ./frontend:/var/www/nuxt
     ports:
       - ${FRONT_PORT}:3000
+      - '24678:24678'
     tty: true
