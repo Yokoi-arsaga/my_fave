@@ -129,3 +129,5 @@ ide-helper:
 	docker compose exec app php artisan ide-helper:generate
 	docker compose exec app php artisan ide-helper:meta
 	docker compose exec app php artisan ide-helper:models --nowrite
+nuxt-dev:
+	docker compose exec front ash -c 'cd front && npm run dev'
