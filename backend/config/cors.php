@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://web',],
+    'allowed_origins' => [env('HOST_URL')],
 
     'allowed_origins_patterns' => [],
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\SnsAccountController;
 use App\Http\Controllers\FriendRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+// 疎通確認
+Route::get('/check', function (){
+    Log::debug('接続されています！');
+    return response()->json([
+        'message'=>'hello world.'
+
+    ]);
 });
 
 // サムネイル関連
