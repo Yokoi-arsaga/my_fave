@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-    const {data} = await useFetch('http://localhost:9000/api/check');
+    const {data} = await useFetch('http://my_fave_nginx:9000/api/check');
 </script>

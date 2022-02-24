@@ -3,11 +3,13 @@ volumes:
   php-fpm-socket:
   db-store:
   psysh-store:
+
 services:
   app:
     build:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile
+    container_name: my_fave_app
     volumes:
       - type: volume
         source: php-fpm-socket
@@ -34,6 +36,7 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/nginx/Dockerfile
+    container_name: my_fave_nginx
     ports:
       - target: 80
         published: ${WEB_PORT:-80}
@@ -109,6 +112,7 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/front/Dockerfile
+    container_name: my_fave_front
     volumes:
       - ./frontend:/var/www/nuxt
     ports:
