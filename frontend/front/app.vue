@@ -1,9 +1,11 @@
 <template>
     <div>
-        <p>{{ data }}</p>
+        <p>hello, world</p>
     </div>
 </template>
 
-<script setup>
-const { data } = await useFetch("http://my_fave_nginx:9000/api/check");
+<script setup lang="ts">
+const fn = (args) => {
+    console.log(args);
+};
 </script>
