@@ -1,11 +1,25 @@
 {
-  "private": true,
-  "scripts": {
-    "dev": "nuxi dev",
-    "build": "nuxi build",
-    "start": "node .output/server/index.mjs"
-  },
-  "devDependencies": {
-    "nuxt3": "latest"
-  }
+    "private": true,
+    "scripts": {
+        "dev": "nuxi dev",
+        "build": "nuxi build",
+        "start": "node .output/server/index.mjs",
+        "lint": "eslint . --ext .ts,.tsx,.vue --ignore-path .gitignore",
+        "lintfix": "prettier . --write --ignore-path .gitignore"
+    },
+    "devDependencies": {
+        "@nuxtjs/eslint-config": "^7.0.0",
+        "@nuxtjs/eslint-module": "^3.0.2",
+        "@typescript-eslint/eslint-plugin": "^5.7.0",
+        "@typescript-eslint/parser": "^5.7.0",
+        "eslint": "^8.4.1",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-nuxt": "^3.0.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "eslint-plugin-vue": "^8.2.0",
+        "nuxt3": "latest",
+        "prettier": "^2.5.1",
+        "typescript": "^4.5.4",
+        "typescript-eslint": "^0.0.1-alpha.0"
+    }
 }
