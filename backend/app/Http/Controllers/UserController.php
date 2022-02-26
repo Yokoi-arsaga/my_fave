@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileRequest;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Modules\ApplicationLogger;
+use App\ViewModel\UserViewModel;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 
 /**
  * ユーザーに関するコントローラー
@@ -27,9 +33,10 @@ class UserController extends Controller
     /**
      * プロフィール編集ページ
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
-    public function edit(){
+    public function edit()
+    {
         return view('Profile.edit');
     }
 
@@ -37,10 +44,16 @@ class UserController extends Controller
      * プロフィールの更新
      *
      * @param ProfileRequest $request
-     * @return \App\Models\User
+     * @return JsonResponse
      */
-    public function store(ProfileRequest $request)
+    public function store(ProfileRequest $request): JsonResponse
     {
-        return $this->userRepository->editProfile($request);
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('プロフィールの更新処理を開始');
+        $editProfile = $this->userRepository->editProfile($request);
+
+        $logger->success();
+        return response()->json($editProfile);
     }
 }

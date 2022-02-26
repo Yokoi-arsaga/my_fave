@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FriendRequestRequest;
 use App\Models\FriendRequest;
 use App\Models\User;
+use App\Modules\ApplicationLogger;
 use App\Notifications\FriendRequestNotification;
 use App\Repositories\FriendRequest\FriendRequestRepositoryInterface;
 use Illuminate\Contracts\Foundation\Application;
@@ -48,15 +49,20 @@ class FriendRequestController extends Controller
      */
     public function store(FriendRequestRequest $request): FriendRequest
     {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('フレンド申請の登録処理開始');
         $friendRequest = $this->friendRequestRepository->storeFriendRequest($request);
 
         $applicant = User::find(Auth::id());
         $destination = User::find($request->getDestinationId());
 
+        $logger->write('通知処理開始');
         $destination->notify(
             new FriendRequestNotification($friendRequest, $applicant)
         );
 
+        $logger->success();
         return $friendRequest;
     }
 }
