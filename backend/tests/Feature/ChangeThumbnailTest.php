@@ -34,11 +34,11 @@ class ChangeThumbnailTest extends TestCase
     {
         Storage::fake('s3');
 
-        $current = $this->actingAs($this->users[1])->post('/thumbnail',[
+        $current = $this->actingAs($this->users[1])->post('/api/thumbnail',[
             'thumbnail' => UploadedFile::fake()->image('photo.jpg')
         ]);
 
-        $response = $this->actingAs($this->users[1])->patch('/thumbnail/change',[
+        $response = $this->actingAs($this->users[1])->patch('/api/thumbnail/change',[
             'thumbnail' => UploadedFile::fake()->image('photo.png')
         ]);
 
@@ -59,7 +59,7 @@ class ChangeThumbnailTest extends TestCase
     {
         Storage::fake('s3');
 
-        $response = $this->actingAs($this->users[1])->patch('/thumbnail/change',[
+        $response = $this->actingAs($this->users[1])->patch('/api/thumbnail/change',[
             'thumbnail' => UploadedFile::fake()->image('photo.png')
         ]);
 
@@ -77,7 +77,7 @@ class ChangeThumbnailTest extends TestCase
     {
         Storage::fake('s3');
 
-        $current = $this->actingAs($this->users[1])->post('/thumbnail',[
+        $current = $this->actingAs($this->users[1])->post('/api/thumbnail',[
             'thumbnail' => UploadedFile::fake()->image('photo.jpg')
         ]);
 
@@ -85,7 +85,7 @@ class ChangeThumbnailTest extends TestCase
             $table->dropColumn('file_string');
         });
 
-        $response = $this->actingAs($this->users[1])->patch('/thumbnail/change',[
+        $response = $this->actingAs($this->users[1])->patch('/api/thumbnail/change',[
             'thumbnail' => UploadedFile::fake()->image('photo.png')
         ]);
 

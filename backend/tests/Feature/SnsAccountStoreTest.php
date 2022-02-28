@@ -31,7 +31,7 @@ class SnsAccountStoreTest extends TestCase
             'account_url' => 'https://www.youtube.com/'
         ];
 
-        $response = $this->actingAs($this->user)->post('/account/store', $accountInfo);
+        $response = $this->actingAs($this->user)->post('/api/account/store', $accountInfo);
 
         $account = SnsAccount::first();
 
@@ -51,7 +51,7 @@ class SnsAccountStoreTest extends TestCase
             'account_url' => 'https://www.youtube.com/'
         ];
 
-        $response = $this->actingAs($this->user)->post('/account/store', $accountInfo);
+        $response = $this->actingAs($this->user)->post('/api/account/store', $accountInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(SnsAccount::all());
@@ -69,7 +69,7 @@ class SnsAccountStoreTest extends TestCase
             'account_url' => ''
         ];
 
-        $response = $this->actingAs($this->user)->post('/account/store', $accountInfo);
+        $response = $this->actingAs($this->user)->post('/api/account/store', $accountInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(SnsAccount::all());
@@ -87,7 +87,7 @@ class SnsAccountStoreTest extends TestCase
             'account_url' => 'https://www.youtube.com/'
         ];
 
-        $response = $this->actingAs($this->user)->post('/account/store', $accountInfo);
+        $response = $this->actingAs($this->user)->post('/api/account/store', $accountInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(SnsAccount::all());

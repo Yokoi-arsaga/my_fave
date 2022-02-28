@@ -34,7 +34,7 @@ class SubmitThumbnailTest extends TestCase
     {
         Storage::fake('s3');
 
-        $response = $this->actingAs($this->users[1])->post('/thumbnail',[
+        $response = $this->actingAs($this->users[1])->post('/api/thumbnail',[
             'thumbnail' => UploadedFile::fake()->image('photo.jpg')
         ]);
 
@@ -58,7 +58,7 @@ class SubmitThumbnailTest extends TestCase
 
         Storage::fake('s3');
 
-        $response = $this->actingAs($this->users[1])->post('/thumbnail',[
+        $response = $this->actingAs($this->users[1])->post('/api/thumbnail',[
             'thumbnail' => UploadedFile::fake()->image('photo.jpeg')
         ]);
 
@@ -78,7 +78,7 @@ class SubmitThumbnailTest extends TestCase
             ->once()
             ->andReturnNull();
 
-        $response = $this->actingAs($this->users[1])->post('/thumbnail',[
+        $response = $this->actingAs($this->users[1])->post('/api/thumbnail',[
             'thumbnail' => UploadedFile::fake()->image('photo.jpeg')
         ]);
 
@@ -98,7 +98,7 @@ class SubmitThumbnailTest extends TestCase
 
         $arr = [1, 2, 3, 4, 5];
         foreach ($arr as $value){
-            $this->actingAs($this->users[$value])->post('/thumbnail',[
+            $this->actingAs($this->users[$value])->post('/api/thumbnail',[
                 'thumbnail' => UploadedFile::fake()->image('photo.jpg')
             ]);
         }
@@ -120,7 +120,7 @@ class SubmitThumbnailTest extends TestCase
     {
         Storage::fake('s3');
 
-        $response = $this->actingAs($this->users[1])->post('/thumbnail');
+        $response = $this->actingAs($this->users[1])->post('/api/thumbnail');
 
         $response->assertStatus(302);
 
@@ -136,7 +136,7 @@ class SubmitThumbnailTest extends TestCase
     {
         Storage::fake('s3');
 
-        $response = $this->actingAs($this->users[1])->post('/thumbnail',[
+        $response = $this->actingAs($this->users[1])->post('/api/thumbnail',[
             'thumbnail' => UploadedFile::fake()->image('photo.tiff')
         ]);
 

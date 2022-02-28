@@ -34,11 +34,11 @@ class DeleteThumbnailTest extends TestCase
     {
         Storage::fake('s3');
 
-        $this->actingAs($this->users[1])->post('/thumbnail',[
+        $this->actingAs($this->users[1])->post('/api/thumbnail',[
             'thumbnail' => UploadedFile::fake()->image('photo.jpg')
         ]);
 
-        $response = $this->actingAs($this->users[1])->delete('/thumbnail');
+        $response = $this->actingAs($this->users[1])->delete('/api/thumbnail');
 
         $response->assertStatus(200);
 
@@ -55,7 +55,7 @@ class DeleteThumbnailTest extends TestCase
     {
         Storage::fake('s3');
 
-        $response = $this->actingAs($this->users[1])->delete('/thumbnail');
+        $response = $this->actingAs($this->users[1])->delete('/api/thumbnail');
 
         $response->assertRedirect('/');
 
@@ -71,7 +71,7 @@ class DeleteThumbnailTest extends TestCase
     {
         Storage::fake('s3');
 
-        $current = $this->actingAs($this->users[1])->post('/thumbnail',[
+        $current = $this->actingAs($this->users[1])->post('/api/thumbnail',[
             'thumbnail' => UploadedFile::fake()->image('photo.jpg')
         ]);
 
@@ -79,7 +79,7 @@ class DeleteThumbnailTest extends TestCase
             $table->dropColumn('full_file_name');
         });
 
-        $response = $this->actingAs($this->users[1])->delete('/thumbnail');
+        $response = $this->actingAs($this->users[1])->delete('/api/thumbnail');
 
         $response->assertStatus(500);
 
