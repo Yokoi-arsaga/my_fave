@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\FriendRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 
@@ -35,7 +34,7 @@ class StoreFriendRequestTest extends TestCase
             'message' => 'よろしくお願いいたします。',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/friend/request/store', $friendRequestInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
 
         $response->assertStatus(201);
         $this->assertEquals($response['destination_id'], $friendRequestInfo['destination_id']);
@@ -56,7 +55,7 @@ class StoreFriendRequestTest extends TestCase
             'message' => '',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/friend/request/store', $friendRequestInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(FriendRequest::all());
@@ -77,7 +76,7 @@ class StoreFriendRequestTest extends TestCase
             'message' => 'よろしくお願いいたします。',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/friend/request/store', $friendRequestInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(FriendRequest::all());
@@ -98,7 +97,7 @@ class StoreFriendRequestTest extends TestCase
             'message' => 'よろしくお願いいたします。',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/friend/request/store', $friendRequestInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(FriendRequest::all());
@@ -119,7 +118,7 @@ class StoreFriendRequestTest extends TestCase
             'message' => 'よろしくお願いいたします。',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/friend/request/store', $friendRequestInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(FriendRequest::all());

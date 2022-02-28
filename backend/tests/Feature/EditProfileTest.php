@@ -30,7 +30,7 @@ class EditProfileTest extends TestCase
             'location' => '東京都'
         ];
 
-        $response = $this->actingAs($this->user)->post('/profile/store', $profileInfo);
+        $response = $this->actingAs($this->user)->post('/api/profile/store', $profileInfo);
 
         $user = User::first();
 
@@ -51,7 +51,7 @@ class EditProfileTest extends TestCase
             'location' => '東京都'
         ];
 
-        $response = $this->actingAs($this->user)->post('/profile/store', $profileInfo);
+        $response = $this->actingAs($this->user)->post('/api/profile/store', $profileInfo);
 
         $user = User::first();
 
@@ -72,7 +72,7 @@ class EditProfileTest extends TestCase
             'location' => '東京都'
         ];
 
-        $response = $this->actingAs($this->user)->post('/profile/store', $profileInfo);
+        $response = $this->actingAs($this->user)->post('/api/profile/store', $profileInfo);
 
         $user = User::first();
 
@@ -93,7 +93,7 @@ class EditProfileTest extends TestCase
             'location' => '東京都'
         ];
 
-        $response = $this->actingAs($this->user)->post('/profile/store', $profileInfo);
+        $response = $this->actingAs($this->user)->post('/api/profile/store', $profileInfo);
 
         $user = User::first();
 
@@ -114,7 +114,7 @@ class EditProfileTest extends TestCase
             'location' => 'あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ'
         ];
 
-        $response = $this->actingAs($this->user)->post('/profile/store', $profileInfo);
+        $response = $this->actingAs($this->user)->post('/api/profile/store', $profileInfo);
 
         $user = User::first();
 
