@@ -7,22 +7,18 @@
         </ul>
         <div>
             <p>&lt;</p>
-            <p>{{ this.currentPage }}</p>
+            <p>{{ data.currentPage }}</p>
             <p>&gt;</p>
         </div>
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 interface PageInfo {
     currentPage: number
 }
 
-export default {
-    data(): PageInfo {
-        return {
-            currentPage: 1
-        }
-    }
-}
+const data: PageInfo = {
+    currentPage: 1
+};
 </script>

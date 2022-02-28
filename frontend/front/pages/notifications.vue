@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <NotificationsItem
+            <NotificationItem
                 v-for="(notification, key) in notifications"
                 :key="key"
                 :title="notification.title"
