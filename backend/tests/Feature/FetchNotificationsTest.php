@@ -22,24 +22,24 @@ class FetchNotificationsTest extends TestCase
     }
 
     /**
-     * フレンド申請投稿に成功したテスト
-     * 通知が送られているかもテスト
+     * 通知一覧の取得に成功したテスト
      *
      * @return void
      */
-    public function test_store_friend_request_success()
+    public function test_fetch_notifications_success()
     {
         $friendRequestInfo = [
             'destination_id' => $this->users[1]->id,
             'message' => 'よろしくお願いいたします。',
         ];
 
-        $response = $this->actingAs($this->users[2])->post('/api/friend/request/store', $friendRequestInfo);
+        $this->actingAs($this->users[2])->post('/api/friend/request/store', $friendRequestInfo);
+        $this->actingAs($this->users[3])->post('/api/friend/request/store', $friendRequestInfo);
 
-        $response->assertStatus(201);
-        $this->assertEquals($response['destination_id'], $friendRequestInfo['destination_id']);
+        $response = $this->actingAs($this->users[1])->get('/api/notifications');
 
-        $user = User::find($this->users[2]->id);
-        $this->assertCount(1, $user->notifications);
+        $response->assertStatus(200);
+
+        $this->assertCount(2, $response->notifications);
     }
 }
