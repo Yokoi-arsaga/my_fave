@@ -59,3 +59,8 @@ Route::prefix('friend/request')->name('friend.request.')->group(function(){
     Route::get('/create', [FriendRequestController::class, 'create'])->name('create');
     Route::post('/store', [FriendRequestController::class, 'store'])->middleware(['friend.request'])->name('store');
 });
+
+// 通知取得
+Route::prefix('notifications')->name('notifications.')->group(function(){
+    Route::get('/', [UserController::class, 'notifications'])->name('all');
+});

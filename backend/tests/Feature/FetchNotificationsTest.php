@@ -39,7 +39,7 @@ class FetchNotificationsTest extends TestCase
         $response = $this->actingAs($this->users[1])->get('/api/notifications');
 
         $response->assertStatus(200);
-
-        $this->assertCount(2, $response->notifications);
+        $response->assertJsonCount(2);
+        $this->assertEquals($response[0]['data']['message'], $friendRequestInfo['message']);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileRequest;
+use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Modules\ApplicationLogger;
 use App\ViewModel\UserViewModel;
@@ -55,5 +56,21 @@ class UserController extends Controller
 
         $logger->success();
         return response()->json($editProfile);
+    }
+
+    /**
+     * 通知一覧の取得
+     *
+     * @return JsonResponse
+     */
+    public function notifications(): JsonResponse
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('通知一覧の取得処理を開始');
+        $notifications = $this->userRepository->fetchNotifications();
+
+        $logger->success();
+        return response()->json($notifications);
     }
 }
