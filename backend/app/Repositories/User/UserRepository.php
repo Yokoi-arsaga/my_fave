@@ -4,7 +4,6 @@ namespace App\Repositories\User;
 
 use App\Http\Requests\ProfileRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class UserRepository implements UserRepositoryInterface
@@ -30,5 +29,14 @@ class UserRepository implements UserRepositoryInterface
         $user = User::find(Auth::id());
         $user->have_thumbnail = $flag;
         $user->save();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchNotifications(): mixed
+    {
+        $user = User::find(Auth::id());
+        return $user->notifications;
     }
 }

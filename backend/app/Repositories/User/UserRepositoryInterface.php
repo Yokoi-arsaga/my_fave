@@ -4,6 +4,7 @@ namespace App\Repositories\User;
 
 use App\Http\Requests\ProfileRequest;
 use App\Models\User;
+use Notification;
 
 /**
  * interface UserRepository ユーザーのサムネイル処理
@@ -26,4 +27,11 @@ interface UserRepositoryInterface
      * @return void
      */
     public function toggleThumbnailFlag(bool $flag): void;
+
+    /**
+     * 通知一覧の取得
+     *
+     * @return mixed
+     */
+    public function fetchNotifications(): mixed;
 }
