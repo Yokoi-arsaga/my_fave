@@ -18,16 +18,6 @@ use \Symfony\Component\HttpFoundation\Response;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
-     *
-     * @return View
-     */
-    public function create()
-    {
-        return view('auth.register');
-    }
-
-    /**
      * Handle an incoming registration request.
      *
      * @param Request $request
