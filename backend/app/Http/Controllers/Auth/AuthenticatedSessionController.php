@@ -24,11 +24,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $email = $request->email;
-        $user = User::where('email', $email)->first();
-        $token = $user->createToken('token')->plainTextToken;
 
-        return response()->json($token);
+        return response()->json(['message' => 'ログインしました']);
     }
 
     /**
