@@ -25,5 +25,9 @@ const form:FormData = {
     email: 'example.com',
     password: 'secret'
 };
+
+const submit = async () => {
+    const user = await useFetch('http://my_fave_nginx:9000/api/check');
+}
 </script>
 
