@@ -64,3 +64,5 @@ Route::prefix('friend/request')->name('friend.request.')->group(function(){
 Route::prefix('notifications')->name('notifications.')->group(function(){
     Route::get('/', [UserController::class, 'notifications'])->name('all');
 });
+
+require __DIR__.'/auth.php';
