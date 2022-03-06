@@ -16,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from "axios";
 interface FormData {
     email: string,
     password: string

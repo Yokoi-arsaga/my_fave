@@ -5,5 +5,7 @@ export default defineNuxtConfig({
     typescript: {
         strict: true
     },
-    modules: ['@nuxtjs/axios'],
+    modules: [
+        ['@nuxtjs/axios', {baseURL: 'http://my_fave_nginx:9000/api/'}]
+    ],
 });
