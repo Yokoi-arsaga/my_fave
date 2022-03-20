@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Modules\ApplicationLogger;
 use App\Notifications\FriendRequestNotification;
 use App\Repositories\FriendRequest\FriendRequestRepositoryInterface;
+use App\Repositories\Friend\FriendRepositoryInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -21,13 +22,19 @@ use Illuminate\Support\Facades\Auth;
 class FriendRequestController extends Controller
 {
     private FriendRequestRepositoryInterface $friendRequestRepository;
+    private FriendRepositoryInterface $friendRepository;
 
     /**
      * @param FriendRequestRepositoryInterface $friendRequestRepository
+     * @param FriendRepositoryInterface $friendRepository
      */
-    public function __construct(FriendRequestRepositoryInterface $friendRequestRepository)
+    public function __construct(
+        FriendRequestRepositoryInterface $friendRequestRepository,
+        FriendRepositoryInterface $friendRepository
+    )
     {
         $this->friendRequestRepository = $friendRequestRepository;
+        $this->friendRepository = $friendRepository;
         // 認証が必要
         $this->middleware('auth');
     }
@@ -77,7 +84,10 @@ class FriendRequestController extends Controller
     {
         $logger = new ApplicationLogger(__METHOD__);
 
-        $logger->write('フレンド申請の登録処理開始');
-        $friendRequest = $this->friendRequestRepository->storeFriendRequest($request);
+        $logger->write('フレンド申請の取得開始');
+        $friendRequest = $this->friendRequestRepository->getFriendRequest($request->request_id);
+
+        $logger->write('フレンドの登録処理開始');
+        $friend = $this->friendRepository->storeFriend($friendRequest->applicant_id);
     }
 }

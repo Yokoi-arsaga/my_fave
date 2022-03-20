@@ -19,4 +19,12 @@ class FriendRequestRepository implements FriendRequestRepositoryInterface
             'message' => $request->getMessage()
         ]);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFriendRequest(int $requestId): FriendRequest
+    {
+        return FriendRequest::find($requestId);
+    }
 }
