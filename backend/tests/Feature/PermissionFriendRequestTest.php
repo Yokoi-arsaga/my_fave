@@ -36,7 +36,7 @@ class PermissionFriendRequestTest extends TestCase
 
         $friendRequest = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
 
-        $response = $this->actingAs($this->users[2])->post("api/friend/permission/$friendRequest->id");
+        $response = $this->actingAs($this->users[2])->post("api/friend/request/permission", ['request_id' => $friendRequest->id]);
 
         $response->assertCreated();
         // ユーザー2のフレンドが追加されているか
@@ -57,7 +57,7 @@ class PermissionFriendRequestTest extends TestCase
      */
     public function test_permission_friend_request_failure_by_request_empty()
     {
-        $response = $this->actingAs($this->users[2])->post("api/friend/permission/1");
+        $response = $this->actingAs($this->users[2])->post("api/friend/request/permission", ['request_id' => 1]);
 
         $response->assertRedirect('/');
         $this->assertEmpty(Friend::all());
