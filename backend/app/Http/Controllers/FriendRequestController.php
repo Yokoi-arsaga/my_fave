@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FriendRequestRequest;
+use Illuminate\Http\Request;
 use App\Models\FriendRequest;
 use App\Models\User;
 use App\Modules\ApplicationLogger;
@@ -64,5 +65,19 @@ class FriendRequestController extends Controller
 
         $logger->success();
         return $friendRequest;
+    }
+
+    /**
+     * フレンド申請の許可
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function permission(Request $request): void
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('フレンド申請の登録処理開始');
+        $friendRequest = $this->friendRequestRepository->storeFriendRequest($request);
     }
 }
