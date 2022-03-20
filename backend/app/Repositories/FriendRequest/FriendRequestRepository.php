@@ -27,4 +27,12 @@ class FriendRequestRepository implements FriendRequestRepositoryInterface
     {
         return FriendRequest::find($requestId);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteFriendRequest(int $requestId): void
+    {
+        FriendRequest::destroy($requestId);
+    }
 }

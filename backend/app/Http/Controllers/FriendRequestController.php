@@ -14,6 +14,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * フレンド申請に関するコントローラー
@@ -30,7 +31,7 @@ class FriendRequestController extends Controller
      */
     public function __construct(
         FriendRequestRepositoryInterface $friendRequestRepository,
-        FriendRepositoryInterface $friendRepository
+        FriendRepositoryInterface        $friendRepository
     )
     {
         $this->friendRequestRepository = $friendRequestRepository;
@@ -84,10 +85,15 @@ class FriendRequestController extends Controller
     {
         $logger = new ApplicationLogger(__METHOD__);
 
-        $logger->write('フレンド申請の取得開始');
-        $friendRequest = $this->friendRequestRepository->getFriendRequest($request->request_id);
+        DB::transaction(function () use ($logger, $request) {
+            $logger->write('フレンド申請の取得開始');
+            $friendRequest = $this->friendRequestRepository->getFriendRequest($request->request_id);
 
-        $logger->write('フレンドの登録処理開始');
-        $friend = $this->friendRepository->storeFriend($friendRequest->applicant_id);
+            $logger->write('フレンドの登録処理開始');
+            $this->friendRepository->storeFriend($friendRequest->applicant_id);
+
+            $logger->write('フレンド申請の削除処理開始');
+            $this->friendRequestRepository->deleteFriendRequest($request->request_id);
+        });
     }
 }

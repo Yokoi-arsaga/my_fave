@@ -26,4 +26,12 @@ interface FriendRequestRepositoryInterface
      * @return FriendRequest
      */
     public function getFriendRequest(int $requestId): FriendRequest;
+
+    /**
+     * 削除処理
+     *
+     * @param int $requestId
+     * @return void
+     */
+    public function deleteFriendRequest(int $requestId): void;
 }
