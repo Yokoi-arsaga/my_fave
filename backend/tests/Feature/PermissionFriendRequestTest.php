@@ -26,7 +26,7 @@ class PermissionFriendRequestTest extends TestCase
      *
      * @return void
      */
-    public function test_store_friend_request_success()
+    public function test_permission_friend_request_success()
     {
         $friendRequestInfo = [
             'destination_id' => $this->users[2]->id,
@@ -50,24 +50,19 @@ class PermissionFriendRequestTest extends TestCase
     }
 
     /**
-     * メッセージが空欄だった場合バリデーションで弾かれることを確認
+     * フレンド申請していない場合に申請許可が失敗することを確認
      *
      * @return void
      */
-    public function test_store_friend_request_failure_by_message_empty()
+    public function test_permission_friend_request_failure_by_request_empty()
     {
-        $friendRequestInfo = [
-            'destination_id' => $this->users[2]->id,
-            'message' => '',
-        ];
-
-        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
+        $response = $this->actingAs($this->users[2])->post("api/friend/permission/1");
 
         $response->assertRedirect('/');
-        $this->assertEmpty(FriendRequest::all());
+        $this->assertEmpty(Friend::all());
 
-        $user = User::find($this->users[2]->id);
-        $this->assertEmpty($user->notifications);
+        $user = User::find($this->users[1]->id);
+        $this->assertEmpty($user->friends);
     }
 
     /**
