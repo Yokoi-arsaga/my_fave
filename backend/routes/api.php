@@ -54,10 +54,14 @@ Route::prefix('account')->name('account.')->group(function(){
     Route::delete('/{id}', [SnsAccountController::class, 'delete'])->name('delete');
 });
 
-// フレンド申請
-Route::prefix('friend/request')->name('friend.request.')->group(function(){
-    Route::get('/create', [FriendRequestController::class, 'create'])->name('create');
-    Route::post('/store', [FriendRequestController::class, 'store'])->middleware(['friend.request'])->name('store');
+// フレンド
+Route::prefix('friend')->name('friend.')->group(function(){
+    // フレンド申請
+    Route::prefix('/request')->name('request.')->group(function(){
+        Route::get('/create', [FriendRequestController::class, 'create'])->name('create');
+        Route::post('/store', [FriendRequestController::class, 'store'])->middleware(['friend.request'])->name('store');
+        Route::post('/permission', [FriendRequestController::class, 'permission'])->middleware(['friend.request.permission'])->name('permission');
+    });
 });
 
 // 通知取得

@@ -66,4 +66,14 @@ class User extends Authenticatable implements MustVerifyEmail
         // $this->notify(new ResetPasswordNotification($token));
         $this->notify(new ResetPasswordNotificationJP($token));
     }
+
+    /**
+     * フレンド一覧
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function friends()
+    {
+        return $this->hasMany(Friend::class, 'authorizer_id');
+    }
 }

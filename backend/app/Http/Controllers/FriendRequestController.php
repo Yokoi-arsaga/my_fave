@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FriendRequestRequest;
+use Illuminate\Http\Request;
 use App\Models\FriendRequest;
 use App\Models\User;
 use App\Modules\ApplicationLogger;
 use App\Notifications\FriendRequestNotification;
 use App\Repositories\FriendRequest\FriendRequestRepositoryInterface;
+use App\Repositories\Friend\FriendRepositoryInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * フレンド申請に関するコントローラー
@@ -20,13 +23,19 @@ use Illuminate\Support\Facades\Auth;
 class FriendRequestController extends Controller
 {
     private FriendRequestRepositoryInterface $friendRequestRepository;
+    private FriendRepositoryInterface $friendRepository;
 
     /**
      * @param FriendRequestRepositoryInterface $friendRequestRepository
+     * @param FriendRepositoryInterface $friendRepository
      */
-    public function __construct(FriendRequestRepositoryInterface $friendRequestRepository)
+    public function __construct(
+        FriendRequestRepositoryInterface $friendRequestRepository,
+        FriendRepositoryInterface        $friendRepository
+    )
     {
         $this->friendRequestRepository = $friendRequestRepository;
+        $this->friendRepository = $friendRepository;
         // 認証が必要
         $this->middleware('auth');
     }
@@ -64,5 +73,28 @@ class FriendRequestController extends Controller
 
         $logger->success();
         return $friendRequest;
+    }
+
+    /**
+     * フレンド申請の許可
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function permission(Request $request): void
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        DB::transaction(function () use ($logger, $request) {
+            $logger->write('フレンド申請の取得開始');
+            $friendRequest = $this->friendRequestRepository->getFriendRequest($request->request_id);
+
+            $logger->write('フレンドの登録処理開始');
+            $this->friendRepository->storeFriend($friendRequest->applicant_id, Auth::id());
+            $this->friendRepository->storeFriend(Auth::id(), $friendRequest->applicant_id);
+
+            $logger->write('フレンド申請の削除処理開始');
+            $this->friendRequestRepository->deleteFriendRequest($request->request_id);
+        });
     }
 }
