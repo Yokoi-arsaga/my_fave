@@ -60,7 +60,7 @@ Route::prefix('friend')->name('friend.')->group(function(){
     Route::prefix('/request')->name('request.')->group(function(){
         Route::get('/create', [FriendRequestController::class, 'create'])->name('create');
         Route::post('/store', [FriendRequestController::class, 'store'])->middleware(['friend.request'])->name('store');
-        Route::post('/permission', [FriendRequestController::class, 'permission'])->name('permission');
+        Route::post('/permission', [FriendRequestController::class, 'permission'])->middleware(['friend.request.permission'])->name('permission');
     });
 });
 
