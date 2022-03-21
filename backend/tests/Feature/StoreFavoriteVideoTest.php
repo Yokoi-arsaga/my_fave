@@ -58,65 +58,38 @@ class StoreFavoriteVideoTest extends TestCase
     }
 
     /**
-     * 送信先IDが空欄だった場合バリデーションで弾かれることを確認
+     * 動画名が空欄だった場合バリデーションで弾かれることを確認
      *
      * @return void
      */
-    public function test_store_friend_request_failure_by_destination_empty()
+    public function test_store_favorite_video_failure_by_name_empty()
     {
-        $friendRequestInfo = [
-            'destination_id' => '',
-            'message' => 'よろしくお願いいたします。',
+        $favoriteVideoInfo = [
+            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
+            'video_name' => '',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite-video/store', $favoriteVideoInfo);
 
         $response->assertRedirect('/');
-        $this->assertEmpty(FriendRequest::all());
-
-        $user = User::find($this->users[2]->id);
-        $this->assertEmpty($user->notifications);
+        $this->assertEmpty(FavoriteVideo::all());
     }
 
     /**
-     * 送信先IDが自身だった場合リダイレクトされることを確認
+     * 動画URLがyoutube動画の形式でない場合バリデーションで弾かれることを確認
      *
      * @return void
      */
-    public function test_store_friend_request_failure_by_destination_mine()
+    public function test_store_favorite_video_failure_by_format_different()
     {
-        $friendRequestInfo = [
-            'destination_id' => $this->users[1]->id,
-            'message' => 'よろしくお願いいたします。',
+        $favoriteVideoInfo = [
+            'video_url' => 'https://www.arsaga.jp/',
+            'video_name' => 'サンプル',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite-video/store', $favoriteVideoInfo);
 
         $response->assertRedirect('/');
-        $this->assertEmpty(FriendRequest::all());
-
-        $user = User::find($this->users[2]->id);
-        $this->assertEmpty($user->notifications);
-    }
-
-    /**
-     * 送信先IDが存在しない場合リダイレクトされることを確認
-     *
-     * @return void
-     */
-    public function test_store_friend_request_failure_by_destination_not_exist()
-    {
-        $friendRequestInfo = [
-            'destination_id' => 3,
-            'message' => 'よろしくお願いいたします。',
-        ];
-
-        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(FriendRequest::all());
-
-        $user = User::find($this->users[2]->id);
-        $this->assertEmpty($user->notifications);
+        $this->assertEmpty(FavoriteVideo::all());
     }
 }
