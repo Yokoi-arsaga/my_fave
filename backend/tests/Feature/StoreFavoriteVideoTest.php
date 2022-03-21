@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\FriendRequest;
+use App\Models\FavoriteVideo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
@@ -40,24 +40,21 @@ class StoreFavoriteVideoTest extends TestCase
     }
 
     /**
-     * メッセージが空欄だった場合バリデーションで弾かれることを確認
+     * 動画URLが空欄だった場合バリデーションで弾かれることを確認
      *
      * @return void
      */
-    public function test_store_friend_request_failure_by_message_empty()
+    public function test_store_favorite_video_failure_by_url_empty()
     {
-        $friendRequestInfo = [
-            'destination_id' => $this->users[2]->id,
-            'message' => '',
+        $favoriteVideoInfo = [
+            'video_url' => '',
+            'video_name' => 'サンプル',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite-video/store', $favoriteVideoInfo);
 
         $response->assertRedirect('/');
-        $this->assertEmpty(FriendRequest::all());
-
-        $user = User::find($this->users[2]->id);
-        $this->assertEmpty($user->notifications);
+        $this->assertEmpty(FavoriteVideo::all());
     }
 
     /**
