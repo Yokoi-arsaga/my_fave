@@ -18,7 +18,8 @@ class RepositoryServiceProvider extends ServiceProvider
         'Thumbnail',
         'User',
         'SnsAccount',
-        'FriendRequest'
+        'FriendRequest',
+        'Friend'
     ];
 
     /**

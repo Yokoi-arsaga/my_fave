@@ -11,11 +11,11 @@ class FriendRepository implements FriendRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function storeFriend(int $applicantId): Friend
+    public function storeFriend(int $applicantId, int $authorizerId): Friend
     {
         return Friend::create([
             'applicant_id' => $applicantId,
-            'authorizer_id' => Auth::id(),
+            'authorizer_id' => $authorizerId,
         ]);
     }
 }

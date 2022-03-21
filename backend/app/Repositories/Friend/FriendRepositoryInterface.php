@@ -17,5 +17,5 @@ interface FriendRepositoryInterface
      * @param int $applicantId
      * @return Friend
      */
-    public function storeFriend(int $applicantId): Friend;
+    public function storeFriend(int $applicantId, int $authorizerId): Friend;
 }

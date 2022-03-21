@@ -90,7 +90,8 @@ class FriendRequestController extends Controller
             $friendRequest = $this->friendRequestRepository->getFriendRequest($request->request_id);
 
             $logger->write('フレンドの登録処理開始');
-            $this->friendRepository->storeFriend($friendRequest->applicant_id);
+            $this->friendRepository->storeFriend($friendRequest->applicant_id, Auth::id());
+            $this->friendRepository->storeFriend(Auth::id(), $friendRequest->applicant_id);
 
             $logger->write('フレンド申請の削除処理開始');
             $this->friendRequestRepository->deleteFriendRequest($request->request_id);
