@@ -2,8 +2,6 @@
 
 namespace App\Repositories\Friend;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use App\Models\Friend;
 
 class FriendRepository implements FriendRepositoryInterface
