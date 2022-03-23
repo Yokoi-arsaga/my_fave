@@ -68,3 +68,10 @@ Route::prefix('friend')->name('friend.')->group(function(){
 Route::prefix('notifications')->name('notifications.')->group(function(){
     Route::get('/', [UserController::class, 'notifications'])->name('all');
 });
+
+// 動画整理関連
+Route::prefix('favorite')->name('favorite.')->group(function(){
+    Route::prefix('videos')->name('videos.')->group(function(){
+        Route::post('/store', [FavoriteVideoController::class, 'store'])->name('store');
+    });
+});
