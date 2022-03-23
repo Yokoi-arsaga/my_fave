@@ -4,6 +4,7 @@ use App\Http\Controllers\ThumbnailController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SnsAccountController;
 use App\Http\Controllers\FriendRequestController;
+use App\Http\Controllers\FavoriteVideoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;

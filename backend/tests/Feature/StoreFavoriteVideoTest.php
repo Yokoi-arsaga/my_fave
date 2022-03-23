@@ -33,7 +33,7 @@ class StoreFavoriteVideoTest extends TestCase
             'video_name' => 'サンプル',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite-video/store', $favoriteVideoInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
 
         $response->assertStatus(201);
         $this->assertEquals($response['video_url'], $favoriteVideoInfo['video_url']);
@@ -51,7 +51,7 @@ class StoreFavoriteVideoTest extends TestCase
             'video_name' => 'サンプル',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite-video/store', $favoriteVideoInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(FavoriteVideo::all());
@@ -69,7 +69,7 @@ class StoreFavoriteVideoTest extends TestCase
             'video_name' => '',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite-video/store', $favoriteVideoInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(FavoriteVideo::all());
@@ -87,7 +87,7 @@ class StoreFavoriteVideoTest extends TestCase
             'video_name' => 'サンプル',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite-video/store', $favoriteVideoInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
 
         $response->assertRedirect('/');
         $this->assertEmpty(FavoriteVideo::all());

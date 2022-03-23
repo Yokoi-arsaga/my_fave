@@ -15,6 +15,6 @@ class FavoriteVideo extends Model
     protected $fillable = [
         'user_id',
         'video_url',
-        'video_url',
+        'video_name',
     ];
 }

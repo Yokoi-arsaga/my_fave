@@ -6,8 +6,6 @@ use App\Http\Requests\FavoriteVideoRequest;
 use App\Models\FavoriteVideo;
 use App\Modules\ApplicationLogger;
 use App\Repositories\FavoriteVideo\FavoriteVideoRepositoryInterface;
-use App\Repositories\FriendRequest\FriendRequestRepositoryInterface;
-use App\Repositories\Friend\FriendRepositoryInterface;
 
 /**
  * お気に入り動画に関するコントローラー

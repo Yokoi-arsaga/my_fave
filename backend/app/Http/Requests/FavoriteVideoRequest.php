@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\VideoUrl;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FavoriteVideoRequest extends FormRequest
@@ -24,7 +25,7 @@ class FavoriteVideoRequest extends FormRequest
     public function rules()
     {
         return [
-            'video_url' => ['required', 'string', 'max:100'],
+            'video_url' => ['required', 'string', new VideoUrl()],
             'video_name' => ['required', 'string', 'max:100']
         ];
     }
