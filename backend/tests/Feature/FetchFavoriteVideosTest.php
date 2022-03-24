@@ -54,7 +54,7 @@ class FetchFavoriteVideosTest extends TestCase
     }
 
     /**
-     * お気に入り動画一覧の取得に成功したテスト
+     * 認証されておらずリダイレクトされることを確認するテスト
      *
      * @return void
      */
