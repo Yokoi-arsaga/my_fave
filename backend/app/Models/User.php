@@ -76,4 +76,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Friend::class, 'authorizer_id');
     }
+
+    /**
+     * お気に入り動画一覧
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function favoriteVideos()
+    {
+        return $this->hasMany(FavoriteVideo::class);
+    }
 }

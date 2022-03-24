@@ -19,7 +19,8 @@ class RepositoryServiceProvider extends ServiceProvider
         'User',
         'SnsAccount',
         'FriendRequest',
-        'Friend'
+        'Friend',
+        'FavoriteVideo'
     ];
 
     /**

@@ -3,7 +3,6 @@
 namespace App\Repositories\Friend;
 
 use App\Models\Friend;
-use Illuminate\Http\Request;
 
 /**
  * interface SnsAccountRepository SNSアカウントの処理
