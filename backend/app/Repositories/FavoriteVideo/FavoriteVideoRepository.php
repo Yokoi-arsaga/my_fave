@@ -3,6 +3,7 @@
 namespace App\Repositories\FavoriteVideo;
 
 use App\Models\FavoriteVideo;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteVideoRepository implements FavoriteVideoRepositoryInterface
@@ -17,5 +18,13 @@ class FavoriteVideoRepository implements FavoriteVideoRepositoryInterface
             'video_url' => $videoUrl,
             'video_name' => $videoName
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchFavoriteVideos(): Collection
+    {
+        return FavoriteVideo::where('user_id', Auth::id())->get();
     }
 }

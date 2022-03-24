@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\FavoriteVideo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
@@ -50,7 +49,7 @@ class FetchFavoriteVideosTest extends TestCase
         $response = $this->actingAs($this->users[1])->get('/api/favorite/videos/fetch');
 
         $response->assertStatus(200);
-        $this->assertCount(count($favoriteVideoInfos), $response['data']);
+        $response->assertJsonCount(3);
     }
 
     /**
@@ -60,27 +59,8 @@ class FetchFavoriteVideosTest extends TestCase
      */
     public function test_fetch_favorite_videos_failure_by_not_auth()
     {
-        $favoriteVideoInfos = [
-            [
-                'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-                'video_name' => 'サンプル1',
-            ],
-            [
-                'video_url' => 'https://www.youtube.com/watch?v=oq20w95OlSY',
-                'video_name' => 'サンプル2',
-            ],
-            [
-                'video_url' => 'https://www.youtube.com/watch?v=AElYX7XQ-7s',
-                'video_name' => 'サンプル3',
-            ],
-        ];
-
-        foreach ($favoriteVideoInfos as $videoInfo){
-            $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $videoInfo);
-        }
-
         $response = $this->get('/api/favorite/videos/fetch');
 
-        $response->assertRedirect('/');
+        $response->assertRedirect('/login');
     }
 }
