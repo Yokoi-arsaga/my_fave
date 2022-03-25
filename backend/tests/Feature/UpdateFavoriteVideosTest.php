@@ -50,14 +50,86 @@ class UpdateFavoriteVideosTest extends TestCase
     }
 
     /**
-     * 認証されておらずリダイレクトされることを確認するテスト
+     * 動画URLが空欄だった場合にお気に入り動画の情報更新に失敗するテスト
      *
      * @return void
      */
-    public function test_fetch_favorite_videos_failure_by_not_auth()
+    public function test_update_favorite_video_failure_by_url_empty()
     {
-        $response = $this->get('/api/favorite/videos/fetch');
+        $favoriteVideoInfo = [
+            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
+            'video_name' => 'サンプル',
+        ];
 
-        $response->assertRedirect('/login');
+        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+
+        $updateFavoriteVideoInfo = [
+            'video_url' => '',
+            'video_name' => 'サンプル2',
+        ];
+
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/update/$favoriteVideo->id", $updateFavoriteVideoInfo);
+
+        $response->assertRedirect('/');
+
+        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideo->id);
+
+        $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
+    }
+
+    /**
+     * 動画名が空欄だった場合にお気に入り動画の情報更新に失敗するテスト
+     *
+     * @return void
+     */
+    public function test_update_favorite_video_failure_by_name_empty()
+    {
+        $favoriteVideoInfo = [
+            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
+            'video_name' => 'サンプル',
+        ];
+
+        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+
+        $updateFavoriteVideoInfo = [
+            'video_url' => 'https://www.youtube.com/watch?v=DmdrWQXtL-U',
+            'video_name' => '',
+        ];
+
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/update/$favoriteVideo->id", $updateFavoriteVideoInfo);
+
+        $response->assertRedirect('/');
+
+        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideo->id);
+
+        $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
+    }
+
+    /**
+     * 動画名が空欄だった場合にお気に入り動画の情報更新に失敗するテスト
+     *
+     * @return void
+     */
+    public function test_update_favorite_video_failure_by_format_different()
+    {
+        $favoriteVideoInfo = [
+            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
+            'video_name' => 'サンプル',
+        ];
+
+        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+
+        $updateFavoriteVideoInfo = [
+            'video_url' => 'https://www.arsaga.jp/',
+            'video_name' => 'サンプル2',
+        ];
+
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/update/$favoriteVideo->id", $updateFavoriteVideoInfo);
+
+        $response->assertRedirect('/');
+
+        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideo->id);
+
+        $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
     }
 }
