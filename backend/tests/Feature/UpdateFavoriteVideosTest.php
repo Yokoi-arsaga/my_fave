@@ -40,11 +40,12 @@ class UpdateFavoriteVideosTest extends TestCase
             'video_name' => 'サンプル2',
         ];
 
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideo->id", $updateFavoriteVideoInfo);
+        $favoriteVideoId = $favoriteVideo['id'];
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
 
         $response->assertStatus(200);
 
-        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideo->id);
+        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideoId);
 
         $this->assertEquals($updateFavoriteVideo->video_url, $response['video_url']);
     }
@@ -68,11 +69,12 @@ class UpdateFavoriteVideosTest extends TestCase
             'video_name' => 'サンプル2',
         ];
 
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideo->id", $updateFavoriteVideoInfo);
+        $favoriteVideoId = $favoriteVideo['id'];
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
 
         $response->assertRedirect('/');
 
-        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideo->id);
+        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideoId);
 
         $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
     }
@@ -96,11 +98,12 @@ class UpdateFavoriteVideosTest extends TestCase
             'video_name' => '',
         ];
 
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideo->id", $updateFavoriteVideoInfo);
+        $favoriteVideoId = $favoriteVideo['id'];
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
 
         $response->assertRedirect('/');
 
-        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideo->id);
+        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideoId);
 
         $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
     }
@@ -124,11 +127,12 @@ class UpdateFavoriteVideosTest extends TestCase
             'video_name' => 'サンプル2',
         ];
 
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideo->id", $updateFavoriteVideoInfo);
+        $favoriteVideoId = $favoriteVideo['id'];
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
 
         $response->assertRedirect('/');
 
-        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideo->id);
+        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideoId);
 
         $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
     }

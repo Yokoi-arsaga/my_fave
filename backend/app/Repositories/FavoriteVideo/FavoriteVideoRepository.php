@@ -27,4 +27,16 @@ class FavoriteVideoRepository implements FavoriteVideoRepositoryInterface
     {
         return FavoriteVideo::where('user_id', Auth::id())->get();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateFavoriteVideo(int $videoId, string $videoUrl, string $videoName): FavoriteVideo
+    {
+        $favoriteVideo = FavoriteVideo::find($videoId);
+        $favoriteVideo->video_url = $videoUrl;
+        $favoriteVideo->video_name = $videoName;
+        $favoriteVideo->save();
+        return $favoriteVideo;
+    }
 }
