@@ -32,4 +32,12 @@ interface FavoriteVideoRepositoryInterface
      * @return FavoriteVideo
      */
     public function updateFavoriteVideo(int $videoId, string $videoUrl, string $videoName): FavoriteVideo;
+
+    /**
+     * 削除
+     *
+     * @param int $videoId
+     * @return void
+     */
+    public function deleteFavoriteVideo(int $videoId): void;
 }
