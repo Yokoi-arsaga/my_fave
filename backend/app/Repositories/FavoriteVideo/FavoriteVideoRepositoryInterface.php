@@ -22,4 +22,14 @@ interface FavoriteVideoRepositoryInterface
      * @return Collection
      */
     public function fetchFavoriteVideos(): Collection;
+
+    /**
+     * 更新
+     *
+     * @param int $videoId
+     * @param string $videoUrl
+     * @param string $videoName
+     * @return FavoriteVideo
+     */
+    public function updateFavoriteVideo(int $videoId, string $videoUrl, string $videoName): FavoriteVideo;
 }

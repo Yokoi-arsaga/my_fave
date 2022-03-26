@@ -60,4 +60,22 @@ class FavoriteVideoController extends Controller
         $logger->success();
         return $favoriteVideos;
     }
+
+    /**
+     * お気に入り動画情報の更新
+     *
+     * @param FavoriteVideoRequest $request
+     * @param int $id
+     * @return FavoriteVideo
+     */
+    public function update(FavoriteVideoRequest $request, int $id): FavoriteVideo
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('お気に入り動画の更新処理開始');
+        $favoriteVideo = $this->favoriteVideoRepository->updateFavoriteVideo($id, $request->getVideoUrl(), $request->getVideoName());
+
+        $logger->success();
+        return $favoriteVideo;
+    }
 }
