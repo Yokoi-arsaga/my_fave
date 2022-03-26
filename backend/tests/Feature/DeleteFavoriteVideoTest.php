@@ -44,4 +44,24 @@ class DeleteFavoriteVideoTest extends TestCase
 
         $this->assertNull($favoriteVideos);
     }
+
+    /**
+     * 認証されておらずリダイレクトすることを確認するテスト
+     *
+     * @return void
+     */
+    public function test_delete_favorite_video_failure_by_not_auth()
+    {
+        $favoriteVideoInfo = [
+            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
+            'video_name' => 'サンプル',
+        ];
+
+        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+
+        $favoriteVideoId = $favoriteVideo['id'];
+        $response = $this->actingAs($this->users[1])->delete("/api/favorite/videos/$favoriteVideoId");
+
+        $response->assertRedirect('/login');
+    }
 }
