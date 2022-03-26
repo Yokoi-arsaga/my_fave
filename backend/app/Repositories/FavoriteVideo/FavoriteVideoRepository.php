@@ -39,4 +39,12 @@ class FavoriteVideoRepository implements FavoriteVideoRepositoryInterface
         $favoriteVideo->save();
         return $favoriteVideo;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteFavoriteVideo(int $videoId): void
+    {
+        FavoriteVideo::destroy($videoId);
+    }
 }

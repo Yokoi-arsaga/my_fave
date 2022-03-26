@@ -78,4 +78,20 @@ class FavoriteVideoController extends Controller
         $logger->success();
         return $favoriteVideo;
     }
+
+    /**
+     * 御気に入り動画の削除
+     *
+     * @param int $id
+     * @return void
+     */
+    public function delete(int $id): void
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('お気に入り動画の削除処理開始');
+        $this->favoriteVideoRepository->deleteFavoriteVideo($id);
+
+        $logger->success();
+    }
 }

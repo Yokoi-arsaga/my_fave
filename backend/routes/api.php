@@ -76,5 +76,6 @@ Route::prefix('favorite')->name('favorite.')->group(function(){
         Route::post('/store', [FavoriteVideoController::class, 'store'])->name('store');
         Route::get('/fetch', [FavoriteVideoController::class, 'fetch'])->middleware('auth:sanctum')->name('fetch');
         Route::patch('/{id}', [FavoriteVideoController::class, 'update'])->middleware('auth:sanctum')->name('update');
+        Route::delete('/{id}', [FavoriteVideoController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
     });
 });
