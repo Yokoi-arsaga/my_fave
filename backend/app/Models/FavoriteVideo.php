@@ -17,4 +17,14 @@ class FavoriteVideo extends Model
         'video_url',
         'video_name',
     ];
+
+    /**
+     * お気に入り動画に紐づく親フォルダー
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function parentFolders()
+    {
+        return $this->belongsToMany(ParentFolder::class);
+    }
 }

@@ -19,4 +19,14 @@ class ParentFolder extends Model
         'disclosure_range_id',
         'is_nest'
     ];
+
+    /**
+     * 親フォルダーに紐づくお気に入り動画
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function favoriteVideos()
+    {
+        return $this->belongsToMany(FavoriteVideo::class);
+    }
 }
