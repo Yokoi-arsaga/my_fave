@@ -42,56 +42,62 @@ class StoreParentFolderTest extends TestCase
     }
 
     /**
-     * 動画URLが空欄だった場合バリデーションで弾かれることを確認
+     * フォルダ名が空欄だった場合バリデーションで弾かれることを確認
      *
      * @return void
      */
-    public function test_store_favorite_video_failure_by_url_empty()
+    public function test_store_parent_folder_failure_by_name_empty()
     {
-        $favoriteVideoInfo = [
-            'video_url' => '',
-            'video_name' => 'サンプル',
+        $parentFolderInfo = [
+            'folder_name' => '',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'is_nest' => false
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
 
         $response->assertRedirect('/');
-        $this->assertEmpty(FavoriteVideo::all());
+        $this->assertEmpty(ParentFolder::all());
     }
 
     /**
-     * 動画名が空欄だった場合バリデーションで弾かれることを確認
+     * 公開範囲が無効だった場合バリデーションで弾かれることを確認
      *
      * @return void
      */
-    public function test_store_favorite_video_failure_by_name_empty()
+    public function test_store_parent_folder_failure_by_disclosure_out_of_range()
     {
-        $favoriteVideoInfo = [
-            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-            'video_name' => '',
+        $parentFolderInfo = [
+            'folder_name' => 'サンプル',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 4,
+            'is_nest' => false
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
 
         $response->assertRedirect('/');
-        $this->assertEmpty(FavoriteVideo::all());
+        $this->assertEmpty(ParentFolder::all());
     }
 
     /**
-     * 動画URLがyoutube動画の形式でない場合バリデーションで弾かれることを確認
+     * 公開範囲が無効だった場合バリデーションで弾かれることを確認
      *
      * @return void
      */
-    public function test_store_favorite_video_failure_by_format_different()
+    public function test_store_parent_folder_failure_by_nest_flag_invalid()
     {
-        $favoriteVideoInfo = [
-            'video_url' => 'https://www.arsaga.jp/',
-            'video_name' => 'サンプル',
+        $parentFolderInfo = [
+            'folder_name' => 'サンプル',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'is_nest' => null
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        $response = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
 
         $response->assertRedirect('/');
-        $this->assertEmpty(FavoriteVideo::all());
+        $this->assertEmpty(ParentFolder::all());
     }
 }
