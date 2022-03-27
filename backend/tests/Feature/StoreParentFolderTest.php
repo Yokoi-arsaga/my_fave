@@ -82,7 +82,7 @@ class StoreParentFolderTest extends TestCase
     }
 
     /**
-     * 公開範囲が無効だった場合バリデーションで弾かれることを確認
+     * ネストフラグの値が無効なものだった場合バリデーションで弾かれることを確認
      *
      * @return void
      */
