@@ -100,4 +100,24 @@ class StoreParentFolderTest extends TestCase
         $response->assertRedirect('/');
         $this->assertEmpty(ParentFolder::all());
     }
+
+    /**
+     * 認証されていない場合にリダイレクトされることを確認
+     *
+     * @return void
+     */
+    public function test_store_parent_folder_failure_by_not_auth()
+    {
+        $parentFolderInfo = [
+            'folder_name' => 'サンプル',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'is_nest' => true
+        ];
+
+        $response = $this->post('/api/favorite/folder/parent/store', $parentFolderInfo);
+
+        $response->assertRedirect('/login');
+        $this->assertEmpty(ParentFolder::all());
+    }
 }
