@@ -50,4 +50,24 @@ class ParentFolderRequest extends FormRequest
     {
         return $this->input('description');
     }
+
+    /**
+     * 公開範囲ID
+     *
+     * @return int
+     */
+    public function getDisclosureRangeId(): int
+    {
+        return $this->input('disclosure_range_id');
+    }
+
+    /**
+     * ネストフラグ
+     *
+     * @return bool
+     */
+    public function getIsNest(): bool
+    {
+        return $this->input('is_nest');
+    }
 }

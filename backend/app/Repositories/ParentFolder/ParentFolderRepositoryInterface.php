@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Repositories\ParentFolder;
+use App\Http\Requests\ParentFolderRequest;
+use App\Models\ParentFolder;
 
 interface ParentFolderRepositoryInterface
 {

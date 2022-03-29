@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FavoriteVideoRequest;
+use App\Http\Requests\ParentFolderRequest;
 use App\Models\FavoriteVideo;
+use App\Models\ParentFolder;
 use App\Modules\ApplicationLogger;
-use App\Repositories\FavoriteVideo\FavoriteVideoRepositoryInterface;
+use App\Repositories\ParentFolder\ParentFolderRepositoryInterface;
 use Illuminate\Support\Collection;
 
 /**
@@ -14,16 +16,16 @@ use Illuminate\Support\Collection;
  */
 class ParentFolderController extends Controller
 {
-    private FavoriteVideoRepositoryInterface $favoriteVideoRepository;
+    private ParentFolderRepositoryInterface $parentFolderRepository;
 
     /**
-     * @param FavoriteVideoRepositoryInterface $favoriteVideoRepository
+     * @param ParentFolderRepositoryInterface $parentFolderRepository
      */
     public function __construct(
-        FavoriteVideoRepositoryInterface $favoriteVideoRepository
+        ParentFolderRepositoryInterface $parentFolderRepository
     )
     {
-        $this->favoriteVideoRepository = $favoriteVideoRepository;
+        $this->parentFolderRepository = $parentFolderRepository;
         // 認証が必要
         $this->middleware('auth');
     }
@@ -31,15 +33,15 @@ class ParentFolderController extends Controller
     /**
      * お気に入り動画の登録
      *
-     * @param FavoriteVideoRequest $request
-     * @return FavoriteVideo
+     * @param ParentFolderRequest $request
+     * @return ParentFolder
      */
-    public function store(FavoriteVideoRequest $request): FavoriteVideo
+    public function store(ParentFolderRequest $request): ParentFolder
     {
         $logger = new ApplicationLogger(__METHOD__);
 
         $logger->write('親フォルダーの登録処理開始');
-        $favoriteVideo = $this->favoriteVideoRepository->storeFavoriteVideo($request->getVideoUrl(), $request->getVideoName());
+        $favoriteVideo = $this->parentFolderRepository->storeParentFolder($request);
 
         $logger->success();
         return $favoriteVideo;
