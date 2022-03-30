@@ -63,9 +63,9 @@ class FetchParentFoldersTest extends TestCase
      *
      * @return void
      */
-    public function test_fetch_favorite_videos_failure_by_not_auth()
+    public function test_fetch_parent_folders_failure_by_not_auth()
     {
-        $response = $this->get('/api/favorite/videos/fetch');
+        $response = $this->get('/api/favorite/folder/parent/fetch');
 
         $response->assertRedirect('/login');
     }
