@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FavoriteVideo extends Model
+class ParentFolder extends Model
 {
     use HasFactory;
 
@@ -13,18 +13,20 @@ class FavoriteVideo extends Model
      * @var string[]
      */
     protected $fillable = [
+        'folder_name',
+        'description',
         'user_id',
-        'video_url',
-        'video_name',
+        'disclosure_range_id',
+        'is_nest'
     ];
 
     /**
-     * お気に入り動画に紐づく親フォルダー
+     * 親フォルダーに紐づくお気に入り動画
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function parentFolders()
+    public function favoriteVideos()
     {
-        return $this->belongsToMany(ParentFolder::class);
+        return $this->belongsToMany(FavoriteVideo::class);
     }
 }

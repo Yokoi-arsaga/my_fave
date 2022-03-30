@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SnsAccountController;
 use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\FavoriteVideoController;
+use App\Http\Controllers\ParentFolderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
@@ -25,30 +26,30 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // 疎通確認
-Route::get('/check', function (){
+Route::get('/check', function () {
     Log::debug('接続されています！');
     return response()->json([
-        'message'=>'hello world.'
+        'message' => 'hello world.'
 
     ]);
 });
 
 // サムネイル関連
-Route::prefix('thumbnail')->name('thumbnail.')->group(function(){
+Route::prefix('thumbnail')->name('thumbnail.')->group(function () {
     Route::post('/', [ThumbnailController::class, 'store'])->name('store');
     Route::patch('/change', [ThumbnailController::class, 'change'])->middleware(['thumbnail.have'])->name('change');
     Route::delete('/', [ThumbnailController::class, 'delete'])->middleware(['thumbnail.have'])->name('delete');
 });
 
 // プロフィール関連
-Route::prefix('profile')->name('profile.')->group(function(){
+Route::prefix('profile')->name('profile.')->group(function () {
     Route::get('/edit', [UserController::class, 'edit'])->name('edit');
     Route::get('/show', [UserController::class, 'show'])->name('show');
     Route::post('/store', [UserController::class, 'store'])->name('store');
 });
 
 // SNSアカウント関連
-Route::prefix('account')->name('account.')->group(function(){
+Route::prefix('account')->name('account.')->group(function () {
     Route::get('/edit', [SnsAccountController::class, 'edit'])->name('edit'); //一時的なもの　いずれ消す
     Route::post('/store', [SnsAccountController::class, 'store'])->name('store');
     Route::patch('/{id}', [SnsAccountController::class, 'update'])->name('update');
@@ -56,9 +57,9 @@ Route::prefix('account')->name('account.')->group(function(){
 });
 
 // フレンド
-Route::prefix('friend')->name('friend.')->group(function(){
+Route::prefix('friend')->name('friend.')->group(function () {
     // フレンド申請
-    Route::prefix('/request')->name('request.')->group(function(){
+    Route::prefix('/request')->name('request.')->group(function () {
         Route::get('/create', [FriendRequestController::class, 'create'])->name('create');
         Route::post('/store', [FriendRequestController::class, 'store'])->middleware(['friend.request'])->name('store');
         Route::post('/permission', [FriendRequestController::class, 'permission'])->middleware(['friend.request.permission'])->name('permission');
@@ -66,16 +67,22 @@ Route::prefix('friend')->name('friend.')->group(function(){
 });
 
 // 通知取得
-Route::prefix('notifications')->name('notifications.')->group(function(){
+Route::prefix('notifications')->name('notifications.')->group(function () {
     Route::get('/', [UserController::class, 'notifications'])->name('all');
 });
 
 // 動画整理関連
-Route::prefix('favorite')->name('favorite.')->group(function(){
-    Route::prefix('videos')->name('videos.')->group(function(){
+Route::prefix('favorite')->name('favorite.')->group(function () {
+    Route::prefix('/videos')->name('videos.')->group(function () {
         Route::post('/store', [FavoriteVideoController::class, 'store'])->name('store');
         Route::get('/fetch', [FavoriteVideoController::class, 'fetch'])->middleware('auth:sanctum')->name('fetch');
         Route::patch('/{id}', [FavoriteVideoController::class, 'update'])->middleware('auth:sanctum')->name('update');
         Route::delete('/{id}', [FavoriteVideoController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
+    });
+
+    Route::prefix('/folder')->name('folder.')->group(function () {
+        Route::prefix('/parent')->name('parent.')->group(function () {
+            Route::post('/store', [ParentFolderController::class, 'store'])->middleware('auth:sanctum')->name('store');
+        });
     });
 });
