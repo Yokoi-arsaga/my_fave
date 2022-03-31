@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\FavoriteVideo;
 use App\Models\ParentFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -33,7 +32,7 @@ class UpdateParentFolderTest extends TestCase
             'folder_name' => 'サンプル',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 1,
-            'is_nest' => null
+            'is_nest' => true
         ];
 
         $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
@@ -42,7 +41,7 @@ class UpdateParentFolderTest extends TestCase
             'folder_name' => 'サンプル2',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 2,
-            'is_nest' => null
+            'is_nest' => false
         ];
 
         $parentFolderId = $parentFolder['id'];
@@ -56,89 +55,134 @@ class UpdateParentFolderTest extends TestCase
     }
 
     /**
-     * 動画URLが空欄だった場合にお気に入り動画の情報更新に失敗するテスト
+     * フォルダ名が空欄だった場合に親フォルダの情報更新に失敗するテスト
      *
      * @return void
      */
-    public function test_update_favorite_video_failure_by_url_empty()
+    public function test_update_parent_folder_failure_by_folder_name_empty()
     {
-        $favoriteVideoInfo = [
-            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-            'video_name' => 'サンプル',
+        $parentFolderInfo = [
+            'folder_name' => 'サンプル',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'is_nest' => true
         ];
 
-        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
 
-        $updateFavoriteVideoInfo = [
-            'video_url' => '',
-            'video_name' => 'サンプル2',
+        $updateParentFolderInfo = [
+            'folder_name' => '',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 2,
+            'is_nest' => true
         ];
 
-        $favoriteVideoId = $favoriteVideo['id'];
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
+        $parentFolderId = $parentFolder['id'];
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$parentFolderId", $updateParentFolderInfo);
 
         $response->assertRedirect('/');
 
-        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideoId);
+        $updateParentFolder = ParentFolder::find($parentFolderId);
 
-        $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
+        $this->assertEquals($updateParentFolder->folder_name, $parentFolderInfo['folder_name']);
     }
 
     /**
-     * 動画名が空欄だった場合にお気に入り動画の情報更新に失敗するテスト
+     * 説明文が空欄だった場合に親フォルダの情報更新に失敗するテスト
      *
      * @return void
      */
-    public function test_update_favorite_video_failure_by_name_empty()
+    public function test_update_parent_folder_failure_by_description_empty()
     {
-        $favoriteVideoInfo = [
-            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-            'video_name' => 'サンプル',
+        $parentFolderInfo = [
+            'folder_name' => 'サンプル',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'is_nest' => true
         ];
 
-        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
 
-        $updateFavoriteVideoInfo = [
-            'video_url' => 'https://www.youtube.com/watch?v=DmdrWQXtL-U',
-            'video_name' => '',
+        $updateParentFolderInfo = [
+            'folder_name' => 'サンプル2',
+            'description' => '',
+            'disclosure_range_id' => 2,
+            'is_nest' => true
         ];
 
-        $favoriteVideoId = $favoriteVideo['id'];
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
+        $parentFolderId = $parentFolder['id'];
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$parentFolderId", $updateParentFolderInfo);
 
         $response->assertRedirect('/');
 
-        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideoId);
+        $updateParentFolder = ParentFolder::find($parentFolderId);
 
-        $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
+        $this->assertEquals($updateParentFolder->folder_name, $parentFolderInfo['folder_name']);
     }
 
     /**
-     * 動画名が空欄だった場合にお気に入り動画の情報更新に失敗するテスト
+     * 公開範囲が無効な値だった場合に親フォルダの情報更新に失敗するテスト
      *
      * @return void
      */
-    public function test_update_favorite_video_failure_by_format_different()
+    public function test_update_parent_folder_failure_by_disclosure_out_of_range()
     {
-        $favoriteVideoInfo = [
-            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-            'video_name' => 'サンプル',
+        $parentFolderInfo = [
+            'folder_name' => 'サンプル',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'is_nest' => true
         ];
 
-        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
 
-        $updateFavoriteVideoInfo = [
-            'video_url' => 'https://www.arsaga.jp/',
-            'video_name' => 'サンプル2',
+        $updateParentFolderInfo = [
+            'folder_name' => 'サンプル2',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 4,
+            'is_nest' => true
         ];
 
-        $favoriteVideoId = $favoriteVideo['id'];
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
+        $parentFolderId = $parentFolder['id'];
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$parentFolderId", $updateParentFolderInfo);
 
         $response->assertRedirect('/');
 
-        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideoId);
+        $updateParentFolder = ParentFolder::find($parentFolderId);
 
-        $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
+        $this->assertEquals($updateParentFolder->folder_name, $parentFolderInfo['folder_name']);
+    }
+
+    /**
+     * ネストフラグが無効な値だった場合に親フォルダの情報更新に失敗するテスト
+     *
+     * @return void
+     */
+    public function test_update_parent_folder_failure_by_nest_flag_invalid()
+    {
+        $parentFolderInfo = [
+            'folder_name' => 'サンプル',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'is_nest' => true
+        ];
+
+        $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
+
+        $updateParentFolderInfo = [
+            'folder_name' => 'サンプル2',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 2,
+            'is_nest' => null
+        ];
+
+        $parentFolderId = $parentFolder['id'];
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$parentFolderId", $updateParentFolderInfo);
+
+        $response->assertRedirect('/');
+
+        $updateParentFolder = ParentFolder::find($parentFolderId);
+
+        $this->assertEquals($updateParentFolder->folder_name, $parentFolderInfo['folder_name']);
     }
 }
