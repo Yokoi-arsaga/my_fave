@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FavoriteVideoRequest;
 use App\Http\Requests\ParentFolderRequest;
-use App\Models\FavoriteVideo;
 use App\Models\ParentFolder;
 use App\Modules\ApplicationLogger;
 use App\Repositories\ParentFolder\ParentFolderRepositoryInterface;
@@ -31,7 +29,7 @@ class ParentFolderController extends Controller
     }
 
     /**
-     * お気に入り動画の登録
+     * 親フォルダーの登録
      *
      * @param ParentFolderRequest $request
      * @return ParentFolder
@@ -45,5 +43,21 @@ class ParentFolderController extends Controller
 
         $logger->success();
         return $favoriteVideo;
+    }
+
+    /**
+     * ユーザーに紐づく親フォルダー一覧の取得
+     *
+     * @return Collection
+     */
+    public function fetch(): Collection
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('親フォルダーの一覧取得処理開始');
+        $favoriteVideos = $this->parentFolderRepository->fetchParentFolders();
+
+        $logger->success();
+        return $favoriteVideos;
     }
 }

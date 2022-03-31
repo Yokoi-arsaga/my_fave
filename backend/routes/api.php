@@ -83,6 +83,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
     Route::prefix('/folder')->name('folder.')->group(function () {
         Route::prefix('/parent')->name('parent.')->group(function () {
             Route::post('/store', [ParentFolderController::class, 'store'])->middleware('auth:sanctum')->name('store');
+            Route::get('/fetch', [ParentFolderController::class, 'fetch'])->middleware('auth:sanctum')->name('fetch');
         });
     });
 });
