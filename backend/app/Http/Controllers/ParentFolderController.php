@@ -78,4 +78,20 @@ class ParentFolderController extends Controller
         $logger->success();
         return $parentFolder;
     }
+
+    /**
+     * 親フォルダーの削除
+     *
+     * @param int $id
+     * @return void
+     */
+    public function delete(int $id): void
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('親フォルダーの削除処理開始');
+        $this->parentFolderRepository->deleteParentFolder($id);
+
+        $logger->success();
+    }
 }

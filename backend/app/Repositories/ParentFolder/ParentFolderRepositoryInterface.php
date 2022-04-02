@@ -31,4 +31,11 @@ interface ParentFolderRepositoryInterface
      */
     public function updateParentFolder(ParentFolderRequest $request, int $id): ParentFolder;
 
+    /**
+     * 削除
+     *
+     * @param int $id
+     * @return void
+     */
+    public function deleteParentFolder(int $id): void;
 }
