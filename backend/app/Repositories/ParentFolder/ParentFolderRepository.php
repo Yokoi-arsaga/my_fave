@@ -44,4 +44,12 @@ class ParentFolderRepository implements ParentFolderRepositoryInterface
         $parentFolder->save();
         return $parentFolder;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteParentFolder(int $id): void
+    {
+        ParentFolder::destroy($id);
+    }
 }
