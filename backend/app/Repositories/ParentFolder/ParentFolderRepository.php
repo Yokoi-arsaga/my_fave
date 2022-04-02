@@ -30,4 +30,18 @@ class ParentFolderRepository implements ParentFolderRepositoryInterface
     {
         return ParentFolder::where('user_id', Auth::id())->get();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateParentFolder(ParentFolderRequest $request, int $id): ParentFolder
+    {
+        $parentFolder = ParentFolder::find($id);
+        $parentFolder->folder_name = $request->getFolderName();
+        $parentFolder->description = $request->getDescription();
+        $parentFolder->disclosure_range_id = $request->getDisclosureRangeId();
+        $parentFolder->is_nest = $request->getIsNest();
+        $parentFolder->save();
+        return $parentFolder;
+    }
 }
