@@ -60,4 +60,22 @@ class ParentFolderController extends Controller
         $logger->success();
         return $favoriteVideos;
     }
+
+    /**
+     * 親フォルダー情報の更新
+     *
+     * @param ParentFolderRequest $request
+     * @param int $id
+     * @return ParentFolder
+     */
+    public function update(ParentFolderRequest $request, int $id): ParentFolder
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('親フォルダー情報の更新処理開始');
+        $parentFolder = $this->parentFolderRepository->updateParentFolder($request, $id);
+
+        $logger->success();
+        return $parentFolder;
+    }
 }
