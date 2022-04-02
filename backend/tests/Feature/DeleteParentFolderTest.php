@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\FavoriteVideo;
 use App\Models\ParentFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
