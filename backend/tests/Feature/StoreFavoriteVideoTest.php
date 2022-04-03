@@ -51,10 +51,7 @@ class StoreFavoriteVideoTest extends TestCase
             'video_name' => 'サンプル',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(FavoriteVideo::all());
+        $this->common_validation_logic($favoriteVideoInfo);
     }
 
     /**
@@ -69,10 +66,7 @@ class StoreFavoriteVideoTest extends TestCase
             'video_name' => '',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(FavoriteVideo::all());
+        $this->common_validation_logic($favoriteVideoInfo);
     }
 
     /**
@@ -87,6 +81,17 @@ class StoreFavoriteVideoTest extends TestCase
             'video_name' => 'サンプル',
         ];
 
+        $this->common_validation_logic($favoriteVideoInfo);
+    }
+
+    /**
+     * バリデーション関連のテストの共通ロジック
+     *
+     * @param array $favoriteVideoInfo
+     * @return void
+     */
+    private function common_validation_logic(array $favoriteVideoInfo)
+    {
         $response = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
 
         $response->assertRedirect('/');
