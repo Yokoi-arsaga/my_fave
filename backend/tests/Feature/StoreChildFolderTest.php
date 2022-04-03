@@ -28,7 +28,7 @@ class StoreChildFolderTest extends TestCase
      */
     public function test_store_child_folder_success()
     {
-        [$parentFolder, $parentFolderId] = $this->common_preparation();
+        $parentFolderId = $this->common_preparation();
 
         $childFolderInfo = [
             'folder_name' => 'サンプル',
@@ -51,7 +51,7 @@ class StoreChildFolderTest extends TestCase
      */
     public function test_store_child_folder_failure_by_name_empty()
     {
-        [$parentFolder, $parentFolderId] = $this->common_preparation();
+        $parentFolderId = $this->common_preparation();
 
         $childFolderInfo = [
             'folder_name' => '',
@@ -69,9 +69,9 @@ class StoreChildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_store_parent_folder_failure_by_disclosure_out_of_range()
+    public function test_store_child_folder_failure_by_disclosure_out_of_range()
     {
-        [$parentFolder, $parentFolderId] = $this->common_preparation();
+        $parentFolderId = $this->common_preparation();
 
         $parentFolderInfo = [
             'folder_name' => 'サンプル',
@@ -89,9 +89,9 @@ class StoreChildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_store_parent_folder_failure_by_nest_flag_invalid()
+    public function test_store_child_folder_failure_by_nest_flag_invalid()
     {
-        [$parentFolder, $parentFolderId] = $this->common_preparation();
+        $parentFolderId = $this->common_preparation();
 
         $parentFolderInfo = [
             'folder_name' => 'サンプル',
@@ -105,13 +105,49 @@ class StoreChildFolderTest extends TestCase
     }
 
     /**
+     * 親フォルダーIDがnullだった場合バリデーションで弾かれることを確認
+     *
+     * @return void
+     */
+    public function test_store_child_folder_failure_by_parent_folder_id_empty()
+    {
+        $parentFolderInfo = [
+            'folder_name' => 'サンプル',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'parent_folder_id' => null,
+            'is_nest' => false
+        ];
+
+        $this->common_validation_logic($parentFolderInfo);
+    }
+
+    /**
+     * 親フォルダーそのものが存在しなかった場合バリデーションで弾かれることを確認
+     *
+     * @return void
+     */
+    public function test_store_child_folder_failure_by_parent_folder_empty()
+    {
+        $parentFolderInfo = [
+            'folder_name' => 'サンプル',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'parent_folder_id' => 1,
+            'is_nest' => false
+        ];
+
+        $this->common_validation_logic($parentFolderInfo);
+    }
+
+    /**
      * 認証されていない場合にリダイレクトされることを確認
      *
      * @return void
      */
-    public function test_store_parent_folder_failure_by_not_auth()
+    public function test_store_child_folder_failure_by_not_auth()
     {
-        [$parentFolder, $parentFolderId] = $this->common_preparation();
+        $parentFolderId = $this->common_preparation();
 
         $parentFolderInfo = [
             'folder_name' => 'サンプル',
@@ -121,15 +157,15 @@ class StoreChildFolderTest extends TestCase
             'is_nest' => true
         ];
 
-        $this->common_validation_logic($parentFolderInfo, $parentFolder, 'login');
+        $this->common_validation_logic($parentFolderInfo, 'login');
     }
 
     /**
      * テスト実行前の準備
      *
-     * @return array
+     * @return int
      */
-    private function common_preparation(): array
+    private function common_preparation(): int
     {
         $parentFolderInfo = [
             'folder_name' => 'サンプル',
