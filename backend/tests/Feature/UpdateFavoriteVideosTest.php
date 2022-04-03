@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\FavoriteVideo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 use App\Models\User;
 
@@ -28,12 +29,7 @@ class UpdateFavoriteVideosTest extends TestCase
      */
     public function test_update_favorite_video_success()
     {
-        $favoriteVideoInfo = [
-            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-            'video_name' => 'サンプル',
-        ];
-
-        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        [$favoriteVideoInfo, $favoriteVideo] = $this->common_preparation();
 
         $updateFavoriteVideoInfo = [
             'video_url' => 'https://www.youtube.com/watch?v=DmdrWQXtL-U',
@@ -57,26 +53,14 @@ class UpdateFavoriteVideosTest extends TestCase
      */
     public function test_update_favorite_video_failure_by_url_empty()
     {
-        $favoriteVideoInfo = [
-            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-            'video_name' => 'サンプル',
-        ];
-
-        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        [$favoriteVideoInfo, $favoriteVideo] = $this->common_preparation();
 
         $updateFavoriteVideoInfo = [
             'video_url' => '',
             'video_name' => 'サンプル2',
         ];
 
-        $favoriteVideoId = $favoriteVideo['id'];
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
-
-        $response->assertRedirect('/');
-
-        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideoId);
-
-        $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
+        $this->common_validation_logic($favoriteVideo, $updateFavoriteVideoInfo, $favoriteVideoInfo);
     }
 
     /**
@@ -86,26 +70,14 @@ class UpdateFavoriteVideosTest extends TestCase
      */
     public function test_update_favorite_video_failure_by_name_empty()
     {
-        $favoriteVideoInfo = [
-            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-            'video_name' => 'サンプル',
-        ];
-
-        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        [$favoriteVideoInfo, $favoriteVideo] = $this->common_preparation();
 
         $updateFavoriteVideoInfo = [
             'video_url' => 'https://www.youtube.com/watch?v=DmdrWQXtL-U',
             'video_name' => '',
         ];
 
-        $favoriteVideoId = $favoriteVideo['id'];
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
-
-        $response->assertRedirect('/');
-
-        $updateFavoriteVideo = FavoriteVideo::find($favoriteVideoId);
-
-        $this->assertEquals($updateFavoriteVideo->video_url, $favoriteVideoInfo['video_url']);
+        $this->common_validation_logic($favoriteVideo, $updateFavoriteVideoInfo, $favoriteVideoInfo);
     }
 
     /**
@@ -115,18 +87,42 @@ class UpdateFavoriteVideosTest extends TestCase
      */
     public function test_update_favorite_video_failure_by_format_different()
     {
-        $favoriteVideoInfo = [
-            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-            'video_name' => 'サンプル',
-        ];
-
-        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        [$favoriteVideoInfo, $favoriteVideo] = $this->common_preparation();
 
         $updateFavoriteVideoInfo = [
             'video_url' => 'https://www.arsaga.jp/',
             'video_name' => 'サンプル2',
         ];
 
+        $this->common_validation_logic($favoriteVideo, $updateFavoriteVideoInfo, $favoriteVideoInfo);
+    }
+
+    /**
+     * テスト実行前の準備
+     *
+     * @return array
+     */
+    private function common_preparation(): array
+    {
+        $favoriteVideoInfo = [
+            'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
+            'video_name' => 'サンプル',
+        ];
+
+        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        return [$favoriteVideoInfo, $favoriteVideo];
+    }
+
+    /**
+     * バリデーション関連のテストの共通ロジック
+     *
+     * @param TestResponse $favoriteVideo
+     * @param array $updateFavoriteVideoInfo
+     * @param array $favoriteVideoInfo
+     * @return void
+     */
+    private function common_validation_logic(TestResponse $favoriteVideo, array $updateFavoriteVideoInfo, array $favoriteVideoInfo)
+    {
         $favoriteVideoId = $favoriteVideo['id'];
         $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$favoriteVideoId", $updateFavoriteVideoInfo);
 

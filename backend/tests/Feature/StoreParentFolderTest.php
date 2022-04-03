@@ -55,10 +55,7 @@ class StoreParentFolderTest extends TestCase
             'is_nest' => false
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(ParentFolder::all());
+        $this->common_validation_logic($parentFolderInfo);
     }
 
     /**
@@ -75,10 +72,7 @@ class StoreParentFolderTest extends TestCase
             'is_nest' => false
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(ParentFolder::all());
+        $this->common_validation_logic($parentFolderInfo);
     }
 
     /**
@@ -95,10 +89,7 @@ class StoreParentFolderTest extends TestCase
             'is_nest' => null
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(ParentFolder::all());
+        $this->common_validation_logic($parentFolderInfo);
     }
 
     /**
@@ -115,9 +106,25 @@ class StoreParentFolderTest extends TestCase
             'is_nest' => true
         ];
 
-        $response = $this->post('/api/favorite/folder/parent/store', $parentFolderInfo);
+        $this->common_validation_logic($parentFolderInfo, 'login');
+    }
 
-        $response->assertRedirect('/login');
+    /**
+     * バリデーション関連のテストの共通ロジック
+     *
+     * @param array $parentFolderInfo
+     * @param string|null $path
+     * @return void
+     */
+    private function common_validation_logic(array $parentFolderInfo, ?string $path=null)
+    {
+        if (is_null($path)){
+            $response = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
+        }else{
+            $response = $this->post('/api/favorite/folder/parent/store', $parentFolderInfo);
+        }
+
+        $response->assertRedirect("/$path");
         $this->assertEmpty(ParentFolder::all());
     }
 }

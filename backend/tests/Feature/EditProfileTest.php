@@ -51,12 +51,7 @@ class EditProfileTest extends TestCase
             'location' => '東京都'
         ];
 
-        $response = $this->actingAs($this->user)->post('/api/profile/store', $profileInfo);
-
-        $user = User::first();
-
-        $response->assertRedirect('/');
-        $this->assertNull($user['description']);
+        $this->common_validation_logic($profileInfo);
     }
 
     /**
@@ -72,12 +67,7 @@ class EditProfileTest extends TestCase
             'location' => '東京都'
         ];
 
-        $response = $this->actingAs($this->user)->post('/api/profile/store', $profileInfo);
-
-        $user = User::first();
-
-        $response->assertRedirect('/');
-        $this->assertNull($user['description']);
+        $this->common_validation_logic($profileInfo);
     }
 
     /**
@@ -93,12 +83,7 @@ class EditProfileTest extends TestCase
             'location' => '東京都'
         ];
 
-        $response = $this->actingAs($this->user)->post('/api/profile/store', $profileInfo);
-
-        $user = User::first();
-
-        $response->assertRedirect('/');
-        $this->assertNull($user['description']);
+        $this->common_validation_logic($profileInfo);
     }
 
     /**
@@ -114,6 +99,17 @@ class EditProfileTest extends TestCase
             'location' => 'あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ'
         ];
 
+        $this->common_validation_logic($profileInfo);
+    }
+
+    /**
+     * バリデーション関連のテストの共通ロジック
+     *
+     * @param array $profileInfo
+     * @return void
+     */
+    private function common_validation_logic(array $profileInfo)
+    {
         $response = $this->actingAs($this->user)->post('/api/profile/store', $profileInfo);
 
         $user = User::first();
