@@ -55,13 +55,7 @@ class StoreFriendRequestTest extends TestCase
             'message' => '',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(FriendRequest::all());
-
-        $user = User::find($this->users[2]->id);
-        $this->assertEmpty($user->notifications);
+        $this->common_validation_logic($friendRequestInfo);
     }
 
     /**
@@ -76,13 +70,7 @@ class StoreFriendRequestTest extends TestCase
             'message' => 'よろしくお願いいたします。',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(FriendRequest::all());
-
-        $user = User::find($this->users[2]->id);
-        $this->assertEmpty($user->notifications);
+        $this->common_validation_logic($friendRequestInfo);
     }
 
     /**
@@ -97,13 +85,7 @@ class StoreFriendRequestTest extends TestCase
             'message' => 'よろしくお願いいたします。',
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(FriendRequest::all());
-
-        $user = User::find($this->users[2]->id);
-        $this->assertEmpty($user->notifications);
+        $this->common_validation_logic($friendRequestInfo);
     }
 
     /**
@@ -118,6 +100,17 @@ class StoreFriendRequestTest extends TestCase
             'message' => 'よろしくお願いいたします。',
         ];
 
+        $this->common_validation_logic($friendRequestInfo);
+    }
+
+    /**
+     * バリデーション関連のテストの共通ロジック
+     *
+     * @param array $friendRequestInfo
+     * @return void
+     */
+    private function common_validation_logic(array $friendRequestInfo)
+    {
         $response = $this->actingAs($this->users[1])->post('/api/friend/request/store', $friendRequestInfo);
 
         $response->assertRedirect('/');
