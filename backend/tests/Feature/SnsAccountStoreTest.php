@@ -51,10 +51,7 @@ class SnsAccountStoreTest extends TestCase
             'account_url' => 'https://www.youtube.com/'
         ];
 
-        $response = $this->actingAs($this->user)->post('/api/account/store', $accountInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(SnsAccount::all());
+        $this->common_validation_logic($accountInfo);
     }
 
     /**
@@ -69,10 +66,7 @@ class SnsAccountStoreTest extends TestCase
             'account_url' => ''
         ];
 
-        $response = $this->actingAs($this->user)->post('/api/account/store', $accountInfo);
-
-        $response->assertRedirect('/');
-        $this->assertEmpty(SnsAccount::all());
+        $this->common_validation_logic($accountInfo);
     }
 
     /**
@@ -87,6 +81,17 @@ class SnsAccountStoreTest extends TestCase
             'account_url' => 'https://www.youtube.com/'
         ];
 
+        $this->common_validation_logic($accountInfo);
+    }
+
+    /**
+     * バリデーション関連のテストの共通ロジック
+     *
+     * @param array $accountInfo
+     * @return void
+     */
+    private function common_validation_logic(array $accountInfo)
+    {
         $response = $this->actingAs($this->user)->post('/api/account/store', $accountInfo);
 
         $response->assertRedirect('/');
