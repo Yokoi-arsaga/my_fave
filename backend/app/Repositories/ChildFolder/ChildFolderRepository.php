@@ -11,7 +11,7 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function storeChildFolder(ChildFolderRequest $request, int $parentFolderId): ChildFolder
+    public function storeChildFolder(ChildFolderRequest $request): ChildFolder
     {
         return ChildFolder::create([
             'folder_name' => $request->getFolderName(),
@@ -19,7 +19,7 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
             'disclosure_range_id' => $request->getDisclosureRangeId(),
             'is_nest' => $request->getIsNest(),
             'user_id' => Auth::id(),
-            'parent_folder_id' => $parentFolderId
+            'parent_folder_id' => $request->getParentFolderId()
         ]);
     }
 }

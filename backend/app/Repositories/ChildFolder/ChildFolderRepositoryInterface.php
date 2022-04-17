@@ -11,8 +11,7 @@ interface ChildFolderRepositoryInterface
      * インサート
      *
      * @param ChildFolderRequest $request
-     * @param int $parentFolderId
      * @return ChildFolder
      */
-    public function storeChildFolder(ChildFolderRequest $request, int $parentFolderId): ChildFolder;
+    public function storeChildFolder(ChildFolderRequest $request): ChildFolder;
 }

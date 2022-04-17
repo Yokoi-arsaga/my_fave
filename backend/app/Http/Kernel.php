@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'thumbnail.have' => \App\Http\Middleware\HaveThumbnail::class,
         'friend.request' => \App\Http\Middleware\FriendRequestStore::class,
         'friend.request.permission'  => \App\Http\Middleware\FriendRequestPermission::class,
+        'child.folder.store' => \App\Http\Middleware\ChildFolderStore::class,
     ];
 }

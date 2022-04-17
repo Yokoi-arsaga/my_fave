@@ -27,7 +27,8 @@ class ChildFolderRequest extends FormRequest
             'folder_name' => ['required', 'string', 'max:60'],
             'description' => ['nullable', 'string', 'max:250'],
             'disclosure_range_id' => ['required', 'numeric', 'between:1,3'],
-            'is_nest' => ['boolean']
+            'is_nest' => ['boolean'],
+            'parent_folder_id' => ['required', 'numeric']
         ];
     }
 
@@ -69,5 +70,15 @@ class ChildFolderRequest extends FormRequest
     public function getIsNest(): bool
     {
         return $this->input('is_nest');
+    }
+
+    /**
+     * 親フォルダーID
+     *
+     * @return int
+     */
+    public function getParentFolderId(): int
+    {
+        return $this->input('parent_folder_id');
     }
 }

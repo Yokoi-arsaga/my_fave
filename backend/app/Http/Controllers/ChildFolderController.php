@@ -38,12 +38,12 @@ class ChildFolderController extends Controller
      * @param int $parentFolderId
      * @return ChildFolder
      */
-    public function store(ChildFolderRequest $request, int $parentFolderId): ChildFolder
+    public function store(ChildFolderRequest $request): ChildFolder
     {
         $logger = new ApplicationLogger(__METHOD__);
 
         $logger->write('子フォルダーの登録処理開始');
-        $childFolder = $this->childFolderRepository->storeChildFolder($request, $parentFolderId);
+        $childFolder = $this->childFolderRepository->storeChildFolder($request);
 
         $logger->success();
         return $childFolder;

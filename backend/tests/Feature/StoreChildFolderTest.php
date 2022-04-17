@@ -34,13 +34,15 @@ class StoreChildFolderTest extends TestCase
             'folder_name' => 'サンプル',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 1,
+            'parent_folder_id' => $parentFolderId,
             'is_nest' => false
         ];
 
-        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/store/{$parentFolderId}", $childFolderInfo);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/store", $childFolderInfo);
 
         $response->assertStatus(201);
         $this->assertEquals($response['folder_name'], $childFolderInfo['folder_name']);
+        $this->assertEquals($response['parent_folder_id'], $parentFolderId);
     }
 
     /**
@@ -56,10 +58,11 @@ class StoreChildFolderTest extends TestCase
             'folder_name' => '',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 1,
+            'parent_folder_id' => $parentFolderId,
             'is_nest' => false
         ];
 
-        $this->common_validation_logic($childFolderInfo, $parentFolderId);
+        $this->common_validation_logic($childFolderInfo);
     }
 
     /**
@@ -79,7 +82,7 @@ class StoreChildFolderTest extends TestCase
             'is_nest' => false
         ];
 
-        $this->common_validation_logic($parentFolderInfo, $parentFolderId);
+        $this->common_validation_logic($parentFolderInfo);
     }
 
     /**
@@ -99,7 +102,7 @@ class StoreChildFolderTest extends TestCase
             'is_nest' => null
         ];
 
-        $this->common_validation_logic($parentFolderInfo, $parentFolderId);
+        $this->common_validation_logic($parentFolderInfo);
     }
 
     /**
@@ -130,30 +133,34 @@ class StoreChildFolderTest extends TestCase
             'folder_name' => 'サンプル',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 1,
+            'parent_folder_id' => 1,
             'is_nest' => false
         ];
 
-        $this->common_validation_logic($parentFolderInfo, 1);
+        $this->common_validation_logic($parentFolderInfo);
     }
 
     /**
-     * 認証されていない場合にリダイレクトされることを確認
+     * 指定した親フォルダーIDが自分のものでない場合バリデーションで弾かれることを確認
      *
      * @return void
      */
-    public function test_store_child_folder_failure_by_not_auth()
+    public function test_store_child_folder_failure_by_parent_folder_not_mine()
     {
-        $parentFolderId = $this->common_preparation();
+        $this->common_preparation();
 
         $parentFolderInfo = [
             'folder_name' => 'サンプル',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 1,
-            'is_nest' => true
+            'parent_folder_id' => 2,
+            'is_nest' => false
         ];
 
-        $this->common_validation_logic($parentFolderInfo, $parentFolderId, 'login');
+        $this->common_validation_logic($parentFolderInfo);
     }
+
+    // TODO: 認証されていない場合のテストの実装
 
     /**
      * テスト実行前の準備
@@ -179,16 +186,15 @@ class StoreChildFolderTest extends TestCase
      * バリデーション関連のテストの共通ロジック
      *
      * @param array $childFolderInfo
-     * @param int|null $parentFolderId
      * @param string|null $path
      * @return void
      */
-    private function common_validation_logic(array $childFolderInfo, ?int $parentFolderId=null, ?string $path=null)
+    private function common_validation_logic(array $childFolderInfo, ?string $path=null)
     {
         if (is_null($path)){
-            $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/store/{$parentFolderId}", $childFolderInfo);
+            $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/store", $childFolderInfo);
         }else{
-            $response = $this->post("/api/favorite/folder/child/store/{$parentFolderId}", $childFolderInfo);
+            $response = $this->post("/api/favorite/folder/child/store", $childFolderInfo);
         }
 
         $response->assertRedirect("/$path");
