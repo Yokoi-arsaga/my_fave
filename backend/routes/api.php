@@ -6,6 +6,7 @@ use App\Http\Controllers\SnsAccountController;
 use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\FavoriteVideoController;
 use App\Http\Controllers\ParentFolderController;
+use App\Http\Controllers\ChildFolderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
@@ -80,12 +81,18 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
         Route::delete('/{id}', [FavoriteVideoController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
     });
 
+    // フォルダー管理
     Route::prefix('/folder')->name('folder.')->group(function () {
+        // 親フォルダー
         Route::prefix('/parent')->name('parent.')->group(function () {
             Route::post('/store', [ParentFolderController::class, 'store'])->middleware('auth:sanctum')->name('store');
             Route::get('/fetch', [ParentFolderController::class, 'fetch'])->middleware('auth:sanctum')->name('fetch');
             Route::patch('/{id}', [ParentFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
             Route::delete('/{id}', [ParentFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
+        });
+        // 子フォルダー
+        Route::prefix('/child')->name('child.')->group(function (){
+            Route::post('/store/{parentFolderId}', [ChildFolderController::class, 'store'])->middleware('auth:sanctum')->name('store');
         });
     });
 });

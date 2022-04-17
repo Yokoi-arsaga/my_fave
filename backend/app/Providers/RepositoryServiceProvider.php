@@ -21,7 +21,8 @@ class RepositoryServiceProvider extends ServiceProvider
         'FriendRequest',
         'Friend',
         'FavoriteVideo',
-        'ParentFolder'
+        'ParentFolder',
+        'ChildFolder'
     ];
 
     /**
