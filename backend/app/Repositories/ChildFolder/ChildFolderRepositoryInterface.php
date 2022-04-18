@@ -4,7 +4,7 @@ namespace App\Repositories\ChildFolder;
 
 use App\Http\Requests\ChildFolderRequest;
 use App\Models\ChildFolder;
-
+use Illuminate\Support\Collection;
 interface ChildFolderRepositoryInterface
 {
     /**
@@ -14,4 +14,12 @@ interface ChildFolderRepositoryInterface
      * @return ChildFolder
      */
     public function storeChildFolder(ChildFolderRequest $request): ChildFolder;
+
+    /**
+     * 親フォルダーに紐づく子フォルダーの全件取得
+     *
+     * @param int $parentFolderId
+     * @return Collection
+     */
+    public function fetchChildFolders(int $parentFolderId): Collection;
 }

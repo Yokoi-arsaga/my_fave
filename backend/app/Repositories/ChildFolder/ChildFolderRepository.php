@@ -4,6 +4,7 @@ namespace App\Repositories\ChildFolder;
 
 use App\Http\Requests\ChildFolderRequest;
 use App\Models\ChildFolder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class ChildFolderRepository implements ChildFolderRepositoryInterface
@@ -21,5 +22,13 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
             'user_id' => Auth::id(),
             'parent_folder_id' => $request->getParentFolderId()
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchChildFolders(int $parentFolderId): Collection
+    {
+        return ChildFolder::where('parent_folder_id', $parentFolderId)->get();
     }
 }

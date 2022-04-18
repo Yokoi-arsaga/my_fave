@@ -35,7 +35,6 @@ class ChildFolderController extends Controller
      *  子フォルダーの登録
      *
      * @param ChildFolderRequest $request
-     * @param int $parentFolderId
      * @return ChildFolder
      */
     public function store(ChildFolderRequest $request): ChildFolder
@@ -47,5 +46,22 @@ class ChildFolderController extends Controller
 
         $logger->success();
         return $childFolder;
+    }
+
+    /**
+     * 親フォルダーに紐づく子フォルダーの全件取得
+     *
+     * @param int $parentFolderId
+     * @return Collection
+     */
+    public function fetch(int $parentFolderId): Collection
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('親フォルダーに紐づく子フォルダーの一覧取得処理開始');
+        $childFolders = $this->childFolderRepository->fetchChildFolders($parentFolderId);
+
+        $logger->success();
+        return $childFolders;
     }
 }

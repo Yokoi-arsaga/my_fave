@@ -41,21 +41,21 @@ class FetchChildFoldersTest extends TestCase
                 'folder_name' => 'サンプル1',
                 'description' => '動画フォルダーの説明文',
                 'disclosure_range_id' => 1,
-                'parent_folder_id' => $parentFolder->id,
+                'parent_folder_id' => $parentFolder['id'],
                 'is_nest' => true
             ],
             [
                 'folder_name' => 'サンプル2',
                 'description' => '動画フォルダーの説明文',
                 'disclosure_range_id' => 1,
-                'parent_folder_id' => $parentFolder->id,
+                'parent_folder_id' => $parentFolder['id'],
                 'is_nest' => true
             ],
             [
                 'folder_name' => 'サンプル3',
                 'description' => '動画フォルダーの説明文',
                 'disclosure_range_id' => 1,
-                'parent_folder_id' => $parentFolder->id,
+                'parent_folder_id' => $parentFolder['id'],
                 'is_nest' => true
             ],
         ];
@@ -64,7 +64,7 @@ class FetchChildFoldersTest extends TestCase
             $this->actingAs($this->users[1])->post("/api/favorite/folder/child/store", $childFolderInfo);
         }
 
-        $response = $this->actingAs($this->users[1])->get('/api/favorite/folder/child/fetch');
+        $response = $this->actingAs($this->users[1])->get("/api/favorite/folder/child/fetch/{$parentFolder['id']}");
 
         $response->assertStatus(200);
         $response->assertJsonCount(3);
