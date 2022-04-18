@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\ParentFolder;
+use App\Models\ChildFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
@@ -38,10 +38,11 @@ class StoreChildFolderTest extends TestCase
             'is_nest' => false
         ];
 
-        $response = $this->actingAs($this->users[1])->post('/api/favorite/folder/child/store', $childFolderInfo);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/store", $childFolderInfo);
 
         $response->assertStatus(201);
         $this->assertEquals($response['folder_name'], $childFolderInfo['folder_name']);
+        $this->assertEquals($response['parent_folder_id'], $parentFolderId);
     }
 
     /**
@@ -115,7 +116,6 @@ class StoreChildFolderTest extends TestCase
             'folder_name' => 'サンプル',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 1,
-            'parent_folder_id' => null,
             'is_nest' => false
         ];
 
@@ -141,27 +141,30 @@ class StoreChildFolderTest extends TestCase
     }
 
     /**
-     * 認証されていない場合にリダイレクトされることを確認
+     * 指定した親フォルダーIDが自分のものでない場合バリデーションで弾かれることを確認
      *
      * @return void
      */
-    public function test_store_child_folder_failure_by_not_auth()
+    public function test_store_child_folder_failure_by_parent_folder_not_mine()
     {
-        $parentFolderId = $this->common_preparation();
+        $this->common_preparation();
 
         $parentFolderInfo = [
             'folder_name' => 'サンプル',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 1,
-            'parent_folder_id' => $parentFolderId,
-            'is_nest' => true
+            'parent_folder_id' => 2,
+            'is_nest' => false
         ];
 
-        $this->common_validation_logic($parentFolderInfo, 'login');
+        $this->common_validation_logic($parentFolderInfo);
     }
+
+    // TODO: 認証されていない場合のテストの実装
 
     /**
      * テスト実行前の準備
+     * 親フォルダーを登録してそのIDを返却
      *
      * @return int
      */
@@ -189,9 +192,9 @@ class StoreChildFolderTest extends TestCase
     private function common_validation_logic(array $childFolderInfo, ?string $path=null)
     {
         if (is_null($path)){
-            $response = $this->actingAs($this->users[1])->post('/api/favorite/folder/child/store', $childFolderInfo);
+            $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/store", $childFolderInfo);
         }else{
-            $response = $this->post('/api/favorite/folder/child/store', $childFolderInfo);
+            $response = $this->post("/api/favorite/folder/child/store", $childFolderInfo);
         }
 
         $response->assertRedirect("/$path");

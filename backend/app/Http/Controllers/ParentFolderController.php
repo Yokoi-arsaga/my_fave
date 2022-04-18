@@ -9,7 +9,7 @@ use App\Repositories\ParentFolder\ParentFolderRepositoryInterface;
 use Illuminate\Support\Collection;
 
 /**
- * お気に入り動画に関するコントローラー
+ * 親フォルダーに関するコントローラー
  *
  */
 class ParentFolderController extends Controller
