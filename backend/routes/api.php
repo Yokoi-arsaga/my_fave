@@ -93,6 +93,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
         // 子フォルダー
         Route::prefix('/child')->name('child.')->group(function (){
             Route::post('/store', [ChildFolderController::class, 'store'])->middleware(['auth:sanctum', 'child.folder.store'])->name('store');
+            Route::get('/fetch/{parentFolderId}', [ChildFolderController::class, 'fetch'])->middleware('auth:sanctum')->name('fetch');
         });
     });
 });
