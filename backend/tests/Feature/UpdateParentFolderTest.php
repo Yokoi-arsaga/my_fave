@@ -153,7 +153,7 @@ class UpdateParentFolderTest extends TestCase
     private function common_validation_logic(TestResponse $parentFolder, array $updateParentFolderInfo, array $parentFolderInfo)
     {
         $parentFolderId = $parentFolder['id'];
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$parentFolderId", $updateParentFolderInfo);
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/parent/$parentFolderId", $updateParentFolderInfo);
 
         $response->assertRedirect('/');
 
