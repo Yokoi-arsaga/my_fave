@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\ChildFolder;
-use App\Models\ParentFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
@@ -51,79 +50,103 @@ class UpdateChildFolderTest extends TestCase
     }
 
     /**
-     * フォルダ名が空欄だった場合に親フォルダの情報更新に失敗するテスト
+     * フォルダ名が空欄だった場合に子フォルダの情報更新に失敗するテスト
      *
      * @return void
      */
-    public function test_update_parent_folder_failure_by_folder_name_empty()
+    public function test_update_child_folder_failure_by_folder_name_empty()
     {
-        [$parentFolderInfo, $parentFolder] = $this->common_preparation();
+        [$childFolderInfo, $childFolder, $parentFolderId] = $this->common_preparation();
 
-        $updateParentFolderInfo = [
+        $updateChildFolderInfo = [
             'folder_name' => '',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 2,
-            'is_nest' => true
+            'parent_folder_id' => $parentFolderId,
+            'is_nest' => false
         ];
 
-        $this->common_validation_logic($parentFolder, $updateParentFolderInfo, $parentFolderInfo);
+        $this->common_validation_logic($childFolder, $updateChildFolderInfo, $childFolderInfo);
     }
 
     /**
-     * 説明文が空欄だった場合に親フォルダの情報更新に失敗するテスト
+     * 説明文が空欄だった場合に子フォルダの情報更新に失敗するテスト
      *
      * @return void
      */
-    public function test_update_parent_folder_failure_by_description_empty()
+    public function test_update_child_folder_failure_by_description_empty()
     {
-        [$parentFolderInfo, $parentFolder] = $this->common_preparation();
+        [$childFolderInfo, $childFolder, $parentFolderId] = $this->common_preparation();
 
-        $updateParentFolderInfo = [
+        $updateChildFolderInfo = [
             'folder_name' => 'サンプル2',
             'description' => '',
             'disclosure_range_id' => 2,
-            'is_nest' => true
+            'parent_folder_id' => $parentFolderId,
+            'is_nest' => false
         ];
 
-        $this->common_validation_logic($parentFolder, $updateParentFolderInfo, $parentFolderInfo);
+        $this->common_validation_logic($childFolder, $updateChildFolderInfo, $childFolderInfo);
     }
 
     /**
-     * 公開範囲が無効な値だった場合に親フォルダの情報更新に失敗するテスト
+     * 公開範囲が無効な値だった場合に子フォルダの情報更新に失敗するテスト
      *
      * @return void
      */
-    public function test_update_parent_folder_failure_by_disclosure_out_of_range()
+    public function test_update_child_folder_failure_by_disclosure_out_of_range()
     {
-        [$parentFolderInfo, $parentFolder] = $this->common_preparation();
+        [$childFolderInfo, $childFolder, $parentFolderId] = $this->common_preparation();
 
-        $updateParentFolderInfo = [
+        $updateChildFolderInfo = [
             'folder_name' => 'サンプル2',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 4,
-            'is_nest' => true
+            'parent_folder_id' => $parentFolderId,
+            'is_nest' => false
         ];
 
-        $this->common_validation_logic($parentFolder, $updateParentFolderInfo, $parentFolderInfo);
+        $this->common_validation_logic($childFolder, $updateChildFolderInfo, $childFolderInfo);
     }
 
     /**
-     * ネストフラグが無効な値だった場合に親フォルダの情報更新に失敗するテスト
+     * ネストフラグが無効な値だった場合に子フォルダの情報更新に失敗するテスト
      *
      * @return void
      */
-    public function test_update_parent_folder_failure_by_nest_flag_invalid()
+    public function test_update_child_folder_failure_by_nest_flag_invalid()
     {
-        [$parentFolderInfo, $parentFolder] = $this->common_preparation();
+        [$childFolderInfo, $childFolder, $parentFolderId] = $this->common_preparation();
 
-        $updateParentFolderInfo = [
+        $updateChildFolderInfo = [
             'folder_name' => 'サンプル2',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 2,
+            'parent_folder_id' => $parentFolderId,
             'is_nest' => null
         ];
 
-        $this->common_validation_logic($parentFolder, $updateParentFolderInfo, $parentFolderInfo);
+        $this->common_validation_logic($childFolder, $updateChildFolderInfo, $childFolderInfo);
+    }
+
+    /**
+     * 親フォルダーIDが無効な値だった場合に子フォルダの情報更新に失敗するテスト
+     *
+     * @return void
+     */
+    public function test_update_child_folder_failure_by_parent_folder_id_invalid()
+    {
+        [$childFolderInfo, $childFolder, $parentFolderId] = $this->common_preparation();
+
+        $updateChildFolderInfo = [
+            'folder_name' => 'サンプル2',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 2,
+            'parent_folder_id' => 2,
+            'is_nest' => null
+        ];
+
+        $this->common_validation_logic($childFolder, $updateChildFolderInfo, $childFolderInfo);
     }
 
     /**
@@ -157,20 +180,20 @@ class UpdateChildFolderTest extends TestCase
     /**
      * バリデーション関連のテストの共通ロジック
      *
-     * @param TestResponse $parentFolder
-     * @param array $updateParentFolderInfo
-     * @param array $parentFolderInfo
+     * @param TestResponse $childFolder
+     * @param array $updateChildFolderInfo
+     * @param array $childFolderInfo
      * @return void
      */
-    private function common_validation_logic(TestResponse $parentFolder, array $updateParentFolderInfo, array $parentFolderInfo)
+    private function common_validation_logic(TestResponse $childFolder, array $updateChildFolderInfo, array $childFolderInfo)
     {
-        $parentFolderId = $parentFolder['id'];
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/videos/$parentFolderId", $updateParentFolderInfo);
+        $childFolderId = $childFolder['id'];
+        $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/child/$childFolderId", $updateChildFolderInfo);
 
         $response->assertRedirect('/');
 
-        $updateParentFolder = ParentFolder::find($parentFolderId);
+        $updateChildFolder = ChildFolder::find($childFolderId);
 
-        $this->assertEquals($updateParentFolder->folder_name, $parentFolderInfo['folder_name']);
+        $this->assertEquals($updateChildFolder->folder_name, $childFolderInfo['folder_name']);
     }
 }
