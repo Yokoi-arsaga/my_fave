@@ -31,4 +31,12 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
     {
         return ChildFolder::where('parent_folder_id', $parentFolderId)->get();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateChildFolder(ChildFolderRequest $request, int $childFolderId): ChildFolder
+    {
+        // TODO: Implement updateChildFolder() method.
+    }
 }

@@ -22,4 +22,13 @@ interface ChildFolderRepositoryInterface
      * @return Collection
      */
     public function fetchChildFolders(int $parentFolderId): Collection;
+
+    /**
+     * 更新
+     *
+     * @param ChildFolderRequest $request
+     * @param int $childFolderId
+     * @return ChildFolder
+     */
+    public function updateChildFolder(ChildFolderRequest $request, int $childFolderId): ChildFolder;
 }
