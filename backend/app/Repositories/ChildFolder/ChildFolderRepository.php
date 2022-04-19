@@ -37,6 +37,13 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
      */
     public function updateChildFolder(ChildFolderRequest $request, int $childFolderId): ChildFolder
     {
-        // TODO: Implement updateChildFolder() method.
+        $childFolder = ChildFolder::find($childFolderId);
+        $childFolder->folder_name = $request->getFolderName();
+        $childFolder->description = $request->getDescription();
+        $childFolder->disclosure_range_id = $request->getDisclosureRangeId();
+        $childFolder->is_nest = $request->getIsNest();
+        $childFolder->parent_folder_id = $request->getParentFolderId();
+        $childFolder->save();
+        return $childFolder;
     }
 }
