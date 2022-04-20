@@ -65,6 +65,13 @@ class ChildFolderController extends Controller
         return $childFolders;
     }
 
+    /**
+     * 子フォルダー情報の更新処理
+     *
+     * @param ChildFolderRequest $request
+     * @param int $id
+     * @return ChildFolder
+     */
     public function update(ChildFolderRequest $request, int $id): ChildFolder
     {
         $logger = new ApplicationLogger(__METHOD__);
@@ -74,5 +81,21 @@ class ChildFolderController extends Controller
 
         $logger->success();
         return $childFolder;
+    }
+
+    /**
+     * 子フォルダーの削除
+     *
+     * @param int $id
+     * @return void
+     */
+    public function delete(int $id): void
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('子フォルダーの削除処理開始');
+        $this->childFolderRepository->deleteChildFolder($id);
+
+        $logger->success();
     }
 }

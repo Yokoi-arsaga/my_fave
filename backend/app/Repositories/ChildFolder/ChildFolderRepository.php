@@ -46,4 +46,12 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
         $childFolder->save();
         return $childFolder;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteChildFolder(int $childFolderId): void
+    {
+        ChildFolder::destroy($childFolderId);
+    }
 }
