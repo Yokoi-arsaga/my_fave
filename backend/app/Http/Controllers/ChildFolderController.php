@@ -64,4 +64,15 @@ class ChildFolderController extends Controller
         $logger->success();
         return $childFolders;
     }
+
+    public function update(ChildFolderRequest $request, int $id): ChildFolder
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('子フォルダー情報の更新処理開始');
+        $childFolder = $this->childFolderRepository->updateChildFolder($request, $id);
+
+        $logger->success();
+        return $childFolder;
+    }
 }

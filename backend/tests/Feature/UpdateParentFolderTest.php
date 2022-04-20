@@ -68,25 +68,6 @@ class UpdateParentFolderTest extends TestCase
     }
 
     /**
-     * 説明文が空欄だった場合に親フォルダの情報更新に失敗するテスト
-     *
-     * @return void
-     */
-    public function test_update_parent_folder_failure_by_description_empty()
-    {
-        [$parentFolderInfo, $parentFolder] = $this->common_preparation();
-
-        $updateParentFolderInfo = [
-            'folder_name' => 'サンプル2',
-            'description' => '',
-            'disclosure_range_id' => 2,
-            'is_nest' => true
-        ];
-
-        $this->common_validation_logic($parentFolder, $updateParentFolderInfo, $parentFolderInfo);
-    }
-
-    /**
      * 公開範囲が無効な値だった場合に親フォルダの情報更新に失敗するテスト
      *
      * @return void
