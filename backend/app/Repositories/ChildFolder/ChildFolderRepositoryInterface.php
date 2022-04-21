@@ -31,4 +31,12 @@ interface ChildFolderRepositoryInterface
      * @return ChildFolder
      */
     public function updateChildFolder(ChildFolderRequest $request, int $childFolderId): ChildFolder;
+
+    /**
+     * 削除
+     *
+     * @param int $childFolderId
+     * @return void
+     */
+    public function deleteChildFolder(int $childFolderId): void;
 }
