@@ -7,6 +7,7 @@ use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\FavoriteVideoController;
 use App\Http\Controllers\ParentFolderController;
 use App\Http\Controllers\ChildFolderController;
+use App\Http\Controllers\GrandchildFolderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
@@ -96,6 +97,13 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::get('/fetch/{parentFolderId}', [ChildFolderController::class, 'fetch'])->middleware('auth:sanctum')->name('fetch');
             Route::patch('/{id}', [ChildFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
             Route::delete('/{id}', [ChildFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
+        });
+        // 孫フォルダー
+        Route::prefix('/grandchild')->name('grandchild.')->group(function (){
+            Route::post('/store', [GrandchildFolderController::class, 'store'])->middleware(['auth:sanctum', 'child.folder.store'])->name('store');
+            Route::get('/fetch/{childFolderId}', [GrandchildFolderController::class, 'fetch'])->middleware('auth:sanctum')->name('fetch');
+            Route::patch('/{id}', [GrandchildFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
+            Route::delete('/{id}', [GrandchildFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
         });
     });
 });
