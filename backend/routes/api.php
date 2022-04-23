@@ -100,7 +100,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
         });
         // 孫フォルダー
         Route::prefix('/grandchild')->name('grandchild.')->group(function (){
-            Route::post('/store', [GrandchildFolderController::class, 'store'])->middleware(['auth:sanctum', 'child.folder.store'])->name('store');
+            Route::post('/store', [GrandchildFolderController::class, 'store'])->middleware(['auth:sanctum', 'grandchild.folder.store'])->name('store');
             Route::get('/fetch/{childFolderId}', [GrandchildFolderController::class, 'fetch'])->middleware('auth:sanctum')->name('fetch');
             Route::patch('/{id}', [GrandchildFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
             Route::delete('/{id}', [GrandchildFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
