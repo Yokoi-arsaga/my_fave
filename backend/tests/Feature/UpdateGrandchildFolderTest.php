@@ -158,7 +158,7 @@ class UpdateGrandchildFolderTest extends TestCase
             'folder_name' => 'サンプル',
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 1,
-            'parent_folder_id' => $parentFolder['id'],
+            'child_folder_id' => $childFolder['id'],
             'is_nest' => false
         ];
         $grandchildFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/grandchild/store', $grandchildFolderInfo);
