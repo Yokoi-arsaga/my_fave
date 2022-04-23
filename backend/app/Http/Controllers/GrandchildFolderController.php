@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ChildFolderRequest;
 use App\Http\Requests\GrandchildFolderRequest;
-use App\Models\ChildFolder;
 use App\Models\GrandchildFolder;
 use App\Modules\ApplicationLogger;
 use App\Repositories\GrandchildFolder\GrandchildFolderRepositoryInterface;
@@ -83,7 +81,7 @@ class GrandchildFolderController extends Controller
     }
 
     /**
-     * 子フォルダーの削除
+     * 孫フォルダーの削除
      *
      * @param int $id
      * @return void
@@ -92,8 +90,8 @@ class GrandchildFolderController extends Controller
     {
         $logger = new ApplicationLogger(__METHOD__);
 
-        $logger->write('子フォルダーの削除処理開始');
-        $this->childFolderRepository->deleteChildFolder($id);
+        $logger->write('孫フォルダーの削除処理開始');
+        $this->grandchildFolderRepository->deleteGrandchildFolder($id);
 
         $logger->success();
     }

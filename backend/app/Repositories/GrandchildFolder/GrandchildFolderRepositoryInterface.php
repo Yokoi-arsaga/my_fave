@@ -32,4 +32,12 @@ interface GrandchildFolderRepositoryInterface
      * @return GrandchildFolder
      */
     public function updateGrandchildFolder(GrandchildFolderRequest $request, int $grandchildFolderId): GrandchildFolder;
+
+    /**
+     * 削除
+     *
+     * @param int $grandchildFolderId
+     * @return void
+     */
+    public function deleteGrandchildFolder(int $grandchildFolderId): void;
 }

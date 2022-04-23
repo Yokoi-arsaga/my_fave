@@ -46,4 +46,12 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
         $grandchildFolder->save();
         return $grandchildFolder;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteGrandchildFolder(int $grandchildFolderId): void
+    {
+        GrandchildFolder::destroy($grandchildFolderId);
+    }
 }
