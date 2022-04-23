@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
 
-class FetchChildFoldersTest extends TestCase
+class FetchGrandchildFoldersTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -21,11 +21,11 @@ class FetchChildFoldersTest extends TestCase
     }
 
     /**
-     * 親フォルダに紐づく子フォルダー一覧の取得に成功したテスト
+     * 子フォルダに紐づく孫フォルダー一覧の取得に成功したテスト
      *
      * @return void
      */
-    public function test_fetch_child_folders_success()
+    public function test_fetch_grandchild_folders_success()
     {
         $parentFolderInfo = [
             'folder_name' => 'サンプル1',
@@ -33,38 +33,46 @@ class FetchChildFoldersTest extends TestCase
             'disclosure_range_id' => 1,
             'is_nest' => true
         ];
-
         $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
 
-        $childFoldersInfo = [
+        $childFolderInfo = [
+            'folder_name' => 'サンプル1',
+            'description' => '動画フォルダーの説明文',
+            'disclosure_range_id' => 1,
+            'parent_folder_id' => $parentFolder['id'],
+            'is_nest' => true
+        ];
+        $childFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/child/store', $childFolderInfo);
+
+        $grandchildFoldersInfo = [
             [
                 'folder_name' => 'サンプル1',
                 'description' => '動画フォルダーの説明文',
                 'disclosure_range_id' => 1,
-                'parent_folder_id' => $parentFolder['id'],
+                'child_folder_id' => $childFolder['id'],
                 'is_nest' => true
             ],
             [
                 'folder_name' => 'サンプル2',
                 'description' => '動画フォルダーの説明文',
                 'disclosure_range_id' => 1,
-                'parent_folder_id' => $parentFolder['id'],
+                'child_folder_id' => $childFolder['id'],
                 'is_nest' => true
             ],
             [
                 'folder_name' => 'サンプル3',
                 'description' => '動画フォルダーの説明文',
                 'disclosure_range_id' => 1,
-                'parent_folder_id' => $parentFolder['id'],
+                'child_folder_id' => $childFolder['id'],
                 'is_nest' => true
             ],
         ];
 
-        foreach ($childFoldersInfo as $childFolderInfo){
-            $this->actingAs($this->users[1])->post("/api/favorite/folder/child/store", $childFolderInfo);
+        foreach ($grandchildFoldersInfo as $grandchildFolderInfo){
+            $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/store", $grandchildFolderInfo);
         }
 
-        $response = $this->actingAs($this->users[1])->get("/api/favorite/folder/child/fetch/{$parentFolder['id']}");
+        $response = $this->actingAs($this->users[1])->get("/api/favorite/folder/grandchild/fetch/{$childFolder['id']}");
 
         $response->assertStatus(200);
         $response->assertJsonCount(3);
@@ -75,9 +83,9 @@ class FetchChildFoldersTest extends TestCase
      *
      * @return void
      */
-    public function test_fetch_child_folders_failure_by_not_auth()
+    public function test_fetch_grandchild_folders_failure_by_not_auth()
     {
-        $response = $this->get("/api/favorite/folder/child/fetch/1");
+        $response = $this->get("/api/favorite/folder/grandchild/fetch/1");
 
         $response->assertRedirect('/login');
     }
