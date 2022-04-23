@@ -31,4 +31,19 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
     {
         return GrandchildFolder::where('child_folder_id', $childFolderId)->get();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateGrandchildFolder(GrandchildFolderRequest $request, int $grandchildFolderId): GrandchildFolder
+    {
+        $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
+        $grandchildFolder->folder_name = $request->getFolderName();
+        $grandchildFolder->description = $request->getDescription();
+        $grandchildFolder->disclosure_range_id = $request->getDisclosureRangeId();
+        $grandchildFolder->is_nest = $request->getIsNest();
+        $grandchildFolder->child_folder_id = $request->getChildFolderId();
+        $grandchildFolder->save();
+        return $grandchildFolder;
+    }
 }

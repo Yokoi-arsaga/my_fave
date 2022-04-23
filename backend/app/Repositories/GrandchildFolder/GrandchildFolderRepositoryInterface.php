@@ -23,4 +23,13 @@ interface GrandchildFolderRepositoryInterface
      * @return Collection
      */
     public function fetchGrandchildFolder(int $childFolderId): Collection;
+
+    /**
+     * 更新
+     *
+     * @param GrandchildFolderRequest $request
+     * @param int $grandchildFolderId
+     * @return GrandchildFolder
+     */
+    public function updateGrandchildFolder(GrandchildFolderRequest $request, int $grandchildFolderId): GrandchildFolder;
 }

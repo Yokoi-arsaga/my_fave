@@ -65,21 +65,21 @@ class GrandchildFolderController extends Controller
     }
 
     /**
-     * 子フォルダー情報の更新処理
+     * 孫フォルダー情報の更新処理
      *
-     * @param ChildFolderRequest $request
+     * @param GrandchildFolderRequest $request
      * @param int $id
-     * @return ChildFolder
+     * @return GrandchildFolder
      */
-    public function update(ChildFolderRequest $request, int $id): ChildFolder
+    public function update(GrandchildFolderRequest $request, int $id): GrandchildFolder
     {
         $logger = new ApplicationLogger(__METHOD__);
 
-        $logger->write('子フォルダー情報の更新処理開始');
-        $childFolder = $this->childFolderRepository->updateChildFolder($request, $id);
+        $logger->write('孫フォルダー情報の更新処理開始');
+        $grandchildFolder = $this->grandchildFolderRepository->updateGrandchildFolder($request, $id);
 
         $logger->success();
-        return $childFolder;
+        return $grandchildFolder;
     }
 
     /**
