@@ -75,6 +75,7 @@ Route::prefix('notifications')->name('notifications.')->group(function () {
 
 // 動画整理関連
 Route::prefix('favorite')->name('favorite.')->group(function () {
+    // お気に入り動画
     Route::prefix('/videos')->name('videos.')->group(function () {
         Route::post('/store', [FavoriteVideoController::class, 'store'])->name('store');
         Route::get('/fetch', [FavoriteVideoController::class, 'fetch'])->middleware('auth:sanctum')->name('fetch');

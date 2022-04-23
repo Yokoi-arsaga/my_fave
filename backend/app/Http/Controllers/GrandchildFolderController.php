@@ -31,7 +31,7 @@ class GrandchildFolderController extends Controller
     }
 
     /**
-     *  子フォルダーの登録
+     *  孫フォルダーの登録
      *
      * @param GrandchildFolderRequest $request
      * @return GrandchildFolder
@@ -48,20 +48,20 @@ class GrandchildFolderController extends Controller
     }
 
     /**
-     * 親フォルダーに紐づく子フォルダーの全件取得
+     * 子フォルダーに紐づく孫フォルダーの全件取得
      *
-     * @param int $parentFolderId
+     * @param int $childFolderId
      * @return Collection
      */
-    public function fetch(int $parentFolderId): Collection
+    public function fetch(int $childFolderId): Collection
     {
         $logger = new ApplicationLogger(__METHOD__);
 
         $logger->write('親フォルダーに紐づく子フォルダーの一覧取得処理開始');
-        $childFolders = $this->childFolderRepository->fetchChildFolders($parentFolderId);
+        $grandchildFolders = $this->grandchildFolderRepository->fetchGrandchildFolder($childFolderId);
 
         $logger->success();
-        return $childFolders;
+        return $grandchildFolders;
     }
 
     /**
