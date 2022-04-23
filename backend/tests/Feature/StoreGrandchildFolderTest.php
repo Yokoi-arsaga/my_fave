@@ -187,7 +187,7 @@ class StoreGrandchildFolderTest extends TestCase
             'is_nest' => false
         ];
 
-        $childFolder = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/store", $childFolderInfo);
+        $childFolder = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/store", $childFolderInfo);
 
         return $childFolder['id'];
     }
