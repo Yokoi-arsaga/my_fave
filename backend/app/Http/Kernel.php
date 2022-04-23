@@ -73,5 +73,6 @@ class Kernel extends HttpKernel
         'friend.request' => \App\Http\Middleware\FriendRequestStore::class,
         'friend.request.permission'  => \App\Http\Middleware\FriendRequestPermission::class,
         'child.folder.store' => \App\Http\Middleware\ChildFolderStore::class,
+        'grandchild.folder.store' => \App\Http\Middleware\GrandchildFolderStore::class,
     ];
 }
