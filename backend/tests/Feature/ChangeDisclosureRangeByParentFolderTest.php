@@ -41,7 +41,7 @@ class ChangeDisclosureRangeByParentFolderTest extends TestCase
         $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/parent/disclosure/$parentFolderId", $disclosureRangeId);
 
         $response->assertStatus(200);
-        $this->assertEquals($response['disclosure_range_id'], $disclosureRangeId);
+        $this->assertEquals($response['disclosure_range_id'], $disclosureRangeId['disclosure_range_id']);
     }
 
     /**

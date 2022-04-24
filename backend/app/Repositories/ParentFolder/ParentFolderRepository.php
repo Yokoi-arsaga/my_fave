@@ -52,4 +52,15 @@ class ParentFolderRepository implements ParentFolderRepositoryInterface
     {
         ParentFolder::destroy($id);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function changeDisclosureRange(int $disclosureRangeId, int $parentFolderId): ParentFolder
+    {
+        $parentFolder = ParentFolder::find($parentFolderId);
+        $parentFolder->disclosure_range_id = $disclosureRangeId;
+        $parentFolder->save();
+        return $parentFolder;
+    }
 }

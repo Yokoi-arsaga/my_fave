@@ -3,6 +3,7 @@
 namespace App\Repositories\ParentFolder;
 use App\Http\Requests\ParentFolderRequest;
 use App\Models\ParentFolder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 interface ParentFolderRepositoryInterface
@@ -38,4 +39,13 @@ interface ParentFolderRepositoryInterface
      * @return void
      */
     public function deleteParentFolder(int $id): void;
+
+    /**
+     * 公開範囲の変更
+     *
+     * @param int $disclosureRangeId
+     * @param int $parentFolderId
+     * @return ParentFolder
+     */
+    public function changeDisclosureRange(int $disclosureRangeId, int $parentFolderId): ParentFolder;
 }
