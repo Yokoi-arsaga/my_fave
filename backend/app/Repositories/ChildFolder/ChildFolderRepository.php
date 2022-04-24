@@ -54,4 +54,15 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
     {
         ChildFolder::destroy($childFolderId);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function changeDisclosureRange(int $disclosureRangeId, int $childFolderId): ChildFolder
+    {
+        $childFolder = ChildFolder::find($childFolderId);
+        $childFolder->disclosure_range_id = $disclosureRangeId;
+        $childFolder->save();
+        return $childFolder;
+    }
 }

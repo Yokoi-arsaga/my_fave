@@ -96,6 +96,13 @@ class ParentFolderController extends Controller
         $logger->success();
     }
 
+    /**
+     * 親フォルダー公開範囲の変更
+     *
+     * @param ChangeDisclosureRequest $request
+     * @param int $id
+     * @return ParentFolder
+     */
     public function changeDisclosure(ChangeDisclosureRequest $request, int $id): ParentFolder
     {
         $logger = new ApplicationLogger(__METHOD__);

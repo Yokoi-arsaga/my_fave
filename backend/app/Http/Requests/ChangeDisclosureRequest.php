@@ -24,7 +24,7 @@ class ChangeDisclosureRequest extends FormRequest
     public function rules()
     {
         return [
-            'disclosure_range_id' => ['required', 'numeric', 'between:1,3'],
+            'disclosure_range_id' => ['required', 'numeric', 'between:1,3']
         ];
     }
 

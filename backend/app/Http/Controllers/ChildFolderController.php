@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ChildFolderRequest;
 use App\Http\Requests\ParentFolderRequest;
 use App\Models\ChildFolder;
@@ -97,5 +98,23 @@ class ChildFolderController extends Controller
         $this->childFolderRepository->deleteChildFolder($id);
 
         $logger->success();
+    }
+
+    /**
+     * 子フォルダー公開範囲の変更
+     *
+     * @param ChangeDisclosureRequest $request
+     * @param int $id
+     * @return ChildFolder
+     */
+    public function changeDisclosure(ChangeDisclosureRequest $request, int $id): ChildFolder
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('子フォルダー公開範囲の変更処理開始');
+        $childFolder = $this->childFolderRepository->changeDisclosureRange($request->getDisclosureRangeId(), $id);
+
+        $logger->success();
+        return $childFolder;
     }
 }
