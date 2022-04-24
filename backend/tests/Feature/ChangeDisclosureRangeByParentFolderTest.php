@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\ParentFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
@@ -50,7 +49,7 @@ class ChangeDisclosureRangeByParentFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_store_parent_folder_failure_by_disclosure_out_of_range()
+    public function test_change_disclosure_range_parent_failure_by_out_of_range()
     {
         $parentFolderInfo = [
             'folder_name' => 'サンプル',
