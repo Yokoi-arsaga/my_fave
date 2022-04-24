@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\GrandchildFolderRequest;
+use App\Models\ChildFolder;
 use App\Models\GrandchildFolder;
 use App\Modules\ApplicationLogger;
 use App\Repositories\GrandchildFolder\GrandchildFolderRepositoryInterface;
@@ -94,5 +96,23 @@ class GrandchildFolderController extends Controller
         $this->grandchildFolderRepository->deleteGrandchildFolder($id);
 
         $logger->success();
+    }
+
+    /**
+     * 孫フォルダー公開範囲の変更
+     *
+     * @param ChangeDisclosureRequest $request
+     * @param int $id
+     * @return GrandchildFolder
+     */
+    public function changeDisclosure(ChangeDisclosureRequest $request, int $id): GrandchildFolder
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('孫フォルダー公開範囲の変更処理開始');
+        $grandchildFolder = $this->grandchildFolderRepository->changeDisclosureRange($request->getDisclosureRangeId(), $id);
+
+        $logger->success();
+        return $grandchildFolder;
     }
 }

@@ -59,7 +59,7 @@ class ChangeDisclosureRangeByGrandchildFolderTest extends TestCase
         $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/grandchild/disclosure/$grandchildFolderId", $disclosureRangeId);
 
         $response->assertStatus(200);
-        $this->assertEquals($response['disclosure_range_id'], $disclosureRangeId);
+        $this->assertEquals($response['disclosure_range_id'], $disclosureRangeId['disclosure_range_id']);
     }
 
     /**
@@ -96,7 +96,7 @@ class ChangeDisclosureRangeByGrandchildFolderTest extends TestCase
         $grandchildFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/grandchild/store', $grandchildFolderInfo);
 
         $grandchildFolderId = $grandchildFolder['id'];
-        $disclosureRangeId = ['disclosure_range_id' => 2];
+        $disclosureRangeId = ['disclosure_range_id' => 4];
 
         $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/grandchild/disclosure/$grandchildFolderId", $disclosureRangeId);
 

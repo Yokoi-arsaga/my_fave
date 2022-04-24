@@ -54,4 +54,15 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
     {
         GrandchildFolder::destroy($grandchildFolderId);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function changeDisclosureRange(int $disclosureRangeId, int $grandchildFolderId): GrandchildFolder
+    {
+        $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
+        $grandchildFolder->disclosure_range_id = $disclosureRangeId;
+        $grandchildFolder->save();
+        return $grandchildFolder;
+    }
 }

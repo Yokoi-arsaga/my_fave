@@ -40,4 +40,13 @@ interface GrandchildFolderRepositoryInterface
      * @return void
      */
     public function deleteGrandchildFolder(int $grandchildFolderId): void;
+
+    /**
+     * 公開範囲の変更
+     *
+     * @param int $disclosureRangeId
+     * @param int $grandchildFolderId
+     * @return GrandchildFolder
+     */
+    public function changeDisclosureRange(int $disclosureRangeId, int $grandchildFolderId): GrandchildFolder;
 }
