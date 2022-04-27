@@ -110,7 +110,7 @@ class GrandchildFolderController extends Controller
         $logger = new ApplicationLogger(__METHOD__);
 
         $logger->write('孫フォルダー公開範囲の変更処理開始');
-        $grandchildFolder = $this->grandchildFolderRepository->changeDisclosureRange($request->getDisclosureRangeId(), $id);
+        $grandchildFolder = $this->grandchildFolderRepository->changeDisclosureRange($request, $id);
 
         $logger->success();
         return $grandchildFolder;
