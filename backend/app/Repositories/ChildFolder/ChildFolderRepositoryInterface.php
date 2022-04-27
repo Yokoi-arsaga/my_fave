@@ -39,4 +39,13 @@ interface ChildFolderRepositoryInterface
      * @return void
      */
     public function deleteChildFolder(int $childFolderId): void;
+
+    /**
+     * 公開範囲の変更
+     *
+     * @param int $disclosureRangeId
+     * @param int $childFolderId
+     * @return ChildFolder
+     */
+    public function changeDisclosureRange(int $disclosureRangeId, int $childFolderId): ChildFolder;
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\GrandchildFolder;
 
+use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\GrandchildFolderRequest;
 use App\Models\GrandchildFolder;
 use Illuminate\Support\Collection;
@@ -40,4 +41,13 @@ interface GrandchildFolderRepositoryInterface
      * @return void
      */
     public function deleteGrandchildFolder(int $grandchildFolderId): void;
+
+    /**
+     * 公開範囲の変更
+     *
+     * @param ChangeDisclosureRequest $request
+     * @param int $grandchildFolderId
+     * @return GrandchildFolder
+     */
+    public function changeDisclosureRange(ChangeDisclosureRequest $request, int $grandchildFolderId): GrandchildFolder;
 }

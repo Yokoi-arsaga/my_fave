@@ -2,6 +2,7 @@
 
 namespace App\Repositories\GrandchildFolder;
 
+use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\GrandchildFolderRequest;
 use App\Models\GrandchildFolder;
 use Illuminate\Support\Collection;
@@ -53,5 +54,16 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
     public function deleteGrandchildFolder(int $grandchildFolderId): void
     {
         GrandchildFolder::destroy($grandchildFolderId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function changeDisclosureRange(ChangeDisclosureRequest $request, int $grandchildFolderId): GrandchildFolder
+    {
+        $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
+        $grandchildFolder->disclosure_range_id = $request->getDisclosureRangeId();
+        $grandchildFolder->save();
+        return $grandchildFolder;
     }
 }
