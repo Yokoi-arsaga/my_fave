@@ -4,9 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\ChildFolder;
 use App\Models\FavoriteVideo;
-use App\Models\ParentFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 use App\Models\User;
 
@@ -60,8 +58,8 @@ class RegisterByChildFolderTest extends TestCase
     public function test_register_by_child_folder_failure_by_wrong_parent_folder()
     {
         [$favoriteVideoId, $childFolderId] = $this->common_preparation();
-        $wrongParentFolderId = ['parent_folder_id' => 2];
-        $this->common_validation_logic($favoriteVideoId, $wrongParentFolderId);
+        $wrongChildFolderId = ['child_folder_id' => 2];
+        $this->common_validation_logic($favoriteVideoId, $wrongChildFolderId);
     }
 
     /**
@@ -81,7 +79,7 @@ class RegisterByChildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_register_by_child_folder_failure_by_have_not_parent_folder()
+    public function test_register_by_child_folder_failure_by_have_not_child_folder()
     {
         [$favoriteVideoId, $childFolderId] = $this->common_preparation(false, true);
         $this->common_validation_logic($favoriteVideoId, $childFolderId);
