@@ -41,18 +41,71 @@ class RegisterByParentFolderTest extends TestCase
     }
 
     /**
+     * 存在しないお気に入り動画を指定した場合にリダイレクトされることを確認
+     *
+     * @return void
+     */
+    public function test_register_by_parent_folder_failure_by_wrong_favorite_video()
+    {
+        [$favoriteVideoId, $parentFolderId] = $this->common_preparation();
+        $wrongFavoriteVideoId = 2;
+        $this->common_validation_logic($wrongFavoriteVideoId, $parentFolderId);
+    }
+
+    /**
+     * 存在しない親フォルダーを指定した場合にリダイレクトされることを確認
+     *
+     * @return void
+     */
+    public function test_register_by_parent_folder_failure_by_wrong_parent_folder()
+    {
+        [$favoriteVideoId, $parentFolderId] = $this->common_preparation();
+        $wrongParentFolderId = ['parent_folder_id' => 2];
+        $this->common_validation_logic($favoriteVideoId, $wrongParentFolderId);
+    }
+
+    /**
+     * 指定したお気に入り動画が自身のものでなかった場合にリダイレクトされることを確認
+     *
+     * @return void
+     */
+    public function test_register_by_parent_folder_failure_by_have_not_favorite_video()
+    {
+        [$favoriteVideoId, $parentFolderId] = $this->common_preparation(true, false);
+        $wrongFavoriteVideoId = $favoriteVideoId;
+        $this->common_validation_logic($wrongFavoriteVideoId, $parentFolderId);
+    }
+
+    /**
+     * 指定した親フォルダーが自身のものでなかった場合にリダイレクトされることを確認
+     *
+     * @return void
+     */
+    public function test_register_by_parent_folder_failure_by_have_not_parent_folder()
+    {
+        [$favoriteVideoId, $parentFolderId] = $this->common_preparation(false, true);
+        $this->common_validation_logic($favoriteVideoId, $parentFolderId);
+    }
+
+    /**
      * テスト実行前の準備
      *
+     * @param bool|null $isFavoriteVideoWrongUser
+     * @param bool|null $isParentFolderWrongUser
      * @return array
      */
-    private function common_preparation(): array
+    private function common_preparation(?bool $isFavoriteVideoWrongUser = false, ?bool $isParentFolderWrongUser = false): array
     {
         $favoriteVideoInfo = [
             'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
             'video_name' => 'サンプル',
         ];
 
-        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        if ($isFavoriteVideoWrongUser){
+            $favoriteVideo = $this->actingAs($this->users[2])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        }else{
+            $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+        }
         $favoriteVideoId = $favoriteVideo['id'];
 
         $parentFolderInfo = [
@@ -62,7 +115,11 @@ class RegisterByParentFolderTest extends TestCase
             'is_nest' => false
         ];
 
-        $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
+        if ($isParentFolderWrongUser){
+            $parentFolder = $this->actingAs($this->users[2])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
+        }else{
+            $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
+        }
         $parentFolderId = ['parent_folder_id' => $parentFolder['id']];
         return [$favoriteVideoId, $parentFolderId];
     }
