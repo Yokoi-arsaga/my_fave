@@ -63,4 +63,14 @@ class ParentFolderRepository implements ParentFolderRepositoryInterface
         $parentFolder->save();
         return $parentFolder;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function registerFavoriteVideo(int $parentFolderId, int $favoriteVideoId): Collection
+    {
+        $parentFolder = ParentFolder::find($parentFolderId);
+        $parentFolder->favoriteVideos()->syncWithoutDetaching($favoriteVideoId);
+        return $parentFolder->favoriteVideos();
+    }
 }

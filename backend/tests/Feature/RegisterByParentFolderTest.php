@@ -58,7 +58,7 @@ class RegisterByParentFolderTest extends TestCase
     public function test_register_by_parent_folder_failure_by_wrong_parent_folder()
     {
         [$favoriteVideoId, $parentFolderId] = $this->common_preparation();
-        $wrongParentFolderId = ['parent_folder_id' => 2];
+        $wrongParentFolderId = ['folder_id' => 2];
         $this->common_validation_logic($favoriteVideoId, $wrongParentFolderId);
     }
 
@@ -118,7 +118,7 @@ class RegisterByParentFolderTest extends TestCase
         }else{
             $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
         }
-        $parentFolderId = ['parent_folder_id' => $parentFolder['id']];
+        $parentFolderId = ['folder_id' => $parentFolder['id']];
         return [$favoriteVideoId, $parentFolderId];
     }
 
@@ -135,7 +135,7 @@ class RegisterByParentFolderTest extends TestCase
 
         $response->assertRedirect('/');
 
-        $parentFolder = ParentFolder::find($parentFolderId['parent_folder_id']);
+        $parentFolder = ParentFolder::find($parentFolderId['folder_id']);
         $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
 
         $this->assertEmpty($parentFolder->favoriteVideos);

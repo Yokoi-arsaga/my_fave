@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ParentFolderRequest;
+use App\Http\Requests\RegisterFavoriteVideoRequest;
 use App\Models\ParentFolder;
 use App\Modules\ApplicationLogger;
 use App\Repositories\ParentFolder\ParentFolderRepositoryInterface;
@@ -109,6 +110,24 @@ class ParentFolderController extends Controller
 
         $logger->write('親フォルダー公開範囲の変更処理開始');
         $parentFolder = $this->parentFolderRepository->changeDisclosureRange($request->getDisclosureRangeId(), $id);
+
+        $logger->success();
+        return $parentFolder;
+    }
+
+    /**
+     * お気に入り動画を親フォルダーに登録
+     *
+     * @param RegisterFavoriteVideoRequest $request
+     * @param int $favoriteVideoId
+     * @return Collection
+     */
+    public function registerFavoriteVideo(RegisterFavoriteVideoRequest $request, int $favoriteVideoId): Collection
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('お気に入り動画を親フォルダーに登録処理開始');
+        $parentFolder = $this->parentFolderRepository->changeDisclosureRange($request->getFolderId(), $favoriteVideoId);
 
         $logger->success();
         return $parentFolder;

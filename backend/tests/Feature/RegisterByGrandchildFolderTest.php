@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\ChildFolder;
 use App\Models\FavoriteVideo;
 use App\Models\GrandchildFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -59,7 +58,7 @@ class RegisterByGrandchildFolderTest extends TestCase
     public function test_register_by_grandchild_folder_failure_by_wrong_parent_folder()
     {
         [$favoriteVideoId, $grandchildFolderId] = $this->common_preparation();
-        $wrongGrandchildFolderId = ['grandchild_folder_id' => 2];
+        $wrongGrandchildFolderId = ['folder_id' => 2];
         $this->common_validation_logic($favoriteVideoId, $wrongGrandchildFolderId);
     }
 
@@ -148,7 +147,7 @@ class RegisterByGrandchildFolderTest extends TestCase
             $grandchildFolder = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/store", $grandchildFolderInfo);
         }
 
-        $grandchildFolderId = ['grandchild_folder_id' => $grandchildFolder['id']];
+        $grandchildFolderId = ['folder_id' => $grandchildFolder['id']];
         return [$favoriteVideoId, $grandchildFolderId];
     }
 
@@ -165,7 +164,7 @@ class RegisterByGrandchildFolderTest extends TestCase
 
         $response->assertRedirect('/');
 
-        $grandchildFolder = GrandchildFolder::find($grandchildFolderId['grandchild_folder_id']);
+        $grandchildFolder = GrandchildFolder::find($grandchildFolderId['folder_id']);
         $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
 
         $this->assertEmpty($grandchildFolder->favoriteVideos);
