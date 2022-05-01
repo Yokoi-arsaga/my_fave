@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Repositories\ParentFolder;
+
 use App\Http\Requests\ParentFolderRequest;
 use App\Models\ParentFolder;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 interface ParentFolderRepositoryInterface

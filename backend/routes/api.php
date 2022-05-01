@@ -101,7 +101,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::patch('/{id}', [ChildFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
             Route::delete('/{id}', [ChildFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
             Route::patch('/disclosure/{id}', [ChildFolderController::class, 'changeDisclosure'])->middleware('auth:sanctum')->name('change.disclosure');
-            Route::post('/register/{favoriteVideoId}', [ChildFolderController::class, 'registerFavoriteVideo'])->middleware('auth:sanctum')->name('register');
+            Route::post('/register/{favoriteVideoId}', [ChildFolderController::class, 'registerFavoriteVideo'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.child'])->name('register');
         });
         // 孫フォルダー
         Route::prefix('/grandchild')->name('grandchild.')->group(function (){

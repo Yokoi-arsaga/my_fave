@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ChildFolderRequest;
-use App\Http\Requests\ParentFolderRequest;
+use App\Http\Requests\RegisterFavoriteVideoRequest;
 use App\Models\ChildFolder;
-use App\Models\ParentFolder;
 use App\Modules\ApplicationLogger;
-use App\Repositories\ParentFolder\ParentFolderRepositoryInterface;
 use App\Repositories\ChildFolder\ChildFolderRepositoryInterface;
 use Illuminate\Support\Collection;
 
@@ -116,5 +114,23 @@ class ChildFolderController extends Controller
 
         $logger->success();
         return $childFolder;
+    }
+
+    /**
+     * お気に入り動画を子フォルダーに登録
+     *
+     * @param RegisterFavoriteVideoRequest $request
+     * @param int $favoriteVideoId
+     * @return Collection
+     */
+    public function registerFavoriteVideo(RegisterFavoriteVideoRequest $request, int $favoriteVideoId): Collection
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('お気に入り動画を子フォルダーに登録処理開始');
+        $parentFolder = $this->childFolderRepository->registerFavoriteVideo($request->getFolderId(), $favoriteVideoId);
+
+        $logger->success();
+        return $parentFolder->favoriteVideos;
     }
 }

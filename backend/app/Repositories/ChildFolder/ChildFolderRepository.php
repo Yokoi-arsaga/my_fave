@@ -65,4 +65,14 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
         $childFolder->save();
         return $childFolder;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function registerFavoriteVideo(int $childFolderId, int $favoriteVideoId): ChildFolder
+    {
+        $childFolder = ChildFolder::find($childFolderId);
+        $childFolder->favoriteVideos()->syncWithoutDetaching($favoriteVideoId);
+        return $childFolder;
+    }
 }

@@ -76,5 +76,6 @@ class Kernel extends HttpKernel
         'grandchild.folder.store' => \App\Http\Middleware\GrandchildFolderStore::class,
         'favorite.register' => \App\Http\Middleware\FavoriteVideoRegister::class,
         'register.to.parent' => \App\Http\Middleware\RegisterToParentFolder::class,
+        'register.to.child' => \App\Http\Middleware\RegisterToChildFolder::class,
     ];
 }

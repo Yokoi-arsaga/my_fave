@@ -5,6 +5,7 @@ namespace App\Repositories\ChildFolder;
 use App\Http\Requests\ChildFolderRequest;
 use App\Models\ChildFolder;
 use Illuminate\Support\Collection;
+
 interface ChildFolderRepositoryInterface
 {
     /**
@@ -48,4 +49,13 @@ interface ChildFolderRepositoryInterface
      * @return ChildFolder
      */
     public function changeDisclosureRange(int $disclosureRangeId, int $childFolderId): ChildFolder;
+
+    /**
+     * お気に入り動画を子フォルダーに登録
+     *
+     * @param int $childFolderId
+     * @param int $favoriteVideoId
+     * @return ChildFolder
+     */
+    public function registerFavoriteVideo(int $childFolderId, int $favoriteVideoId): ChildFolder;
 }
