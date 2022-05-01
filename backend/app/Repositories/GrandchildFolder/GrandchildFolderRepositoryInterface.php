@@ -5,6 +5,7 @@ namespace App\Repositories\GrandchildFolder;
 use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\GrandchildFolderRequest;
 use App\Models\GrandchildFolder;
+use App\Models\ParentFolder;
 use Illuminate\Support\Collection;
 
 interface GrandchildFolderRepositoryInterface
@@ -50,4 +51,13 @@ interface GrandchildFolderRepositoryInterface
      * @return GrandchildFolder
      */
     public function changeDisclosureRange(ChangeDisclosureRequest $request, int $grandchildFolderId): GrandchildFolder;
+
+    /**
+     * お気に入り動画を孫フォルダーに登録
+     *
+     * @param int $grandchildFolderId
+     * @param int $favoriteVideoId
+     * @return GrandchildFolder
+     */
+    public function registerFavoriteVideo(int $grandchildFolderId, int $favoriteVideoId): GrandchildFolder;
 }

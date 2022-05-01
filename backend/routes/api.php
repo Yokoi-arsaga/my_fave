@@ -110,7 +110,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::patch('/{id}', [GrandchildFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
             Route::delete('/{id}', [GrandchildFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
             Route::patch('/disclosure/{id}', [GrandchildFolderController::class, 'changeDisclosure'])->middleware('auth:sanctum')->name('change.disclosure');
-            Route::post('/register/{favoriteVideoId}', [GrandchildFolderController::class, 'registerFavoriteVideo'])->middleware('auth:sanctum')->name('register');
+            Route::post('/register/{favoriteVideoId}', [GrandchildFolderController::class, 'registerFavoriteVideo'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.grandchild'])->name('register');
         });
     });
 });

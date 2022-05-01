@@ -5,6 +5,7 @@ namespace App\Repositories\GrandchildFolder;
 use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\GrandchildFolderRequest;
 use App\Models\GrandchildFolder;
+use App\Models\ParentFolder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,6 +65,16 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
         $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
         $grandchildFolder->disclosure_range_id = $request->getDisclosureRangeId();
         $grandchildFolder->save();
+        return $grandchildFolder;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function registerFavoriteVideo(int $grandchildFolderId, int $favoriteVideoId): GrandchildFolder
+    {
+        $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
+        $grandchildFolder->favoriteVideos()->syncWithoutDetaching($favoriteVideoId);
         return $grandchildFolder;
     }
 }

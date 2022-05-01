@@ -77,5 +77,6 @@ class Kernel extends HttpKernel
         'favorite.register' => \App\Http\Middleware\FavoriteVideoRegister::class,
         'register.to.parent' => \App\Http\Middleware\RegisterToParentFolder::class,
         'register.to.child' => \App\Http\Middleware\RegisterToChildFolder::class,
+        'register.to.grandchild' => \App\Http\Middleware\RegisterToGrandchildFolder::class,
     ];
 }

@@ -128,9 +128,9 @@ class ChildFolderController extends Controller
         $logger = new ApplicationLogger(__METHOD__);
 
         $logger->write('お気に入り動画を子フォルダーに登録処理開始');
-        $parentFolder = $this->childFolderRepository->registerFavoriteVideo($request->getFolderId(), $favoriteVideoId);
+        $childFolder = $this->childFolderRepository->registerFavoriteVideo($request->getFolderId(), $favoriteVideoId);
 
         $logger->success();
-        return $parentFolder->favoriteVideos;
+        return $childFolder->favoriteVideos;
     }
 }
