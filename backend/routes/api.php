@@ -92,6 +92,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::patch('/{id}', [ParentFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
             Route::delete('/{id}', [ParentFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
             Route::patch('/disclosure/{id}', [ParentFolderController::class, 'changeDisclosure'])->middleware('auth:sanctum')->name('change.disclosure');
+            Route::post('/register/{favoriteVideoId}', [ParentFolderController::class, 'registerFavoriteVideo'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.parent'])->name('register');
         });
         // 子フォルダー
         Route::prefix('/child')->name('child.')->group(function (){
@@ -100,6 +101,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::patch('/{id}', [ChildFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
             Route::delete('/{id}', [ChildFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
             Route::patch('/disclosure/{id}', [ChildFolderController::class, 'changeDisclosure'])->middleware('auth:sanctum')->name('change.disclosure');
+            Route::post('/register/{favoriteVideoId}', [ChildFolderController::class, 'registerFavoriteVideo'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.child'])->name('register');
         });
         // 孫フォルダー
         Route::prefix('/grandchild')->name('grandchild.')->group(function (){
@@ -108,6 +110,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::patch('/{id}', [GrandchildFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
             Route::delete('/{id}', [GrandchildFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
             Route::patch('/disclosure/{id}', [GrandchildFolderController::class, 'changeDisclosure'])->middleware('auth:sanctum')->name('change.disclosure');
+            Route::post('/register/{favoriteVideoId}', [GrandchildFolderController::class, 'registerFavoriteVideo'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.grandchild'])->name('register');
         });
     });
 });

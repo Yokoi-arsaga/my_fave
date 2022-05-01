@@ -7,6 +7,7 @@ use App\Models\ParentFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterByParentFolderTest extends TestCase
 {
@@ -31,11 +32,11 @@ class RegisterByParentFolderTest extends TestCase
     {
         [$favoriteVideoId, $parentFolderId] = $this->common_preparation();
 
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/parent/register/$favoriteVideoId", $parentFolderId);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/parent/register/$favoriteVideoId", $parentFolderId);
 
         $response->assertStatus(200);
-        $this->assertEquals($response['parent_folder_id'], $parentFolderId);
-        $this->assertEquals($response['favorite_video_id'], $favoriteVideoId);
+
+        $this->assertEquals($response[0]['pivot']['parent_folder_id'], $parentFolderId['folder_id']);
     }
 
     /**
@@ -58,7 +59,7 @@ class RegisterByParentFolderTest extends TestCase
     public function test_register_by_parent_folder_failure_by_wrong_parent_folder()
     {
         [$favoriteVideoId, $parentFolderId] = $this->common_preparation();
-        $wrongParentFolderId = ['parent_folder_id' => 2];
+        $wrongParentFolderId = ['folder_id' => 2];
         $this->common_validation_logic($favoriteVideoId, $wrongParentFolderId);
     }
 
@@ -118,7 +119,7 @@ class RegisterByParentFolderTest extends TestCase
         }else{
             $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
         }
-        $parentFolderId = ['parent_folder_id' => $parentFolder['id']];
+        $parentFolderId = ['folder_id' => $parentFolder['id']];
         return [$favoriteVideoId, $parentFolderId];
     }
 
@@ -131,14 +132,18 @@ class RegisterByParentFolderTest extends TestCase
      */
     private function common_validation_logic(int $favoriteVideoId, array $parentFolderId)
     {
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/parent/register/$favoriteVideoId", $parentFolderId);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/parent/register/$favoriteVideoId", $parentFolderId);
 
         $response->assertRedirect('/');
 
-        $parentFolder = ParentFolder::find($parentFolderId['parent_folder_id']);
-        $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
+        $parentFolder = ParentFolder::where('user_id', Auth::id())->first();
+        $favoriteVideo = FavoriteVideo::where('user_id', Auth::id())->first();
 
-        $this->assertEmpty($parentFolder->favoriteVideos);
-        $this->assertEmpty($favoriteVideo->parentFolders);
+        if (isset($parentFolder)){
+            $this->assertEmpty($parentFolder->favoriteVideos);
+        }
+        if (isset($favoriteVideo)){
+            $this->assertEmpty($favoriteVideo->parentFolders);
+        }
     }
 }

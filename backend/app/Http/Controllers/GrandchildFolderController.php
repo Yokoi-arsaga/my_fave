@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\GrandchildFolderRequest;
-use App\Models\ChildFolder;
+use App\Http\Requests\RegisterFavoriteVideoRequest;
 use App\Models\GrandchildFolder;
 use App\Modules\ApplicationLogger;
 use App\Repositories\GrandchildFolder\GrandchildFolderRepositoryInterface;
@@ -114,5 +114,23 @@ class GrandchildFolderController extends Controller
 
         $logger->success();
         return $grandchildFolder;
+    }
+
+    /**
+     * お気に入り動画を孫フォルダーに登録
+     *
+     * @param RegisterFavoriteVideoRequest $request
+     * @param int $favoriteVideoId
+     * @return Collection
+     */
+    public function registerFavoriteVideo(RegisterFavoriteVideoRequest $request, int $favoriteVideoId): Collection
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('お気に入り動画を孫フォルダーに登録処理開始');
+        $grandchildFolder = $this->grandchildFolderRepository->registerFavoriteVideo($request->getFolderId(), $favoriteVideoId);
+
+        $logger->success();
+        return $grandchildFolder->favoriteVideos;
     }
 }

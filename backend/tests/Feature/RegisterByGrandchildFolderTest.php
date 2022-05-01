@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\ChildFolder;
 use App\Models\FavoriteVideo;
 use App\Models\GrandchildFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use App\Models\User;
 
@@ -32,11 +32,11 @@ class RegisterByGrandchildFolderTest extends TestCase
     {
         [$favoriteVideoId, $grandchildFolderId] = $this->common_preparation();
 
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/grandchild/register/$favoriteVideoId", $grandchildFolderId);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/register/$favoriteVideoId", $grandchildFolderId);
 
         $response->assertStatus(200);
-        $this->assertEquals($response['grandchild_folder_id'], $grandchildFolderId);
-        $this->assertEquals($response['favorite_video_id'], $favoriteVideoId);
+
+        $this->assertEquals($response[0]['pivot']['grandchild_folder_id'], $grandchildFolderId['folder_id']);
     }
 
     /**
@@ -59,7 +59,7 @@ class RegisterByGrandchildFolderTest extends TestCase
     public function test_register_by_grandchild_folder_failure_by_wrong_parent_folder()
     {
         [$favoriteVideoId, $grandchildFolderId] = $this->common_preparation();
-        $wrongGrandchildFolderId = ['grandchild_folder_id' => 2];
+        $wrongGrandchildFolderId = ['folder_id' => 2];
         $this->common_validation_logic($favoriteVideoId, $wrongGrandchildFolderId);
     }
 
@@ -148,7 +148,7 @@ class RegisterByGrandchildFolderTest extends TestCase
             $grandchildFolder = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/store", $grandchildFolderInfo);
         }
 
-        $grandchildFolderId = ['grandchild_folder_id' => $grandchildFolder['id']];
+        $grandchildFolderId = ['folder_id' => $grandchildFolder['id']];
         return [$favoriteVideoId, $grandchildFolderId];
     }
 
@@ -161,14 +161,18 @@ class RegisterByGrandchildFolderTest extends TestCase
      */
     private function common_validation_logic(int $favoriteVideoId, array $grandchildFolderId)
     {
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/grandchild/register/$favoriteVideoId", $grandchildFolderId);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/register/$favoriteVideoId", $grandchildFolderId);
 
         $response->assertRedirect('/');
 
-        $grandchildFolder = GrandchildFolder::find($grandchildFolderId['grandchild_folder_id']);
-        $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
+        $grandchildFolder = GrandchildFolder::where('user_id', Auth::id())->first();
+        $favoriteVideo = FavoriteVideo::where('user_id', Auth::id())->first();
 
-        $this->assertEmpty($grandchildFolder->favoriteVideos);
-        $this->assertEmpty($favoriteVideo->grandchildFolders);
+        if (isset($grandchildFolder)){
+            $this->assertEmpty($grandchildFolder->favoriteVideos);
+        }
+        if (isset($favoriteVideo)){
+            $this->assertEmpty($favoriteVideo->grandchildFolders);
+        }
     }
 }

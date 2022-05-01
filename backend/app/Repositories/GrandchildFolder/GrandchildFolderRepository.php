@@ -66,4 +66,14 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
         $grandchildFolder->save();
         return $grandchildFolder;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function registerFavoriteVideo(int $grandchildFolderId, int $favoriteVideoId): GrandchildFolder
+    {
+        $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
+        $grandchildFolder->favoriteVideos()->syncWithoutDetaching($favoriteVideoId);
+        return $grandchildFolder;
+    }
 }

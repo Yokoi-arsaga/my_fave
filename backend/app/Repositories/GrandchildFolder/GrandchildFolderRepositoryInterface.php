@@ -50,4 +50,13 @@ interface GrandchildFolderRepositoryInterface
      * @return GrandchildFolder
      */
     public function changeDisclosureRange(ChangeDisclosureRequest $request, int $grandchildFolderId): GrandchildFolder;
+
+    /**
+     * お気に入り動画を孫フォルダーに登録
+     *
+     * @param int $grandchildFolderId
+     * @param int $favoriteVideoId
+     * @return GrandchildFolder
+     */
+    public function registerFavoriteVideo(int $grandchildFolderId, int $favoriteVideoId): GrandchildFolder;
 }
