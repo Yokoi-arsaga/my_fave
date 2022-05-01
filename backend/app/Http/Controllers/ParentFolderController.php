@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterFavoriteVideoRequest;
 use App\Models\ParentFolder;
 use App\Modules\ApplicationLogger;
 use App\Repositories\ParentFolder\ParentFolderRepositoryInterface;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
 /**
@@ -127,9 +128,9 @@ class ParentFolderController extends Controller
         $logger = new ApplicationLogger(__METHOD__);
 
         $logger->write('お気に入り動画を親フォルダーに登録処理開始');
-        $parentFolder = $this->parentFolderRepository->changeDisclosureRange($request->getFolderId(), $favoriteVideoId);
+        $parentFolder = $this->parentFolderRepository->registerFavoriteVideo($request->getFolderId(), $favoriteVideoId);
 
         $logger->success();
-        return $parentFolder;
+        return $parentFolder->favoriteVideos;
     }
 }

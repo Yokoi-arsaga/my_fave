@@ -4,6 +4,7 @@ namespace App\Repositories\ParentFolder;
 
 use App\Models\ParentFolder;
 use App\Http\Requests\ParentFolderRequest;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,10 +68,10 @@ class ParentFolderRepository implements ParentFolderRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function registerFavoriteVideo(int $parentFolderId, int $favoriteVideoId): Collection
+    public function registerFavoriteVideo(int $parentFolderId, int $favoriteVideoId): ParentFolder
     {
         $parentFolder = ParentFolder::find($parentFolderId);
         $parentFolder->favoriteVideos()->syncWithoutDetaching($favoriteVideoId);
-        return $parentFolder->favoriteVideos();
+        return $parentFolder;
     }
 }

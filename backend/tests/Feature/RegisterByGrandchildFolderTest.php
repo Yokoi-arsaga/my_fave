@@ -31,7 +31,7 @@ class RegisterByGrandchildFolderTest extends TestCase
     {
         [$favoriteVideoId, $grandchildFolderId] = $this->common_preparation();
 
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/grandchild/register/$favoriteVideoId", $grandchildFolderId);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/register/$favoriteVideoId", $grandchildFolderId);
 
         $response->assertStatus(200);
         $this->assertEquals($response['grandchild_folder_id'], $grandchildFolderId);
@@ -160,7 +160,7 @@ class RegisterByGrandchildFolderTest extends TestCase
      */
     private function common_validation_logic(int $favoriteVideoId, array $grandchildFolderId)
     {
-        $response = $this->actingAs($this->users[1])->patch("/api/favorite/folder/grandchild/register/$favoriteVideoId", $grandchildFolderId);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/register/$favoriteVideoId", $grandchildFolderId);
 
         $response->assertRedirect('/');
 

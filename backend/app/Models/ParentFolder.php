@@ -18,7 +18,7 @@ class ParentFolder extends Model
         'description',
         'user_id',
         'disclosure_range_id',
-        'is_nest'
+        'is_nest',
     ];
 
     /**
@@ -28,6 +28,6 @@ class ParentFolder extends Model
      */
     public function favoriteVideos(): BelongsToMany
     {
-        return $this->belongsToMany(FavoriteVideo::class);
+        return $this->belongsToMany(FavoriteVideo::class)->withPivot('favorite_video_id', 'parent_folder_id');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Repositories\ParentFolder;
 use App\Http\Requests\ParentFolderRequest;
 use App\Models\ParentFolder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -54,7 +55,7 @@ interface ParentFolderRepositoryInterface
      *
      * @param int $parentFolderId
      * @param int $favoriteVideoId
-     * @return Collection
+     * @return ParentFolder
      */
-    public function registerFavoriteVideo(int $parentFolderId, int $favoriteVideoId): Collection;
+    public function registerFavoriteVideo(int $parentFolderId, int $favoriteVideoId): ParentFolder;
 }
