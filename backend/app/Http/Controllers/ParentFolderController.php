@@ -8,7 +8,6 @@ use App\Http\Requests\RegisterFavoriteVideoRequest;
 use App\Models\ParentFolder;
 use App\Modules\ApplicationLogger;
 use App\Repositories\ParentFolder\ParentFolderRepositoryInterface;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
 /**

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ChildFolder extends Model
 {
@@ -24,9 +25,9 @@ class ChildFolder extends Model
     /**
      * 子フォルダーに紐づくお気に入り動画
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function favoriteVideos()
+    public function favoriteVideos(): BelongsToMany
     {
         return $this->belongsToMany(FavoriteVideo::class);
     }

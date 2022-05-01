@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class RegisterToGrandchildFolder
 {
     /**
-     * ユーザーがお気に入り動画を持っていない場合にリダイレクト
-     * 指定されたIDの子フォルダーを持っていない場合にリダイレクト
+     * ユーザーが孫フォルダーを持っていない場合にリダイレクト
+     * 指定されたIDの孫フォルダーを持っていない場合にリダイレクト
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Closure  $next

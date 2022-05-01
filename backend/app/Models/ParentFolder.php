@@ -28,6 +28,6 @@ class ParentFolder extends Model
      */
     public function favoriteVideos(): BelongsToMany
     {
-        return $this->belongsToMany(FavoriteVideo::class)->withPivot('favorite_video_id', 'parent_folder_id');
+        return $this->belongsToMany(FavoriteVideo::class);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\ChildFolder;
 use App\Models\FavoriteVideo;
 use Closure;
 use Illuminate\Http\Request;

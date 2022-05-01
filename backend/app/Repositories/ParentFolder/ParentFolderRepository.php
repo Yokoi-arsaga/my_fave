@@ -4,7 +4,6 @@ namespace App\Repositories\ParentFolder;
 
 use App\Models\ParentFolder;
 use App\Http\Requests\ParentFolderRequest;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
