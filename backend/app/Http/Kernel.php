@@ -74,5 +74,7 @@ class Kernel extends HttpKernel
         'friend.request.permission'  => \App\Http\Middleware\FriendRequestPermission::class,
         'child.folder.store' => \App\Http\Middleware\ChildFolderStore::class,
         'grandchild.folder.store' => \App\Http\Middleware\GrandchildFolderStore::class,
+        'favorite.register' => \App\Http\Middleware\FavoriteVideoRegister::class,
+        'register.to.parent' => \App\Http\Middleware\RegisterToParentFolder::class,
     ];
 }

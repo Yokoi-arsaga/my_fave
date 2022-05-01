@@ -92,7 +92,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::patch('/{id}', [ParentFolderController::class, 'update'])->middleware('auth:sanctum')->name('update');
             Route::delete('/{id}', [ParentFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
             Route::patch('/disclosure/{id}', [ParentFolderController::class, 'changeDisclosure'])->middleware('auth:sanctum')->name('change.disclosure');
-            Route::post('/register/{favoriteVideoId}', [ParentFolderController::class, 'registerFavoriteVideo'])->middleware('auth:sanctum')->name('register');
+            Route::post('/register/{favoriteVideoId}', [ParentFolderController::class, 'registerFavoriteVideo'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.parent'])->name('register');
         });
         // 子フォルダー
         Route::prefix('/child')->name('child.')->group(function (){

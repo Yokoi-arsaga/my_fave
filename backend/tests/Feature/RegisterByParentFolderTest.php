@@ -7,6 +7,7 @@ use App\Models\ParentFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterByParentFolderTest extends TestCase
 {
@@ -135,10 +136,14 @@ class RegisterByParentFolderTest extends TestCase
 
         $response->assertRedirect('/');
 
-        $parentFolder = ParentFolder::find($parentFolderId['folder_id']);
-        $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
+        $parentFolder = ParentFolder::where('user_id', Auth::id())->first();
+        $favoriteVideo = FavoriteVideo::where('user_id', Auth::id())->first();
 
-        $this->assertEmpty($parentFolder->favoriteVideos);
-        $this->assertEmpty($favoriteVideo->parentFolders);
+        if (isset($parentFolder)){
+            $this->assertEmpty($parentFolder->favoriteVideos);
+        }
+        if (isset($favoriteVideo)){
+            $this->assertEmpty($favoriteVideo->parentFolders);
+        }
     }
 }
