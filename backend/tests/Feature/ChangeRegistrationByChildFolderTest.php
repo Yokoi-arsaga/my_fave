@@ -2,12 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\Models\FavoriteVideo;
+use App\Models\ParentFolder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
-class ChangeRegistrationByParentFolderTest extends TestCase
+class ChangeRegistrationByChildFolderTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -22,19 +25,19 @@ class ChangeRegistrationByParentFolderTest extends TestCase
     }
 
     /**
-     * お気に入り動画の登録先を変更（親フォルダー）することに成功したテスト
+     * お気に入り動画の登録先を変更（子フォルダー）することに成功したテスト
      *
      * @return void
      */
-    public function test_change_registration_to_parent_folder_success()
+    public function test_change_registration_to_child_folder_success()
     {
         [$favoriteVideoId, $request] = $this->common_preparation();
 
-        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/parent/change/$favoriteVideoId", $request);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/change/$favoriteVideoId", $request);
 
         $response->assertStatus(200);
 
-        $this->assertEquals($response[0]['pivot']['parent_folder_id'], $request['destination_folder_id']);
+        $this->assertEquals($response[0]['pivot']['child_folder_id'], $request['destination_folder_id']);
     }
 
     /**
@@ -42,7 +45,7 @@ class ChangeRegistrationByParentFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_change_registration_to_parent_folder_failure_by_wrong_favorite_video()
+    public function test_change_registration_to_child_folder_failure_by_wrong_favorite_video()
     {
         [$favoriteVideoId, $request] = $this->common_preparation();
         $wrongFavoriteVideoId = 2;
@@ -50,15 +53,15 @@ class ChangeRegistrationByParentFolderTest extends TestCase
     }
 
     /**
-     * 存在しない親フォルダーを指定した場合にリダイレクトされることを確認
+     * 存在しない子フォルダーを指定した場合にリダイレクトされることを確認
      *
      * @return void
      */
-    public function test_change_registration_to_parent_folder_failure_by_wrong_parent_folder()
+    public function test_change_registration_to_child_folder_failure_by_wrong_parent_folder()
     {
         [$favoriteVideoId, $request] = $this->common_preparation();
         $wrongRequest = [
-            'source_folder_type' => 'parent',
+            'source_folder_type' => 'child',
             'source_folder_id' => $request['source_folder_id'],
             'destination_folder_id' => 3
         ];
@@ -70,7 +73,7 @@ class ChangeRegistrationByParentFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_change_registration_to_parent_folder_failure_by_have_not_favorite_video()
+    public function test_change_registration_to_child_folder_failure_by_have_not_favorite_video()
     {
         [$favoriteVideoId, $request] = $this->common_preparation(true, false);
         $this->common_validation_logic($favoriteVideoId, $request);
@@ -108,13 +111,15 @@ class ChangeRegistrationByParentFolderTest extends TestCase
         }
         $favoriteVideoId = $favoriteVideo['id'];
 
-        $sourceFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1');
+        $parentFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'parent');
+        $sourceFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'child', $parentFolder['id']);
+
         $sourceFolderId = ['folder_id' => $sourceFolder['id']];
-        $this->actingAs($this->users[1])->post("/api/favorite/folder/parent/register/$favoriteVideoId", $sourceFolderId);
-        $destinationFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル2');
+        $this->actingAs($this->users[1])->post("/api/favorite/folder/child/register/$favoriteVideoId", $sourceFolderId);
+        $destinationFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル2', 'child', $parentFolder['id']);
 
         $request = [
-            'source_folder_type' => 'parent',
+            'source_folder_type' => 'child',
             'source_folder_id' => $sourceFolder['id'],
             'destination_folder_id' => $destinationFolder['id']
         ];
@@ -131,33 +136,39 @@ class ChangeRegistrationByParentFolderTest extends TestCase
      */
     private function common_validation_logic(int $favoriteVideoId, array $request)
     {
-        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/parent/change/$favoriteVideoId", $request);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/change/$favoriteVideoId", $request);
 
         $response->assertRedirect('/');
     }
 
     /**
-     * 親フォルダーの登録処理
+     * 各フォルダーの登録処理
      *
      * @param bool $isParentFolderWrongUser
      * @param string $folderName
+     * @param string $folderType
+     * @param int|null $parentFolderId
      * @return TestResponse
      */
-    private function insert_folder(bool $isParentFolderWrongUser, string $folderName): TestResponse
+    private function insert_folder(bool $isParentFolderWrongUser, string $folderName, string $folderType, int $parentFolderId = null): TestResponse
     {
-        $parentFolderInfo = [
+        $folderInfo = [
             'folder_name' => $folderName,
             'description' => '動画フォルダーの説明文',
             'disclosure_range_id' => 1,
             'is_nest' => false
         ];
-
-        if ($isParentFolderWrongUser){
-            $parentFolder = $this->actingAs($this->users[2])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
-        }else{
-            $parentFolder = $this->actingAs($this->users[1])->post('/api/favorite/folder/parent/store', $parentFolderInfo);
+        if ($folderType === 'child'){
+            $folderInfo = [...$folderInfo,'parent_folder_id' => $parentFolderId];
         }
 
-        return $parentFolder;
+
+        if ($isParentFolderWrongUser){
+            $folder = $this->actingAs($this->users[2])->post("/api/favorite/folder/$folderType/store", $folderInfo);
+        }else{
+            $folder = $this->actingAs($this->users[1])->post("/api/favorite/folder/$folderType/store", $folderInfo);
+        }
+
+        return $folder;
     }
 }
