@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\FavoriteVideo\ChildFolder;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
-use App\Models\User;
 
-class ChangeRegistrationByGrandchildFolderTest extends TestCase
+class ChangeRegistrationByChildFolderTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -22,19 +22,19 @@ class ChangeRegistrationByGrandchildFolderTest extends TestCase
     }
 
     /**
-     * お気に入り動画の登録先を変更（孫フォルダー）することに成功したテスト
+     * お気に入り動画の登録先を変更（子フォルダー）することに成功したテスト
      *
      * @return void
      */
-    public function test_change_registration_to_grandchild_folder_success()
+    public function test_change_registration_to_child_folder_success()
     {
         [$favoriteVideoId, $request] = $this->common_preparation();
 
-        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/change/$favoriteVideoId", $request);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/change/$favoriteVideoId", $request);
 
         $response->assertStatus(200);
 
-        $this->assertEquals($response[0]['pivot']['grandchild_folder_id'], $request['destination_folder_id']);
+        $this->assertEquals($response[0]['pivot']['child_folder_id'], $request['destination_folder_id']);
     }
 
     /**
@@ -42,7 +42,7 @@ class ChangeRegistrationByGrandchildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_change_registration_to_grandchild_folder_failure_by_wrong_favorite_video()
+    public function test_change_registration_to_child_folder_failure_by_wrong_favorite_video()
     {
         [$favoriteVideoId, $request] = $this->common_preparation();
         $wrongFavoriteVideoId = 2;
@@ -54,11 +54,11 @@ class ChangeRegistrationByGrandchildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_change_registration_to_grandchild_folder_failure_by_wrong_parent_folder()
+    public function test_change_registration_to_child_folder_failure_by_wrong_parent_folder()
     {
         [$favoriteVideoId, $request] = $this->common_preparation();
         $wrongRequest = [
-            'source_folder_type' => 'grandchild',
+            'source_folder_type' => 'child',
             'source_folder_id' => $request['source_folder_id'],
             'destination_folder_id' => 3
         ];
@@ -70,18 +70,18 @@ class ChangeRegistrationByGrandchildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_change_registration_to_grandchild_folder_failure_by_have_not_favorite_video()
+    public function test_change_registration_to_child_folder_failure_by_have_not_favorite_video()
     {
         [$favoriteVideoId, $request] = $this->common_preparation(true, false);
         $this->common_validation_logic($favoriteVideoId, $request);
     }
 
     /**
-     * 指定した孫フォルダーが自身のものでなかった場合にリダイレクトされることを確認
+     * 指定した子フォルダーが自身のものでなかった場合にリダイレクトされることを確認
      *
      * @return void
      */
-    public function test_change_registration_to_grandchild_folder_failure_by_have_not_parent_folder()
+    public function test_change_registration_to_child_folder_failure_by_have_not_child_folder()
     {
         [$favoriteVideoId, $request] = $this->common_preparation(false, true);
         $this->common_validation_logic($favoriteVideoId, $request);
@@ -109,15 +109,14 @@ class ChangeRegistrationByGrandchildFolderTest extends TestCase
         $favoriteVideoId = $favoriteVideo['id'];
 
         $parentFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'parent');
-        $childFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'child', $parentFolder['id']);
-        $sourceFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'grandchild', $childFolder['id']);
+        $sourceFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'child', $parentFolder['id']);
 
         $sourceFolderId = ['folder_id' => $sourceFolder['id']];
-        $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/register/$favoriteVideoId", $sourceFolderId);
-        $destinationFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル2', 'grandchild', $childFolder['id']);
+        $this->actingAs($this->users[1])->post("/api/favorite/folder/child/register/$favoriteVideoId", $sourceFolderId);
+        $destinationFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル2', 'child', $parentFolder['id']);
 
         $request = [
-            'source_folder_type' => 'grandchild',
+            'source_folder_type' => 'child',
             'source_folder_id' => $sourceFolder['id'],
             'destination_folder_id' => $destinationFolder['id']
         ];
@@ -134,7 +133,7 @@ class ChangeRegistrationByGrandchildFolderTest extends TestCase
      */
     private function common_validation_logic(int $favoriteVideoId, array $request)
     {
-        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/change/$favoriteVideoId", $request);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/change/$favoriteVideoId", $request);
 
         $response->assertRedirect('/');
     }
@@ -158,8 +157,6 @@ class ChangeRegistrationByGrandchildFolderTest extends TestCase
         ];
         if ($folderType === 'child'){
             $folderInfo = [...$folderInfo,'parent_folder_id' => $parentFolderId];
-        }else if($folderType === 'grandchild'){
-            $folderInfo = [...$folderInfo,'child_folder_id' => $parentFolderId];
         }
 
 

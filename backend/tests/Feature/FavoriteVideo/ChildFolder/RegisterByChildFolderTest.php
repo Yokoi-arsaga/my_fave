@@ -1,14 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\FavoriteVideo\ChildFolder;
 
 use App\Models\ChildFolder;
 use App\Models\FavoriteVideo;
-use App\Models\ParentFolder;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
-use App\Models\User;
 
 class RegisterByChildFolderTest extends TestCase
 {

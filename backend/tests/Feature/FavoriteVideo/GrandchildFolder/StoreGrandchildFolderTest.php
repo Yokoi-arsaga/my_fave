@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\FavoriteVideo\GrandchildFolder;
 
 use App\Models\GrandChildFolder;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
 
 class StoreGrandchildFolderTest extends TestCase
 {
