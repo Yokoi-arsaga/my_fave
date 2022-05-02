@@ -81,7 +81,7 @@ class ChangeRegistrationByParentFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_register_by_parent_folder_failure_by_have_not_parent_folder()
+    public function test_change_registration_to_parent_folder_failure_by_have_not_parent_folder()
     {
         [$favoriteVideoId, $request] = $this->common_preparation(false, true);
         $this->common_validation_logic($favoriteVideoId, $request);
