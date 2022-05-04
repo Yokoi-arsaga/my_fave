@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeDisclosureRequest;
+use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\ChildFolderRequest;
 use App\Http\Requests\RegisterFavoriteVideoRequest;
 use App\Models\ChildFolder;
@@ -132,5 +133,23 @@ class ChildFolderController extends Controller
 
         $logger->success();
         return $childFolder->favoriteVideos;
+    }
+
+    /**
+     * お気に入り動画の格納先の変更
+     *
+     * @param ChangeRegistrationFavoriteVideoRequest $request
+     * @param int $favoriteVideoId
+     * @return Collection
+     */
+    public function changeRegistration(ChangeRegistrationFavoriteVideoRequest $request, int $favoriteVideoId): Collection
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('お気に入り動画の格納先を子フォルダーに変更処理開始');
+        $parentFolder = $this->childFolderRepository->changeRegistration($request, $favoriteVideoId);
+
+        $logger->success();
+        return $parentFolder->favoriteVideos;
     }
 }
