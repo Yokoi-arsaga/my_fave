@@ -3,10 +3,14 @@
 namespace App\Repositories\GrandchildFolder;
 
 use App\Http\Requests\ChangeDisclosureRequest;
+use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\GrandchildFolderRequest;
+use App\Models\ChildFolder;
 use App\Models\GrandchildFolder;
+use App\Models\ParentFolder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
 {
@@ -75,5 +79,30 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
         $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
         $grandchildFolder->favoriteVideos()->syncWithoutDetaching($favoriteVideoId);
         return $grandchildFolder;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function changeRegistration(ChangeRegistrationFavoriteVideoRequest $request, int $favoriteVideoId): GrandchildFolder
+    {
+        return DB::transaction(function () use ($request, $favoriteVideoId){
+            // 既存の中間テーブルの削除処理
+            $sourceType = $request->getSourceFolderType();
+            if ($sourceType === 'parent'){
+                $sourceFolder = ParentFolder::find($request->getSourceFolderId());
+            }else if($sourceType === 'child'){
+                $sourceFolder = ChildFolder::find($request->getSourceFolderId());
+            }else {
+                $sourceFolder = GrandchildFolder::find($request->getSourceFolderId());
+            }
+            $sourceFolder->favoriteVideos()->detach($favoriteVideoId);
+
+            // 格納先の中間テーブルの作成
+            $destinationFolder = GrandchildFolder::find($request->getDestinationFolderId());
+            $destinationFolder->favoriteVideos()->syncWithoutDetaching($favoriteVideoId);
+
+            return $destinationFolder;
+        });
     }
 }
