@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\FavoriteVideo;
 
 use App\Models\FavoriteVideo;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
-use App\Models\User;
 
 class UpdateFavoriteVideosTest extends TestCase
 {
