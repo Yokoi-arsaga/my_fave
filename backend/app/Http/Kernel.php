@@ -78,5 +78,8 @@ class Kernel extends HttpKernel
         'register.to.parent' => \App\Http\Middleware\RegisterToParentFolder::class,
         'register.to.child' => \App\Http\Middleware\RegisterToChildFolder::class,
         'register.to.grandchild' => \App\Http\Middleware\RegisterToGrandchildFolder::class,
+        'change.registration.to.parent' => \App\Http\Middleware\ChangeRegistrationToParentFolder::class,
+        'change.registration.to.child' => \App\Http\Middleware\ChangeRegistrationToChildFolder::class,
+        'change.registration.to.grandchild' => \App\Http\Middleware\ChangeRegistrationToGrandchildFolder::class,
     ];
 }
