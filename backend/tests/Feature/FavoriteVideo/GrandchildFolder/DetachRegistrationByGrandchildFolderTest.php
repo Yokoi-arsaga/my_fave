@@ -1,16 +1,17 @@
 <?php
 
-namespace Tests\Feature\FavoriteVideo\ChildFolder;
+namespace Tests\Feature\FavoriteVideo\GrandchildFolder;
 
 use App\Models\ChildFolder;
 use App\Models\FavoriteVideo;
+use App\Models\GrandchildFolder;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
-class DetachRegistrationByChildFolderTest extends TestCase
+class DetachRegistrationByGrandchildFolderTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -29,16 +30,16 @@ class DetachRegistrationByChildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_detach_registration_to_child_folder_success()
+    public function test_detach_registration_to_grandchild_folder_success()
     {
         [$favoriteVideoId, $registerFolderId] = $this->common_preparation();
 
-        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/detach/$favoriteVideoId", $registerFolderId);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/detach/$favoriteVideoId", $registerFolderId);
 
         $response->assertStatus(200);
 
         $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
-        $registrationFolders = $favoriteVideo->childFolders();
+        $registrationFolders = $favoriteVideo->grandchildFolders();
 
         $this->assertEmpty($registrationFolders);
     }
@@ -48,7 +49,7 @@ class DetachRegistrationByChildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_detach_registration_to_child_folder_failure_by_wrong_favorite_video()
+    public function test_detach_registration_to_grandchild_folder_failure_by_wrong_favorite_video()
     {
         [$favoriteVideoId, $registerFolderId] = $this->common_preparation();
         $wrongFavoriteVideoId = 2;
@@ -60,7 +61,7 @@ class DetachRegistrationByChildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_detach_registration_to_child_folder_failure_by_wrong_child_folder()
+    public function test_detach_registration_to_grandchild_folder_failure_by_wrong_grandchild_folder()
     {
         [$favoriteVideoId, $registerFolderId] = $this->common_preparation();
         $wrongRegisterFolderId = ['folder_id' => 2];
@@ -72,7 +73,7 @@ class DetachRegistrationByChildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_detach_registration_to_child_folder_failure_by_have_not_favorite_video()
+    public function test_detach_registration_to_grandchild_folder_failure_by_have_not_favorite_video()
     {
         [$favoriteVideoId, $registerFolderId] = $this->common_preparation(true, false);
         $this->common_validation_logic($favoriteVideoId, $registerFolderId);
@@ -83,7 +84,7 @@ class DetachRegistrationByChildFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_detach_registration_to_child_folder_failure_by_have_not_child_folder()
+    public function test_detach_registration_to_grandchild_folder_failure_by_have_not_grandchild_folder()
     {
         [$favoriteVideoId, $registerFolderId] = $this->common_preparation(false, true);
         $this->common_validation_logic($favoriteVideoId, $registerFolderId);
@@ -111,10 +112,12 @@ class DetachRegistrationByChildFolderTest extends TestCase
         $favoriteVideoId = $favoriteVideo['id'];
 
         $parentFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'parent');
-        $registerFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'child', $parentFolder['id']);
+        $childFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'child', $parentFolder['id']);
+        $registerFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'grandchild', $childFolder['id']);
+
 
         $registerFolderId = ['folder_id' => $registerFolder['id']];
-        $this->actingAs($this->users[1])->post("/api/favorite/folder/child/register/$favoriteVideoId", $registerFolderId);
+        $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/register/$favoriteVideoId", $registerFolderId);
 
         return [$favoriteVideoId, $registerFolderId];
     }
@@ -123,23 +126,23 @@ class DetachRegistrationByChildFolderTest extends TestCase
      * バリデーション関連のテストの共通ロジック
      *
      * @param int $favoriteVideoId
-     * @param array $parentFolderId
+     * @param array $grandchildFolderId
      * @return void
      */
-    private function common_validation_logic(int $favoriteVideoId, array $parentFolderId)
+    private function common_validation_logic(int $favoriteVideoId, array $grandchildFolderId)
     {
-        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/detach/$favoriteVideoId", $parentFolderId);
+        $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/detach/$favoriteVideoId", $grandchildFolderId);
 
         $response->assertRedirect('/');
 
-        $childFolder = ChildFolder::where('user_id', Auth::id())->first();
+        $grandchildFolder = GrandchildFolder::where('user_id', Auth::id())->first();
         $favoriteVideo = FavoriteVideo::where('user_id', Auth::id())->first();
 
         if (isset($childFolder)){
-            $this->assertCount(1, $childFolder->favoriteVideos);
+            $this->assertCount(1, $grandchildFolder->favoriteVideos);
         }
         if (isset($favoriteVideo)){
-            $this->assertCount(1, $favoriteVideo->childFolders);
+            $this->assertCount(1, $favoriteVideo->grandchildFolders);
         }
     }
 
@@ -162,6 +165,8 @@ class DetachRegistrationByChildFolderTest extends TestCase
         ];
         if ($folderType === 'child'){
             $folderInfo = [...$folderInfo,'parent_folder_id' => $parentFolderId];
+        }else if($folderType === 'grandchild'){
+            $folderInfo = [...$folderInfo,'child_folder_id' => $parentFolderId];
         }
 
 
