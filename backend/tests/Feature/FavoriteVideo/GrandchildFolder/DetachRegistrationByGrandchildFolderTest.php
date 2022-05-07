@@ -39,7 +39,7 @@ class DetachRegistrationByGrandchildFolderTest extends TestCase
         $response->assertStatus(200);
 
         $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
-        $registrationFolders = $favoriteVideo->grandchildFolders();
+        $registrationFolders = $favoriteVideo->grandchildFolders;
 
         $this->assertEmpty($registrationFolders);
     }
