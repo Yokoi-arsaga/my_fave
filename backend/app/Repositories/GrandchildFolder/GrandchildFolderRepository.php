@@ -4,6 +4,7 @@ namespace App\Repositories\GrandchildFolder;
 
 use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
+use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
 use App\Http\Requests\GrandchildFolderRequest;
 use App\Models\ChildFolder;
 use App\Models\GrandchildFolder;
@@ -104,5 +105,14 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
 
             return $destinationFolder;
         });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function detachRegistration(DetachRegistrationFavoriteVideoRequest $request, int $favoriteVideoId): void
+    {
+        $grandchildFolder = GrandchildFolder::find($request->getFolderId());
+        $grandchildFolder->favoriteVideos()->detach($favoriteVideoId);
     }
 }

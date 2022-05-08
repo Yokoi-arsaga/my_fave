@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
+use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
 use App\Http\Requests\ParentFolderRequest;
 use App\Http\Requests\RegisterFavoriteVideoRequest;
 use App\Models\ParentFolder;
@@ -150,5 +151,22 @@ class ParentFolderController extends Controller
 
         $logger->success();
         return $parentFolder->favoriteVideos;
+    }
+
+    /**
+     * お気に入り動画と親フォルダーとの連携を解除
+     *
+     * @param DetachRegistrationFavoriteVideoRequest $request
+     * @param int $favoriteVideoId
+     * @return void
+     */
+    public function detachRegistration(DetachRegistrationFavoriteVideoRequest $request, int $favoriteVideoId): void
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('お気に入り動画と親フォルダーとの連携解除処理開始');
+        $this->parentFolderRepository->detachRegistration($request, $favoriteVideoId);
+
+        $logger->success();
     }
 }

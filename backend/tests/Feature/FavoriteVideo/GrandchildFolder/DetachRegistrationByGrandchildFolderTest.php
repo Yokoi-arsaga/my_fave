@@ -39,7 +39,7 @@ class DetachRegistrationByGrandchildFolderTest extends TestCase
         $response->assertStatus(200);
 
         $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
-        $registrationFolders = $favoriteVideo->grandchildFolders();
+        $registrationFolders = $favoriteVideo->grandchildFolders;
 
         $this->assertEmpty($registrationFolders);
     }
@@ -94,10 +94,10 @@ class DetachRegistrationByGrandchildFolderTest extends TestCase
      * テスト実行前の準備
      *
      * @param bool|null $isFavoriteVideoWrongUser
-     * @param bool|null $isParentFolderWrongUser
+     * @param bool|null $isGrandchildFolderWrongUser
      * @return array
      */
-    private function common_preparation(?bool $isFavoriteVideoWrongUser = false, ?bool $isParentFolderWrongUser = false): array
+    private function common_preparation(?bool $isFavoriteVideoWrongUser = false, ?bool $isGrandchildFolderWrongUser = false): array
     {
         $favoriteVideoInfo = [
             'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
@@ -105,21 +105,37 @@ class DetachRegistrationByGrandchildFolderTest extends TestCase
         ];
 
         if ($isFavoriteVideoWrongUser){
-            $favoriteVideo = $this->actingAs($this->users[2])->post('/api/favorite/videos/store', $favoriteVideoInfo);
-        }else{
-            $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+            $wrongFavoriteVideo = $this->actingAs($this->users[2])->post('/api/favorite/videos/store', $favoriteVideoInfo);
         }
+        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+
+        if ($isFavoriteVideoWrongUser){
+            $returnFavoriteVideoId = $wrongFavoriteVideo['id'];
+        }else{
+            $returnFavoriteVideoId = $favoriteVideo['id'];
+        }
+
         $favoriteVideoId = $favoriteVideo['id'];
 
-        $parentFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'parent');
-        $childFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'child', $parentFolder['id']);
-        $registerFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'grandchild', $childFolder['id']);
+        $parentFolder = $this->insert_folder(false, 'サンプル1', 'parent');
+        $childFolder = $this->insert_folder(false, 'サンプル1', 'child', $parentFolder['id']);
+        if ($isGrandchildFolderWrongUser){
+            $wrongParentFolder = $this->insert_folder($isGrandchildFolderWrongUser, 'サンプル1', 'parent');
+            $wrongChildFolder = $this->insert_folder($isGrandchildFolderWrongUser, 'サンプル1', 'child', $wrongParentFolder['id']);
+            $wrongRegisterFolder = $this->insert_folder($isGrandchildFolderWrongUser, 'サンプル1', 'grandchild', $wrongChildFolder['id']);
+        }
+        $registerFolder = $this->insert_folder(false, 'サンプル1', 'grandchild', $childFolder['id']);
 
+        if ($isGrandchildFolderWrongUser){
+            $returnRegisterFolderId = ['folder_id' => $wrongRegisterFolder['id']];
+        }else{
+            $returnRegisterFolderId = ['folder_id' => $registerFolder['id']];
+        }
 
         $registerFolderId = ['folder_id' => $registerFolder['id']];
         $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/register/$favoriteVideoId", $registerFolderId);
 
-        return [$favoriteVideoId, $registerFolderId];
+        return [$returnFavoriteVideoId, $returnRegisterFolderId];
     }
 
     /**

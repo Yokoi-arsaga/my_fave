@@ -4,6 +4,7 @@ namespace App\Repositories\GrandchildFolder;
 
 use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
+use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
 use App\Http\Requests\GrandchildFolderRequest;
 use App\Models\GrandchildFolder;
 use Illuminate\Support\Collection;
@@ -69,4 +70,13 @@ interface GrandchildFolderRepositoryInterface
      * @return GrandchildFolder
      */
     public function changeRegistration(ChangeRegistrationFavoriteVideoRequest $request, int $favoriteVideoId): GrandchildFolder;
+
+    /**
+     * お気に入り動画と孫フォルダーとの連携解除
+     *
+     * @param DetachRegistrationFavoriteVideoRequest $request
+     * @param int $favoriteVideoId
+     * @return void
+     */
+    public function detachRegistration(DetachRegistrationFavoriteVideoRequest $request, int $favoriteVideoId): void;
 }

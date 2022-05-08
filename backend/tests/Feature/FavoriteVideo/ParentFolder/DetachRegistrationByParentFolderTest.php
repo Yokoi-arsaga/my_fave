@@ -38,7 +38,7 @@ class DetachRegistrationByParentFolderTest extends TestCase
         $response->assertStatus(200);
 
         $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
-        $registrationFolders = $favoriteVideo->parentFolders();
+        $registrationFolders = $favoriteVideo->parentFolders;
 
         $this->assertEmpty($registrationFolders);
     }
@@ -104,17 +104,33 @@ class DetachRegistrationByParentFolderTest extends TestCase
         ];
 
         if ($isFavoriteVideoWrongUser){
-            $favoriteVideo = $this->actingAs($this->users[2])->post('/api/favorite/videos/store', $favoriteVideoInfo);
-        }else{
-            $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+            $wrongFavoriteVideo = $this->actingAs($this->users[2])->post('/api/favorite/videos/store', $favoriteVideoInfo);
         }
+        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+
+        if ($isFavoriteVideoWrongUser){
+            $returnFavoriteVideoId = $wrongFavoriteVideo['id'];
+        }else{
+            $returnFavoriteVideoId = $favoriteVideo['id'];
+        }
+
         $favoriteVideoId = $favoriteVideo['id'];
 
-        $registerFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1');
+        if ($isParentFolderWrongUser){
+            $wrongRegisterFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1');
+        }
+        $registerFolder = $this->insert_folder(false, 'サンプル1');
+
+        if($isParentFolderWrongUser){
+            $returnRegisterFolderId = ['folder_id' => $wrongRegisterFolder['id']];
+        }else{
+            $returnRegisterFolderId = ['folder_id' => $registerFolder['id']];
+        }
         $registerFolderId = ['folder_id' => $registerFolder['id']];
+
         $this->actingAs($this->users[1])->post("/api/favorite/folder/parent/register/$favoriteVideoId", $registerFolderId);
 
-        return [$favoriteVideoId, $registerFolderId];
+        return [$returnFavoriteVideoId, $returnRegisterFolderId];
     }
 
     /**

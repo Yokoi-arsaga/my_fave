@@ -38,7 +38,7 @@ class DetachRegistrationByChildFolderTest extends TestCase
         $response->assertStatus(200);
 
         $favoriteVideo = FavoriteVideo::find($favoriteVideoId);
-        $registrationFolders = $favoriteVideo->childFolders();
+        $registrationFolders = $favoriteVideo->childFolders;
 
         $this->assertEmpty($registrationFolders);
     }
@@ -93,10 +93,10 @@ class DetachRegistrationByChildFolderTest extends TestCase
      * テスト実行前の準備
      *
      * @param bool|null $isFavoriteVideoWrongUser
-     * @param bool|null $isParentFolderWrongUser
+     * @param bool|null $isChildFolderWrongUser
      * @return array
      */
-    private function common_preparation(?bool $isFavoriteVideoWrongUser = false, ?bool $isParentFolderWrongUser = false): array
+    private function common_preparation(?bool $isFavoriteVideoWrongUser = false, ?bool $isChildFolderWrongUser = false): array
     {
         $favoriteVideoInfo = [
             'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
@@ -104,19 +104,35 @@ class DetachRegistrationByChildFolderTest extends TestCase
         ];
 
         if ($isFavoriteVideoWrongUser){
-            $favoriteVideo = $this->actingAs($this->users[2])->post('/api/favorite/videos/store', $favoriteVideoInfo);
-        }else{
-            $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+            $wrongFavoriteVideo = $this->actingAs($this->users[2])->post('/api/favorite/videos/store', $favoriteVideoInfo);
         }
+        $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+
+        if($isFavoriteVideoWrongUser){
+            $returnFavoriteVideoId = $wrongFavoriteVideo['id'];
+        }else{
+            $returnFavoriteVideoId = $favoriteVideo['id'];
+        }
+
         $favoriteVideoId = $favoriteVideo['id'];
 
-        $parentFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'parent');
-        $registerFolder = $this->insert_folder($isParentFolderWrongUser, 'サンプル1', 'child', $parentFolder['id']);
+        $parentFolder = $this->insert_folder(false, 'サンプル1', 'parent');
+        if($isChildFolderWrongUser){
+            $wrongParentFolder = $this->insert_folder($isChildFolderWrongUser, 'サンプル1', 'parent');
+            $wrongRegisterFolder = $this->insert_folder($isChildFolderWrongUser, 'サンプル1', 'child', $wrongParentFolder['id']);
+        }
+        $registerFolder = $this->insert_folder(false, 'サンプル1', 'child', $parentFolder['id']);
+
+        if($isChildFolderWrongUser){
+            $returnRegisterFolderId = ['folder_id' => $wrongRegisterFolder['id']];
+        }else{
+            $returnRegisterFolderId = ['folder_id' => $registerFolder['id']];
+        }
 
         $registerFolderId = ['folder_id' => $registerFolder['id']];
         $this->actingAs($this->users[1])->post("/api/favorite/folder/child/register/$favoriteVideoId", $registerFolderId);
 
-        return [$favoriteVideoId, $registerFolderId];
+        return [$returnFavoriteVideoId, $returnRegisterFolderId];
     }
 
     /**
@@ -146,13 +162,13 @@ class DetachRegistrationByChildFolderTest extends TestCase
     /**
      * 各フォルダーの登録処理
      *
-     * @param bool $isParentFolderWrongUser
+     * @param bool $isChildFolderWrongUser
      * @param string $folderName
      * @param string $folderType
      * @param int|null $parentFolderId
      * @return TestResponse
      */
-    private function insert_folder(bool $isParentFolderWrongUser, string $folderName, string $folderType, int $parentFolderId = null): TestResponse
+    private function insert_folder(bool $isChildFolderWrongUser, string $folderName, string $folderType, int $parentFolderId = null): TestResponse
     {
         $folderInfo = [
             'folder_name' => $folderName,
@@ -165,7 +181,7 @@ class DetachRegistrationByChildFolderTest extends TestCase
         }
 
 
-        if ($isParentFolderWrongUser){
+        if ($isChildFolderWrongUser){
             $folder = $this->actingAs($this->users[2])->post("/api/favorite/folder/$folderType/store", $folderInfo);
         }else{
             $folder = $this->actingAs($this->users[1])->post("/api/favorite/folder/$folderType/store", $folderInfo);

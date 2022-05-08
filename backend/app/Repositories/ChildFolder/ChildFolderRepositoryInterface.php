@@ -4,6 +4,7 @@ namespace App\Repositories\ChildFolder;
 
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\ChildFolderRequest;
+use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
 use App\Models\ChildFolder;
 use Illuminate\Support\Collection;
 
@@ -68,4 +69,13 @@ interface ChildFolderRepositoryInterface
      * @return ChildFolder
      */
     public function changeRegistration(ChangeRegistrationFavoriteVideoRequest $request, int $favoriteVideoId): ChildFolder;
+
+    /**
+     * お気に入り動画と子フォルダーとの連携解除
+     *
+     * @param DetachRegistrationFavoriteVideoRequest $request
+     * @param int $favoriteVideoId
+     * @return void
+     */
+    public function detachRegistration(DetachRegistrationFavoriteVideoRequest $request, int $favoriteVideoId): void;
 }
