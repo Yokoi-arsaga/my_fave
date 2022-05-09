@@ -90,7 +90,7 @@ class MultiRegisterByParentFolderTest extends TestCase
      *
      * @return void
      */
-    public function test_register_by_parent_folder_failure_by_()
+    public function test_register_by_parent_folder_failure_by_exceeding_tolerance()
     {
         $excessRegistrationNumber = $this->maxRegistrationNumber + 1;
         [$favoriteVideoIds, $parentFolderId] = $this->common_preparation($excessRegistrationNumber);
@@ -168,23 +168,7 @@ class MultiRegisterByParentFolderTest extends TestCase
      */
     private function common_preparation(int $registrationNumber, ?bool $isFavoriteVideoWrongUser = false, ?bool $isParentFolderWrongUser = false): array
     {
-        $favoriteVideoIds = [];
-        for ($i = 1; $i <= $registrationNumber; $i++){
-            $favoriteVideoInfo = [
-                'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
-                'video_name' => "サンプル$i",
-            ];
-
-            if ($isFavoriteVideoWrongUser){
-                $favoriteVideo = $this->actingAs($this->users[2])->post('/api/favorite/videos/store', $favoriteVideoInfo);
-            }else{
-                $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
-            }
-            $favoriteVideoIds[] = $favoriteVideo['id'];
-        }
-        $returnFavoriteVideoIds = [
-            'favorite_video_ids' => $favoriteVideoIds
-        ];
+        $returnFavoriteVideoIds = $this->make_favorite_video_ids($registrationNumber, $isFavoriteVideoWrongUser);
 
         $parentFolderInfo = [
             'folder_name' => 'サンプル',
@@ -224,5 +208,33 @@ class MultiRegisterByParentFolderTest extends TestCase
         if (isset($favoriteVideo)){
             $this->assertEmpty($favoriteVideo->parentFolders);
         }
+    }
+
+    /**
+     * 登録する複数のお気に入り動画IDリストの作成
+     *
+     * @param int $registrationNumber
+     * @param bool|null $isFavoriteVideoWrongUser
+     * @return array[]
+     */
+    private function make_favorite_video_ids(int $registrationNumber, ?bool $isFavoriteVideoWrongUser = false): array
+    {
+        $favoriteVideoIds = [];
+        for ($i = 1; $i <= $registrationNumber; $i++){
+            $favoriteVideoInfo = [
+                'video_url' => 'https://www.youtube.com/watch?v=NwOvu-j_WjY',
+                'video_name' => 'サンプル',
+            ];
+
+            if ($isFavoriteVideoWrongUser){
+                $favoriteVideo = $this->actingAs($this->users[2])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+            }else{
+                $favoriteVideo = $this->actingAs($this->users[1])->post('/api/favorite/videos/store', $favoriteVideoInfo);
+            }
+            $favoriteVideoIds[] = $favoriteVideo['id'];
+        }
+        return [
+            'favorite_video_ids' => $favoriteVideoIds
+        ];
     }
 }
