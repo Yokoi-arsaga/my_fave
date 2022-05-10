@@ -6,6 +6,7 @@ use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
 use App\Http\Requests\GrandchildFolderRequest;
+use App\Http\Requests\MultiRegisterFavoriteVideosRequest;
 use App\Models\GrandchildFolder;
 use Illuminate\Support\Collection;
 
@@ -61,6 +62,15 @@ interface GrandchildFolderRepositoryInterface
      * @return GrandchildFolder
      */
     public function registerFavoriteVideo(int $grandchildFolderId, int $favoriteVideoId): GrandchildFolder;
+
+    /**
+     * 複数のお気に入り動画を子フォルダーに登録
+     *
+     * @param MultiRegisterFavoriteVideosRequest $request
+     * @param int $grandchildFolderId
+     * @return Collection
+     */
+    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $grandchildFolderId): Collection;
 
     /**
      * お気に入り動画の格納先の変更
