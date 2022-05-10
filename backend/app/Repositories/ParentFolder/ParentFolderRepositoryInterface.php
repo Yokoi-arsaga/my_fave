@@ -4,6 +4,7 @@ namespace App\Repositories\ParentFolder;
 
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
+use App\Http\Requests\MultiRegisterFavoriteVideosRequest;
 use App\Http\Requests\ParentFolderRequest;
 use App\Models\ParentFolder;
 use Illuminate\Support\Collection;
@@ -59,6 +60,15 @@ interface ParentFolderRepositoryInterface
      * @return ParentFolder
      */
     public function registerFavoriteVideo(int $parentFolderId, int $favoriteVideoId): ParentFolder;
+
+    /**
+     * お気に入り動画を親フォルダーに登録
+     *
+     * @param MultiRegisterFavoriteVideosRequest $request
+     * @param int $parentFolderId
+     * @return Collection
+     */
+    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $parentFolderId): Collection;
 
     /**
      * お気に入り動画の格納先を変更

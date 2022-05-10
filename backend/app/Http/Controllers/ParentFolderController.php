@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
+use App\Http\Requests\MultiRegisterFavoriteVideosRequest;
 use App\Http\Requests\ParentFolderRequest;
 use App\Http\Requests\RegisterFavoriteVideoRequest;
 use App\Models\ParentFolder;
@@ -130,6 +131,24 @@ class ParentFolderController extends Controller
 
         $logger->write('お気に入り動画を親フォルダーに登録処理開始');
         $parentFolder = $this->parentFolderRepository->registerFavoriteVideo($request->getFolderId(), $favoriteVideoId);
+
+        $logger->success();
+        return $parentFolder->favoriteVideos;
+    }
+
+    /**
+     * 複数のお気に入り動画を親フォルダーに登録
+     *
+     * @param MultiRegisterFavoriteVideosRequest $request
+     * @param int $parentFolderId
+     * @return Collection
+     */
+    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $parentFolderId): Collection
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('複数のお気に入り動画を親フォルダーに登録処理開始');
+        $parentFolder = $this->parentFolderRepository->multiRegisterFavoriteVideo($request, $parentFolderId);
 
         $logger->success();
         return $parentFolder->favoriteVideos;
