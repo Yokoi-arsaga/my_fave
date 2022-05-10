@@ -5,6 +5,7 @@ namespace App\Repositories\ChildFolder;
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\ChildFolderRequest;
 use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
+use App\Http\Requests\MultiRegisterFavoriteVideosRequest;
 use App\Models\ChildFolder;
 use App\Models\GrandchildFolder;
 use App\Models\ParentFolder;
@@ -78,6 +79,16 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
     {
         $childFolder = ChildFolder::find($childFolderId);
         $childFolder->favoriteVideos()->syncWithoutDetaching($favoriteVideoId);
+        return $childFolder;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $childFolderId): Collection
+    {
+        $childFolder = ChildFolder::find($childFolderId);
+        $childFolder->favoriteVideos()->syncWithoutDetaching($request->getFavoriteVideoIds());
         return $childFolder;
     }
 

@@ -6,6 +6,7 @@ use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\ChildFolderRequest;
 use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
+use App\Http\Requests\MultiRegisterFavoriteVideosRequest;
 use App\Http\Requests\RegisterFavoriteVideoRequest;
 use App\Models\ChildFolder;
 use App\Modules\ApplicationLogger;
@@ -131,6 +132,24 @@ class ChildFolderController extends Controller
 
         $logger->write('お気に入り動画を子フォルダーに登録処理開始');
         $childFolder = $this->childFolderRepository->registerFavoriteVideo($request->getFolderId(), $favoriteVideoId);
+
+        $logger->success();
+        return $childFolder->favoriteVideos;
+    }
+
+    /**
+     * 複数のお気に入り動画を子フォルダーに登録
+     *
+     * @param MultiRegisterFavoriteVideosRequest $request
+     * @param int $childFolderId
+     * @return Collection
+     */
+    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $childFolderId): Collection
+    {
+        $logger = new ApplicationLogger(__METHOD__);
+
+        $logger->write('複数のお気に入り動画を子フォルダーに登録処理開始');
+        $childFolder = $this->childFolderRepository->multiRegisterFavoriteVideo($request, $childFolderId);
 
         $logger->success();
         return $childFolder->favoriteVideos;

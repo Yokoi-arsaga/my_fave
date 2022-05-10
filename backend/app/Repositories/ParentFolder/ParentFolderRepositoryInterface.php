@@ -62,7 +62,7 @@ interface ParentFolderRepositoryInterface
     public function registerFavoriteVideo(int $parentFolderId, int $favoriteVideoId): ParentFolder;
 
     /**
-     * お気に入り動画を親フォルダーに登録
+     * 複数のお気に入り動画を親フォルダーに登録
      *
      * @param MultiRegisterFavoriteVideosRequest $request
      * @param int $parentFolderId
