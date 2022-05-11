@@ -85,7 +85,7 @@ class ChildFolderRepository implements ChildFolderRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $childFolderId): Collection
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $childFolderId): ChildFolder
     {
         $childFolder = ChildFolder::find($childFolderId);
         $childFolder->favoriteVideos()->syncWithoutDetaching($request->getFavoriteVideoIds());

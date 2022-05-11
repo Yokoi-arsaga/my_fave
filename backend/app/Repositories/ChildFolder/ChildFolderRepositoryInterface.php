@@ -67,9 +67,9 @@ interface ChildFolderRepositoryInterface
      *
      * @param MultiRegisterFavoriteVideosRequest $request
      * @param int $childFolderId
-     * @return Collection
+     * @return ChildFolder
      */
-    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $childFolderId): Collection;
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $childFolderId): ChildFolder;
 
     /**
      * お気に入り動画の格納先を変更
