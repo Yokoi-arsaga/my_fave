@@ -144,7 +144,7 @@ class ChildFolderController extends Controller
      * @param int $childFolderId
      * @return Collection
      */
-    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $childFolderId): Collection
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $childFolderId): Collection
     {
         $logger = new ApplicationLogger(__METHOD__);
 

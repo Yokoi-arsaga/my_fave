@@ -144,12 +144,12 @@ class GrandchildFolderController extends Controller
      * @param int $grandchildFolderId
      * @return Collection
      */
-    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $grandchildFolderId): Collection
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $grandchildFolderId): Collection
     {
         $logger = new ApplicationLogger(__METHOD__);
 
         $logger->write('複数のお気に入り動画を孫フォルダーに登録処理開始');
-        $grandchildFolder = $this->grandchildFolderRepository->multiRegisterFavoriteVideo($request, $grandchildFolderId);
+        $grandchildFolder = $this->grandchildFolderRepository->multiRegisterFavoriteVideos($request, $grandchildFolderId);
 
         $logger->success();
         return $grandchildFolder->favoriteVideos;

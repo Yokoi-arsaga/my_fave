@@ -70,7 +70,7 @@ interface GrandchildFolderRepositoryInterface
      * @param int $grandchildFolderId
      * @return Collection
      */
-    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $grandchildFolderId): Collection;
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $grandchildFolderId): Collection;
 
     /**
      * お気に入り動画の格納先の変更

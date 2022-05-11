@@ -143,12 +143,12 @@ class ParentFolderController extends Controller
      * @param int $parentFolderId
      * @return Collection
      */
-    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $parentFolderId): Collection
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $parentFolderId): Collection
     {
         $logger = new ApplicationLogger(__METHOD__);
 
         $logger->write('複数のお気に入り動画を親フォルダーに登録処理開始');
-        $parentFolder = $this->parentFolderRepository->multiRegisterFavoriteVideo($request, $parentFolderId);
+        $parentFolder = $this->parentFolderRepository->multiRegisterFavoriteVideos($request, $parentFolderId);
 
         $logger->success();
         return $parentFolder->favoriteVideos;

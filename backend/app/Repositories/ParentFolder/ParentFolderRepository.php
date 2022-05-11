@@ -83,7 +83,7 @@ class ParentFolderRepository implements ParentFolderRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $parentFolderId): Collection
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $parentFolderId): ParentFolder
     {
         $parentFolder = ParentFolder::find($parentFolderId);
         $parentFolder->favoriteVideos()->syncWithoutDetaching($request->getFavoriteVideoIds());

@@ -86,7 +86,7 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function multiRegisterFavoriteVideo(MultiRegisterFavoriteVideosRequest $request, int $grandchildFolderId): Collection
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $grandchildFolderId): Collection
     {
         $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
         $grandchildFolder->favoriteVideos()->syncWithoutDetaching($request->getFavoriteVideoIds());
