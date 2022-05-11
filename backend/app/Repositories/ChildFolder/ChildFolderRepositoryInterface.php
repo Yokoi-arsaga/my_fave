@@ -5,6 +5,7 @@ namespace App\Repositories\ChildFolder;
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\ChildFolderRequest;
 use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
+use App\Http\Requests\MultiRegisterFavoriteVideosRequest;
 use App\Models\ChildFolder;
 use Illuminate\Support\Collection;
 
@@ -60,6 +61,15 @@ interface ChildFolderRepositoryInterface
      * @return ChildFolder
      */
     public function registerFavoriteVideo(int $childFolderId, int $favoriteVideoId): ChildFolder;
+
+    /**
+     * 複数のお気に入り動画を子フォルダーに登録
+     *
+     * @param MultiRegisterFavoriteVideosRequest $request
+     * @param int $childFolderId
+     * @return ChildFolder
+     */
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $childFolderId): ChildFolder;
 
     /**
      * お気に入り動画の格納先を変更

@@ -6,6 +6,7 @@ use App\Http\Requests\ChangeDisclosureRequest;
 use App\Http\Requests\ChangeRegistrationFavoriteVideoRequest;
 use App\Http\Requests\DetachRegistrationFavoriteVideoRequest;
 use App\Http\Requests\GrandchildFolderRequest;
+use App\Http\Requests\MultiRegisterFavoriteVideosRequest;
 use App\Models\ChildFolder;
 use App\Models\GrandchildFolder;
 use App\Models\ParentFolder;
@@ -79,6 +80,16 @@ class GrandchildFolderRepository implements GrandchildFolderRepositoryInterface
     {
         $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
         $grandchildFolder->favoriteVideos()->syncWithoutDetaching($favoriteVideoId);
+        return $grandchildFolder;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function multiRegisterFavoriteVideos(MultiRegisterFavoriteVideosRequest $request, int $grandchildFolderId): GrandchildFolder
+    {
+        $grandchildFolder = GrandchildFolder::find($grandchildFolderId);
+        $grandchildFolder->favoriteVideos()->syncWithoutDetaching($request->getFavoriteVideoIds());
         return $grandchildFolder;
     }
 

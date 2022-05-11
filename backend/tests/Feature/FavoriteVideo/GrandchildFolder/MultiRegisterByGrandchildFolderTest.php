@@ -15,7 +15,7 @@ class MultiRegisterByGrandchildFolderTest extends TestCase
     use RefreshDatabase;
 
     // 一度に登録できる最大数（この値はお気に入り動画のページネーションの値と一致する）
-    private int $maxRegistrationNumber = 15;
+    private const MAX_REGISTRATION_NUM = 15;
 
     protected function setUp(): void
     {
@@ -67,12 +67,12 @@ class MultiRegisterByGrandchildFolderTest extends TestCase
      */
     public function test_multi_register_by_grandchild_folder_success_even_when_max_num()
     {
-        [$favoriteVideoIds, $grandchildFolderId] = $this->common_preparation($this->maxRegistrationNumber);
+        [$favoriteVideoIds, $grandchildFolderId] = $this->common_preparation(self::MAX_REGISTRATION_NUM);
 
         $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/grandchild/multi/register/$grandchildFolderId", $favoriteVideoIds);
 
         $response->assertStatus(200);
-        $response->assertJsonCount($this->maxRegistrationNumber);
+        $response->assertJsonCount(self::MAX_REGISTRATION_NUM);
     }
 
     /**
@@ -94,7 +94,7 @@ class MultiRegisterByGrandchildFolderTest extends TestCase
      */
     public function test_multi_register_by_grandchild_folder_failure_by_exceeding_tolerance()
     {
-        $excessRegistrationNumber = $this->maxRegistrationNumber + 1;
+        $excessRegistrationNumber = self::MAX_REGISTRATION_NUM + 1;
         [$favoriteVideoIds, $grandchildFolderId] = $this->common_preparation($excessRegistrationNumber);
         $this->common_validation_logic($favoriteVideoIds, $grandchildFolderId);
     }
@@ -145,7 +145,8 @@ class MultiRegisterByGrandchildFolderTest extends TestCase
      */
     public function test_multi_register_by_grandchild_folder_failure_by_have_not_favorite_video()
     {
-        [$favoriteVideoIds, $grandchildFolderId] = $this->common_preparation(true, false);
+        $registrationNumber = 2;
+        [$favoriteVideoIds, $grandchildFolderId] = $this->common_preparation($registrationNumber, true, false);
         $this->common_validation_logic($favoriteVideoIds, $grandchildFolderId);
     }
 
@@ -156,7 +157,8 @@ class MultiRegisterByGrandchildFolderTest extends TestCase
      */
     public function test_multi_register_by_grandchild_folder_failure_by_have_not_grandchild_folder()
     {
-        [$favoriteVideoIds, $grandchildFolderId] = $this->common_preparation(false, true);
+        $registrationNumber = 2;
+        [$favoriteVideoIds, $grandchildFolderId] = $this->common_preparation($registrationNumber, false, true);
         $this->common_validation_logic($favoriteVideoIds, $grandchildFolderId);
     }
 

@@ -15,7 +15,7 @@ class MultiRegisterByChildFolderTest extends TestCase
     use RefreshDatabase;
 
     // 一度に登録できる最大数（この値はお気に入り動画のページネーションの値と一致する）
-    private int $maxRegistrationNumber = 15;
+    private const MAX_REGISTRATION_NUM = 15;
 
     protected function setUp(): void
     {
@@ -68,13 +68,13 @@ class MultiRegisterByChildFolderTest extends TestCase
      */
     public function test_multi_register_by_child_folder_success_even_when_max_num()
     {
-        [$favoriteVideoIds, $childFolderId] = $this->common_preparation($this->maxRegistrationNumber);
+        [$favoriteVideoIds, $childFolderId] = $this->common_preparation(self::MAX_REGISTRATION_NUM);
 
         $response = $this->actingAs($this->users[1])->post("/api/favorite/folder/child/multi/register/$childFolderId", $favoriteVideoIds);
 
         $response->assertStatus(200);
 
-        $response->assertJsonCount($this->maxRegistrationNumber);
+        $response->assertJsonCount(self::MAX_REGISTRATION_NUM);
     }
 
     /**
@@ -96,7 +96,7 @@ class MultiRegisterByChildFolderTest extends TestCase
      */
     public function test_multi_register_by_child_folder_failure_by_exceeding_tolerance()
     {
-        $registrationNumber = $this->maxRegistrationNumber + 1;
+        $registrationNumber = self::MAX_REGISTRATION_NUM + 1;
         [$favoriteVideoIds, $childFolderId] = $this->common_preparation($registrationNumber);
         $this->common_validation_logic($favoriteVideoIds, $childFolderId);
     }
@@ -147,7 +147,8 @@ class MultiRegisterByChildFolderTest extends TestCase
      */
     public function test_register_by_child_folder_failure_by_have_not_favorite_video()
     {
-        [$favoriteVideoIds, $childFolderId] = $this->common_preparation(true, false);
+        $registrationNumber = 2;
+        [$favoriteVideoIds, $childFolderId] = $this->common_preparation($registrationNumber, true, false);
         $this->common_validation_logic($favoriteVideoIds, $childFolderId);
     }
 
@@ -158,7 +159,8 @@ class MultiRegisterByChildFolderTest extends TestCase
      */
     public function test_register_by_child_folder_failure_by_have_not_parent_folder()
     {
-        [$favoriteVideoIds, $childFolderId] = $this->common_preparation(false, true);
+        $registrationNumber = 2;
+        [$favoriteVideoIds, $childFolderId] = $this->common_preparation($registrationNumber, false, true);
         $this->common_validation_logic($favoriteVideoIds, $childFolderId);
     }
 

@@ -93,6 +93,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::delete('/{id}', [ParentFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
             Route::patch('/disclosure/{id}', [ParentFolderController::class, 'changeDisclosure'])->middleware('auth:sanctum')->name('change.disclosure');
             Route::post('/register/{favoriteVideoId}', [ParentFolderController::class, 'registerFavoriteVideo'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.parent'])->name('register');
+            Route::post('/multi/register/{parentFolderId}', [ParentFolderController::class, 'multiRegisterFavoriteVideos'])->middleware(['auth:sanctum', 'multi.favorite.register', 'multi.register.to.parent'])->name('multi.register');
             Route::post('/change/{favoriteVideoId}', [ParentFolderController::class, 'changeRegistration'])->middleware(['auth:sanctum', 'favorite.register', 'change.registration.to.parent'])->name('change.registration');
             Route::post('/detach/{favoriteVideoId}', [ParentFolderController::class, 'detachRegistration'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.parent'])->name('detach.registration');
         });
@@ -104,6 +105,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::delete('/{id}', [ChildFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
             Route::patch('/disclosure/{id}', [ChildFolderController::class, 'changeDisclosure'])->middleware('auth:sanctum')->name('change.disclosure');
             Route::post('/register/{favoriteVideoId}', [ChildFolderController::class, 'registerFavoriteVideo'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.child'])->name('register');
+            Route::post('/multi/register/{childFolderId}', [ChildFolderController::class, 'multiRegisterFavoriteVideos'])->middleware(['auth:sanctum', 'multi.favorite.register', 'multi.register.to.child'])->name('multi.register');
             Route::post('/change/{favoriteVideoId}', [ChildFolderController::class, 'changeRegistration'])->middleware(['auth:sanctum', 'favorite.register', 'change.registration.to.child'])->name('change.registration');
             Route::post('/detach/{favoriteVideoId}', [ChildFolderController::class, 'detachRegistration'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.child'])->name('detach.registration');
 
@@ -116,6 +118,7 @@ Route::prefix('favorite')->name('favorite.')->group(function () {
             Route::delete('/{id}', [GrandchildFolderController::class, 'delete'])->middleware('auth:sanctum')->name('delete');
             Route::patch('/disclosure/{id}', [GrandchildFolderController::class, 'changeDisclosure'])->middleware('auth:sanctum')->name('change.disclosure');
             Route::post('/register/{favoriteVideoId}', [GrandchildFolderController::class, 'registerFavoriteVideo'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.grandchild'])->name('register');
+            Route::post('/multi/register/{grandchildFolderId}', [GrandchildFolderController::class, 'multiRegisterFavoriteVideos'])->middleware(['auth:sanctum', 'multi.favorite.register', 'multi.register.to.grandchild'])->name('multi.register');
             Route::post('/change/{favoriteVideoId}', [GrandchildFolderController::class, 'changeRegistration'])->middleware(['auth:sanctum', 'favorite.register', 'change.registration.to.grandchild'])->name('change.registration');
             Route::post('/detach/{favoriteVideoId}', [GrandchildFolderController::class, 'detachRegistration'])->middleware(['auth:sanctum', 'favorite.register', 'register.to.grandchild'])->name('detach.registration');
         });
